@@ -1,18 +1,17 @@
-import streamlit as st
+import nltk
 import os
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
-from langchain.vectorstores import FAISS
+import fitz
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
-from langchain.llms import HuggingFaceHub
-
+from summarizer import Summarizer
+from transformers import RobertaTokenizer, TFRobertaModel
+from txtmarker.factory import Factory
 
 def get_pdf_text(pdf_docs):
-  """Takes pdf documents and returns raw texts.
+  """
+  Takes pdf documents and returns raw texts.
 
   Parameters:
     pdf_docs(list): List of pdf documents.
@@ -32,8 +31,10 @@ def get_pdf_text(pdf_docs):
   return text
 
 
+
 def get_text_chunks(raw_text, tokenizer):
-  """ Takes raw text and returns text chunks.
+  """ 
+  Takes raw text and returns text chunks.
   
   Parameters:
     raw_text(str): String of text from document.
@@ -46,7 +47,7 @@ def get_text_chunks(raw_text, tokenizer):
   """
   text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
     tokenizer, 
-    chunk_size=512, 
+    chunk_size=505, 
     chunk_overlap=50)
   
   chunks = text_splitter.split_text(raw_text)
@@ -54,63 +55,96 @@ def get_text_chunks(raw_text, tokenizer):
   return chunks
 
 
-def get_conversation_chain(vector_store):
-  """Takes a vector store and
-  
-  """
 
-  llm = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-xxl")
-  key = os.getenv("HUGGINGFACE_API_TOKEN")
-  
-  llm = HuggingFaceHub(repo_id = 'google/flan-t5-xxl', huggingfacehub_api_token= key, model_kwargs={"temperature":0.5, 'max_length':512})
-  memory = ConversationBufferMemory(memory_key= 'chat_history', return_messages= True)
+def extractive_summarization(chunk):
+    """
+    Takes a chunk of text and extractively summarizes it.
+    
+    Parameters:
+      chunk(str): piece of text that needs to be summarized
 
-  conversation_chain = ConversationalRetrievalChain.from_llm(
-      llm= llm,
-      retriever = vector_store.as_retriever(),
-      memory= memory
+    Returns:
+      summary(str): extractive summary of a piece of text
+    """
+    summarizer = Summarizer()
+    summary = summarizer(chunk, ratio=0.4)
 
-  )
+    return summary
+
+"""
+def mark_original_sentences(raw_text, extractive_summary):
+    sentences = nltk.sent_tokenize(raw_text)
+    marked_text = ""
+
+    for sentence in sentences:
+        if sentence in extractive_summary:
+            marked_text += f'<font color="yellow">{sentence}</font>\n'
+        else:
+            marked_text += f"{sentence}\n"
+
+    return marked_text
 
 
-  return conversation_chain
+def create_marked_pdf(marked_text, output_pdf_path="marked_output.pdf"):
+    c = canvas.Canvas(output_pdf_path, pagesize=letter)
+    width, height = letter
+
+    # Set font and size
+    c.setFont("Helvetica", 10)
+
+    # Draw the marked text on the PDF
+    c.drawString(10, height - 30, marked_text)
+
+    c.save()"""
+
+
+def mark_text(summary):
+   """
+   Takes a summary and marks it in the document
+   """
+   """highlighter = Factory.create("pdf")
+
+   highlighter.highlight("docs/test_pdf.pdf", "output.pdf", [("Here", "Council")])"""
+
+   doc = fitz.open("docs/test_pdf.pdf")
+
+   for page in doc:
+      ### SEARCH
+      text = "European Council"
+      text_instances = page.search_for(text)
+
+      ### HIGHLIGHT
+      for inst in text_instances:
+          highlight = page.add_highlight_annot(inst)
+          highlight.update()
+
+  ### OUTPUT
+   doc.save("output.pdf", garbage=4, deflate=True, clean=True)
+
 
 
 def main():
   load_dotenv()
   #API TOKEN GEBRUIKEN
-  tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-xxl", device_map = 'auto')
+  tokenizer = RobertaTokenizer.from_pretrained('roberta-large')
 
-
-  st.set_page_config(page_title = "Extractive summarization",
-                     page_icon = 'docs/Power2X-Logo.png')
-  
-  with st.columns(3)[1]:
-    st.image('docs/Power2X-Logo.png', width= 200)
-
-
-  if "conversation" not in st.session_state:
-    st.session_state.conversation = None
-
+  pdf_doc = ["docs/test_pdf.pdf"]
     
-  st.header("Use this tool to query PDF files")
+  raw_text = get_pdf_text(pdf_doc)
 
+  #GET CHUNKS
+  text_chunks = get_text_chunks(raw_text, tokenizer)
+  
+  for chunk in text_chunks:
+      # Extractive Summarization
+      summary = extractive_summarization(chunk)
 
-  with st.sidebar:
-    st.subheader("Your documents")
+      # Mark Original Sentences
+      mark_text(summary)
 
-    pdf_docs = st.file_uploader("Upload your PDF here and click on 'Process'", accept_multiple_files= True)
-
-    if st.button("Process"):
-      with st.spinner("Processing"):
-        #GET TEXT
-        raw_text = get_pdf_text(pdf_docs)
-
-        #GET CHUNKS
-        text_chunks = get_text_chunks(raw_text, tokenizer)
-
-        # CREATE VECTOR STORES        
-        
+  # Create Marked PDF
+  
 
 if __name__ == '__main__':
   main()
+  print("Done!")
