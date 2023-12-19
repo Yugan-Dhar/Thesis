@@ -2,14 +2,17 @@ import nltk
 import os
 import fitz
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from summarizer import Summarizer
 from transformers import RobertaTokenizer, TFRobertaModel
-from txtmarker.factory import Factory
 
-def get_pdf_text(pdf_docs):
+
+
+
+
+def get_pdf_text(pdf_docs, rect):
   """
   Takes pdf documents and returns raw texts.
 
@@ -22,16 +25,22 @@ def get_pdf_text(pdf_docs):
   """
 
   text = ""
+  
+  for page in pdf_docs:
+    text += page.get_textbox(rect)
 
+  """#PYPDF METHOD
   for pdf in pdf_docs:
     pdf_reader = PdfReader(pdf)
     for page in pdf_reader.pages:
       text += page.extract_text()
+      print(text)"""
 
+
+      
   return text
 
-
-
+  
 def get_text_chunks(raw_text, tokenizer):
   """ 
   Takes raw text and returns text chunks.
@@ -45,6 +54,8 @@ def get_text_chunks(raw_text, tokenizer):
     chunks(list): List of chunks (str) of 505 tokens.
   
   """
+
+
   text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
     tokenizer, 
     chunk_size=505, 
@@ -53,7 +64,6 @@ def get_text_chunks(raw_text, tokenizer):
   chunks = text_splitter.split_text(raw_text)
 
   return chunks
-
 
 
 def extractive_summarization(chunk):
@@ -71,46 +81,16 @@ def extractive_summarization(chunk):
 
     return summary
 
-"""
-def mark_original_sentences(raw_text, extractive_summary):
-    sentences = nltk.sent_tokenize(raw_text)
-    marked_text = ""
 
-    for sentence in sentences:
-        if sentence in extractive_summary:
-            marked_text += f'<font color="yellow">{sentence}</font>\n'
-        else:
-            marked_text += f"{sentence}\n"
-
-    return marked_text
-
-
-def create_marked_pdf(marked_text, output_pdf_path="marked_output.pdf"):
-    c = canvas.Canvas(output_pdf_path, pagesize=letter)
-    width, height = letter
-
-    # Set font and size
-    c.setFont("Helvetica", 10)
-
-    # Draw the marked text on the PDF
-    c.drawString(10, height - 30, marked_text)
-
-    c.save()"""
-
-
-def mark_text(summary):
+def mark_text(summary, pdf_doc):
    """
    Takes a summary and marks it in the document
    """
-   """highlighter = Factory.create("pdf")
-
-   highlighter.highlight("docs/test_pdf.pdf", "output.pdf", [("Here", "Council")])"""
-
-   doc = fitz.open("docs/test_pdf.pdf")
-
-   for page in doc:
+  
+   for page in pdf_doc:
       ### SEARCH
-      text = "European Council"
+      #text = summary
+      text = "TREE"
       text_instances = page.search_for(text)
 
       ### HIGHLIGHT
@@ -119,7 +99,7 @@ def mark_text(summary):
           highlight.update()
 
   ### OUTPUT
-   doc.save("output.pdf", garbage=4, deflate=True, clean=True)
+   pdf_doc.save("output.pdf", deflate=True, clean=True)
 
 
 
@@ -128,22 +108,25 @@ def main():
   #API TOKEN GEBRUIKEN
   tokenizer = RobertaTokenizer.from_pretrained('roberta-large')
 
-  pdf_doc = ["docs/test_pdf.pdf"]
-    
-  raw_text = get_pdf_text(pdf_doc)
+
+  pdf_object = fitz.open("docs/test_pdf.pdf")
+  rect = fitz.Rect(0, 0, 800, 750) 
+
+  raw_text = get_pdf_text(pdf_object, rect) 
+  print(raw_text)
+
 
   #GET CHUNKS
-  text_chunks = get_text_chunks(raw_text, tokenizer)
+  #text_chunks = get_text_chunks(raw_text, tokenizer)
   
-  for chunk in text_chunks:
+
+  """for chunk in text_chunks[10:11]:
       # Extractive Summarization
       summary = extractive_summarization(chunk)
-
+      #print(summary)
       # Mark Original Sentences
-      mark_text(summary)
+      mark_text(summary, pdf_object)"""
 
-  # Create Marked PDF
-  
 
 if __name__ == '__main__':
   main()
