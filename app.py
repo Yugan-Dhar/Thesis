@@ -28,11 +28,13 @@ def get_pdf_text(pdf_docs, rect):
   
   for page in pdf_docs:
     text += page.get_textbox(rect)
- 
+    page.draw_rect(rect, color =(0,1,0))
   return text
 
   
 def get_text_chunks(raw_text, tokenizer):
+
+  #TODO: Create function which detects footers so they can be exluded
   """ 
   Takes raw text and returns text chunks.
   
@@ -74,15 +76,24 @@ def extractive_summarization(chunk):
 
 
 def mark_text(summary, pdf_doc):
-  #TODO: Fix this. Everything else works
+  #TODO: Think of a method that marks the text 'logically'. Right now if '(f)' is extracted, if you hand it to the function. All (f)'s will be marked
+  
    """
    Takes a summary and marks it in the document
+
+   Parameters:
+    summary(str): piece of text that is summarized.
+
+    pdf_doc: document that needs to be annotated
+
+    Ouptut:
+      pdf file which has the sentences annotated
    """
   
    for page in pdf_doc:
-      ### SEARCH
-      #text = summary
-      text = "TREE"
+      ### SEARCH 
+      # Search is robust to capitalisation
+      text = "regulation of the european parliament and of the council"
       text_instances = page.search_for(text)
 
       ### HIGHLIGHT
@@ -102,10 +113,10 @@ def main():
 
 
   pdf_object = fitz.open("docs/test_pdf.pdf")
-  rect = fitz.Rect(0, 0, 800, 750) 
+  rect = fitz.Rect(10, 10, 585, 770) 
+
 
   raw_text = get_pdf_text(pdf_object, rect) 
-  print(raw_text)
 
 
   #GET CHUNKS
@@ -116,7 +127,7 @@ def main():
   for chunk in text_chunks[10:11]:
       # Extractive Summarization
       summary = extractive_summarization(chunk)
-      #print(summary)
+      print(summary)
       # Mark Original Sentences
       mark_text(summary, pdf_object)
 
@@ -124,4 +135,3 @@ def main():
 if __name__ == '__main__':
   main()
   print("Done!")
-  print("cool")
