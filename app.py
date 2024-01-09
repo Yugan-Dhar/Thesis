@@ -28,16 +28,7 @@ def get_pdf_text(pdf_docs, rect):
   
   for page in pdf_docs:
     text += page.get_textbox(rect)
-
-  """#PYPDF METHOD
-  for pdf in pdf_docs:
-    pdf_reader = PdfReader(pdf)
-    for page in pdf_reader.pages:
-      text += page.extract_text()
-      print(text)"""
-
-
-      
+ 
   return text
 
   
@@ -83,6 +74,7 @@ def extractive_summarization(chunk):
 
 
 def mark_text(summary, pdf_doc):
+  #TODO: Fix this. Everything else works
    """
    Takes a summary and marks it in the document
    """
