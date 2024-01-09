@@ -109,15 +109,15 @@ def main():
 
 
   #GET CHUNKS
-  #text_chunks = get_text_chunks(raw_text, tokenizer)
+  text_chunks = get_text_chunks(raw_text, tokenizer)
   
 
-  """for chunk in text_chunks[10:11]:
+  for chunk in text_chunks[10:11]:
       # Extractive Summarization
       summary = extractive_summarization(chunk)
       #print(summary)
       # Mark Original Sentences
-      mark_text(summary, pdf_object)"""
+      mark_text(summary, pdf_object)
 
 
 if __name__ == '__main__':
