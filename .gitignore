@@ -1,3 +1,4 @@
 thesisvenv
 .env
 .pdf
+.DS_store
