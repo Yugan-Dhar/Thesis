@@ -111,7 +111,7 @@ def main():
   #GET CHUNKS
   text_chunks = get_text_chunks(raw_text, tokenizer)
   
-
+  #test
   for chunk in text_chunks[10:11]:
       # Extractive Summarization
       summary = extractive_summarization(chunk)
