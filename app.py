@@ -88,8 +88,12 @@ def mark_text(summary, pdf_doc, rect):
     Ouptut:
       highlights on pdf file 
    """
+
    sentences_of_summary = nltk.sent_tokenize(summary)
    
+   # FIX OF PREVENTING THAT AL SMALLER INSTANCES SUCH AS (3) ARE MARKED. IT'S A BIT HACKY RIGHT NOW..... BUT IT'S ONLY FOR MARKING SO NOT TOO MUCH OF A WORRY RN
+   sentences_of_summary = [string for string in sentences_of_summary if len(string) >= 3]
+
    for page in pdf_doc:
       ### SEARCH 
       # Search is robust to capitalisation 
@@ -133,7 +137,7 @@ def main():
       # Mark Original Sentences
       mark_text(summary, pdf_object, rect)
 
-  pdf_object.save("output.pdf", deflate=True, clean=True)
+  pdf_object.save("output_quads.pdf", deflate=True, clean=True)
 
 if __name__ == '__main__':
   main()
