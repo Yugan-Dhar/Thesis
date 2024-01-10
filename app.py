@@ -137,7 +137,7 @@ def main():
       # Mark Original Sentences
       mark_text(summary, pdf_object, rect)
 
-  pdf_object.save("output_quads.pdf", deflate=True, clean=True)
+  pdf_object.save("output_highlight_fix.pdf", deflate=True, clean=True)
 
 if __name__ == '__main__':
   main()
