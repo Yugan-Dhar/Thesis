@@ -139,6 +139,11 @@ def main():
 
   pdf_object.save("output_highlight_fix.pdf", deflate=True, clean=True)
 
+  #TODO: CONCATENATE ALL SUMMARY PARTS INTO A NEW OBJECT SO IT CAN BE RE-SUMMARIZE
+  # BEST TO PUT ABOVE FOR LOOP IN A NEW FUNCTION , THIS FUNCTIUON SHOULD THEN RETURN THE NEW SUMMARY
+  # THEN CHECK IF SUMMMARY IS BELOW THRESHOLD, IF IT ISN'T THEN RERUN THE LOOP. WHILE LOOP REQUIRED
+
+  
 if __name__ == '__main__':
   main()
   print("Done!")
