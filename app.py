@@ -74,9 +74,7 @@ def extractive_summarization(chunk):
     return summary
 
 
-def mark_text(summary, pdf_doc, rect):
-  #TODO: Think of a method that marks the text 'logically'. Right now if '(f)' is extracted, if you hand it to the function. All (f)'s will be marked
-  
+def mark_text(summary, pdf_doc, rect):  
    """
    Takes a summary and marks it in the document
 
@@ -90,7 +88,6 @@ def mark_text(summary, pdf_doc, rect):
     Ouptut:
       highlights on pdf file 
    """
-
    sentences_of_summary = nltk.sent_tokenize(summary)
    
    for page in pdf_doc:
@@ -102,7 +99,8 @@ def mark_text(summary, pdf_doc, rect):
 
         text_to_be_highlighted = page.search_for(sentence, clip = rect)
         
-        #TODO: HIER MOET HET DEEL INKOMEN DAT DUS OPLET DAT NIET ALLES WORDT GEMARKEERD
+        #TODO: HIER MOET HET DEEL INKOMEN DAT DUS OPLET DAT NIET ALLES WORDT GEMARKEERD. 
+        # ERROR ZIT BIJ DE NLTK.SENT_TOKENIZE. HIJ SPLIT DAAR BIJVOORBEELD (3) APART. ZO WORDT DIE LOS GEMAAKT EN OVERAL GEMARKEERD.
 
         for instance in text_to_be_highlighted:
             highlight = page.add_highlight_annot(instance)
@@ -135,7 +133,7 @@ def main():
       # Mark Original Sentences
       mark_text(summary, pdf_object, rect)
 
-  pdf_object.save("output_quads.pdf", deflate=True, clean=True)
+  pdf_object.save("output.pdf", deflate=True, clean=True)
 
 if __name__ == '__main__':
   main()
