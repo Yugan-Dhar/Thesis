@@ -140,3 +140,11 @@ def main():
 if __name__ == '__main__':
   main()
   print("Done!")
+
+  # GIT MERGE BEST PRACTICE:
+  # 1: Merge main in new branch
+  # 2: Make changes on own branch
+  # 3: Push changes on branch
+  # 4: Merge main in own branch + resolve conflicts
+  # 5: Merbe branch in main
+
