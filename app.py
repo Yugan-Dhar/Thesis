@@ -4,10 +4,8 @@ import fitz
 from dotenv import load_dotenv
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import AutoTokenizer, AutoModel, RobertaTokenizer, TFRobertaModel, AutoConfig
 from summarizer import Summarizer
-from transformers import RobertaTokenizer, TFRobertaModel
-
 
 def get_pdf_text(pdf_docs, rect):
   """
@@ -65,8 +63,16 @@ def extractive_summarization(chunk):
     Returns:
       summary(str): extractive summary of a piece of text
     """
-    summarizer = Summarizer()
 
+    custom_config = AutoConfig.from_pretrained('nlpaueb/legal-bert-base-uncased')
+    custom_config.output_hidden_states=True
+    tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-base-uncased")
+
+    model = AutoModel.from_pretrained("nlpaueb/legal-bert-base-uncased", config = custom_config)
+
+
+    summarizer = Summarizer(custom_model = model, custom_tokenizer= tokenizer)
+    summarizer = Summarizer()
     #TODO: Check ratio
     #CAN ALSO MAKE USE OF CUSTOM MODEL, CHECK DOCUMENTATION OF SUMMARIZER. COULD BE USEFUL TO USE A LEGAL-BERT
     summary = summarizer(chunk, ratio=0.4)
@@ -114,6 +120,9 @@ def mark_text(summary, pdf_doc, rect):
 def main():
   load_dotenv()
   #API TOKEN GEBRUIKEN
+  #Assign tokenizer, config and model here
+
+
   tokenizer = RobertaTokenizer.from_pretrained('roberta-large')
 
   pdf_object = fitz.open("docs/test_pdf.pdf")
@@ -137,7 +146,7 @@ def main():
       # Mark Original Sentences
       mark_text(summary, pdf_object, rect)
 
-  pdf_object.save("output_highlight_fix.pdf", deflate=True, clean=True)
+  pdf_object.save("output.pdf", deflate=True, clean=True)
 
   #TODO: CONCATENATE ALL SUMMARY PARTS INTO A NEW OBJECT SO IT CAN BE RE-SUMMARIZE
   # BEST TO PUT ABOVE FOR LOOP IN A NEW FUNCTION , THIS FUNCTIUON SHOULD THEN RETURN THE NEW SUMMARY
