@@ -1,10 +1,11 @@
 from transformers import AutoTokenizer, AutoModel, RobertaTokenizer, TFRobertaModel, AutoConfig
 from summarizer import Summarizer 
 
+#Every function returns a tokenizer and model which can be used to 
 
 def LegalBERT():
     custom_config = AutoConfig.from_pretrained('nlpaueb/legal-bert-base-uncased')
-    custom_config.output_hidden_states=True
+    custom_config.output_hidden_states = True
     tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-base-uncased")
     model = AutoModel.from_pretrained("nlpaueb/legal-bert-base-uncased", config = custom_config)
 
@@ -17,4 +18,8 @@ def LegalBERT():
 
 
 
-    
+def select_extractive_model(model):
+
+    if model == 'LegalBERT':
+        return LegalBERT()
+        
