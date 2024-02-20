@@ -1,7 +1,7 @@
 import yaml
 
 # import your extractive and abstractive models here
-from extractive_models import BERTSummarizer, RobertASummarizer, LegalBERTSummarizer
+from models.extractive_models import BERTSummarizer, RobertASummarizer, LegalBERTSummarizer
 from abstractive_models import BARTSummarizer, T5Summarizer
 
 class ExtractiveSummarizationModel:
@@ -61,7 +61,7 @@ def load_model_configurations(config_file):
 # Example usage:
 if __name__ == "__main__":
     config_file = "model_configurations.yaml"
-    
+
     extractive_model_type, abstractive_model_type = load_model_configurations(config_file)
     pipeline = SummarizationPipeline(extractive_model_type, abstractive_model_type)
     text = "Your input text here..."
