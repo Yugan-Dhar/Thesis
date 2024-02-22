@@ -4,4 +4,3 @@ thesisvenv
 .DS_store
 
 __pycache__/
-*.pyc

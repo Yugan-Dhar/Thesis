@@ -4,6 +4,7 @@ from summarizer import Summarizer
 
 #TODO: Add more models
 #TODO: Create a general function for all models, currently LegalBERT and RoBERTa are hardcoded as functions
+#TODO: Currently this returns full summarizer object. This is fine for now. But in the future it might need to be changed because we might fine-tune the model and then we only want to return the model and tokenizer.
 
 def LegalBERT():
     """
@@ -18,6 +19,7 @@ def LegalBERT():
     tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-base-uncased")
     model = AutoModel.from_pretrained("nlpaueb/legal-bert-base-uncased", config = custom_config)
 
+    #In future, we might want to fine-tune the model. In that case, we only want to return the model and tokenizer.
     summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
     
     return summarizer, tokenizer
