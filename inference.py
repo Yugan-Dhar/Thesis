@@ -136,9 +136,7 @@ class SummarizationPipeline:
         self.extractive_model = ExtractiveSummarizationModel(extractive_model_type)
         self.abstractive_model = AbstractiveSummarizationModel(abstractive_model_type)
         self.extractive_compression_ratio = extractive_compression_ratio
-
-        print(f"Max length of tokenizer: {self.extractive_model.tokenizer.model_max_length}")
-
+        self.context_length_abstractive_model = self.abstractive_model.tokenizer.model_max_length
 
     def run_inference(self, text):
 
@@ -168,12 +166,9 @@ class SummarizationPipeline:
         amount_of_tokens = len(self.extractive_model.tokenizer.tokenize(text))
         print(f"Amount of tokens in text: {amount_of_tokens}")
         
-        #TODO: context_length shouldn't be checked for each text. It should be checked once and then stored in a variable. This will save time.
-        context_length = self.abstractive_model.tokenizer.model_max_length
-
         #TODO: Check if 1 still applies. This is just a placeholder for now.
         variable = 2
-        outcome = (math.log10((variable*context_length)/amount_of_tokens))/(math.log10(self.extractive_compression_ratio))
+        outcome = (math.log10((variable*self.context_length_abstractive_model)/amount_of_tokens))/(math.log10(self.extractive_compression_ratio))
 
         amount_of_extractive_steps = math.floor(outcome)
         print(f"Amount of extractive steps needed: {amount_of_extractive_steps}")
@@ -225,41 +220,17 @@ class SummarizationPipeline:
         return chunks
     
     
-    def pre_process_with_extractive_summarization(self, example):
-        """
-        Pre-processes the example using extractive summarization.
-
-        Args:
-            example (dict): The example to be pre-processed.
-
-        Returns:
-            dict: The pre-processed example.
-        """
-        
-        extractive_steps_required = self.calculate_amount_of_extractive_steps(example["reference"])
-        example["reference"] = self.multi_extractive_summarization(example["reference"], extractive_steps_required)
-
-        return example
-    
-
-    
 if __name__ == "__main__":
 
     pipeline = SummarizationPipeline(extractive_model_type = 'RoBERTa', abstractive_model_type='BART')
     
-
-    """text = open("docs/test_text.txt", "r").read()
+    #Change variable to input text of user
+    text = open("docs/test_text.txt", "r").read()
 
     summary = pipeline.run_inference(text)
     
-    print(f"Final summary is:\n------------------------\n{summary}")"""
+    print(f"Final summary is:\n------------------------\n{summary}")
     
-
-
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
-    dataset = dataset.map(pipeline.pre_process_with_extractive_summarization)
-
-    print('Done')
     #Extractive summarization of datatset --> preprocessing
     
 

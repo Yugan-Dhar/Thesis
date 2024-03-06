@@ -3,5 +3,4 @@ thesisvenv
 .pdf
 .DS_store
 datasets
-
 __pycache__/

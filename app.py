@@ -163,4 +163,3 @@ if __name__ == '__main__':
   # 3: Push changes on branch
   # 4: Merge main in own branch + resolve conflicts
   # 5: Merbe branch in main
-
