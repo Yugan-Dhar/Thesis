@@ -43,6 +43,6 @@ def select_abstractive_model(model):
     if model == 'BART':
         return BART()
     
-
-        
-
+    elif model == 'T5':
+        return T5()
+    
