@@ -162,7 +162,7 @@ class SummarizationPipeline:
         Returns:
         int: The amount of extractive steps needed.
         """
-
+        
         amount_of_tokens = len(self.extractive_model.tokenizer.tokenize(text))
         print(f"Amount of tokens in text: {amount_of_tokens}")
         
@@ -240,3 +240,4 @@ if __name__ == "__main__":
     #But pipeline can't take new_model as input yet because it only accepts the model type as input
     #Could change abstractive_model by adding a boolean to check if it is a new model or not
     # if it is a new model, that has just been trained it shoulde be able to be used in the pipeline
+    

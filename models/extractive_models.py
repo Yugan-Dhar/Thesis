@@ -34,7 +34,7 @@ def RoBERTa():
     """
     custom_config = AutoConfig.from_pretrained('roberta-base')
     custom_config.output_hidden_states = True
-    tokenizer = AutoTokenizer.from_pretrained('roberta-base', use_fast = True)
+    tokenizer = AutoTokenizer.from_pretrained('roberta-base')
     model = AutoModel.from_pretrained('roberta-base', config = custom_config)
 
     summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
