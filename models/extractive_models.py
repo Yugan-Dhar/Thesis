@@ -2,61 +2,62 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 from summarizer import Summarizer 
 
 
-#TODO: Add more models
-#TODO: Create a general function for all models, currently LegalBERT and RoBERTa are hardcoded as functions
 #TODO: Currently this returns full summarizer object. This is fine for now. But in the future it might need to be changed because we might fine-tune the model and then we only want to return the model and tokenizer.
 
-def LegalBERT():
+#TODO: Finish LexRank implementation, will differ from other types of models
+def LexRank():
+    pass
+
+
+def initialize_model(model_name):
     """
-    Initializes the LegalBERT model for extractive summarization.
-
-    Returns:
-    - summarizer: The summarizer object for extractive summarization.
-    - tokenizer: The tokenizer object for LegalBERT.
-    """
-    custom_config = AutoConfig.from_pretrained('nlpaueb/legal-bert-base-uncased')
-    custom_config.output_hidden_states = True
-    tokenizer = AutoTokenizer.from_pretrained("nlpaueb/legal-bert-base-uncased")
-    model = AutoModel.from_pretrained("nlpaueb/legal-bert-base-uncased", config = custom_config)
-
-    #In future, we might want to fine-tune the model. In that case, we only want to return the model and tokenizer.
-    summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
-    
-    return summarizer, tokenizer
-
-def RoBERTa():
-    """
-    Initializes the RoBERTa model for extractive summarization.
-
-    Returns:
-    - summarizer: The summarizer object for extractive summarization.
-    - tokenizer: The tokenizer object for RoBERTa.
-    """
-    custom_config = AutoConfig.from_pretrained('roberta-base')
-    custom_config.output_hidden_states = True
-    tokenizer = AutoTokenizer.from_pretrained('roberta-base')
-    model = AutoModel.from_pretrained('roberta-base', config = custom_config)
-
-    summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
-    
-    return summarizer, tokenizer
-
-
-def select_extractive_model(model):
-    """
-    Selects and returns an extractive model based on the given model name.
+    Initializes the specified model for abstractive summarization.
 
     Args:
-        model (str): The name of the model to select.
+    - model_name (str): The name of the model to initialize.
 
     Returns:
-        object: An instance of the selected extractive model.
+    - model: The initialized model for abstractive summarization.
+    - tokenizer: The tokenizer object for the model.
     """
 
-    if model == 'LegalBERT':
-        return LegalBERT()
-    
-    elif model == 'RoBERTa':
-        return RoBERTa()
+    custom_config = AutoConfig.from_pretrained(model_name)
+    custom_config.output_hidden_states = True
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModel.from_pretrained(model_name, config = custom_config)
 
-        
+    summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
+    
+    return summarizer, tokenizer  
+
+
+
+def select_extractive_model(model_name):
+    """
+    Selects and initializes the specified extractive model.
+
+    Args:
+    - model_name (str): The name of the model to select.
+
+    Returns:
+    - model: The initialized model for extractive summarization.
+    - tokenizer: The tokenizer object for the model.
+
+    Raises:
+    - ValueError: If an invalid extractive model type is specified.
+    """
+
+    models = {
+    'RoBERTa': 'roberta-base',
+    'LegalBERT': 'nlpaueb/legal-bert-base-uncased',
+    'Longformer': 'allenai/longformer-base-4096',
+    'LexLM': 'lexlms/legal-roberta-large',
+    'LexLM_Longformer': 'lexlms/legal-longformer-large'
+    }
+  
+    if model_name in models:
+        return initialize_model(models[model_name])
+    else:
+        raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from {models.keys()}")  
+    
+    

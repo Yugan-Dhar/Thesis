@@ -12,8 +12,6 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 class ExtractiveSummarizationModel:
 
-    model_classes = ['RoBERTa', 'LegalBERT']
-
     def __init__(self, model_type):
 
         self.model_type = model_type
@@ -28,10 +26,9 @@ class ExtractiveSummarizationModel:
             model: The loaded extractive model.
             tokenizer: The loaded tokenizer for the model.
         Raises:
-            ValueError: If an invalid extractive model type is specified.
+            ValueError: If an invalid extractive model type is specified by select_extractive_model function.
         """
-        if self.model_type not in self.model_classes:
-            raise ValueError(f"Invalid extractive model type: {self.model_type}\nPlease select from {self.model_classes}")    
+
         
         self.model, self.tokenizer = models.extractive_models.select_extractive_model(self.model_type)
         
@@ -60,8 +57,6 @@ class ExtractiveSummarizationModel:
 
 class AbstractiveSummarizationModel:
     
-    model_classes = ['BART', 'T5']
-
     def __init__(self, model_type):
         self.model_type = model_type
         self.model, self.tokenizer = self.load_abstractive_model()
@@ -76,10 +71,8 @@ class AbstractiveSummarizationModel:
             tokenizer (object): The tokenizer associated with the loaded model.
 
         Raises:
-            ValueError: If an invalid abstractive model type is specified.
+            ValueError: If an invalid abstractive model type is specified by abstractive_models file.
         """
-        if self.model_type not in self.model_classes:
-            raise ValueError(f"Invalid abstractive model type: {self.model_type}\nPlease select from {self.model_classes}")
         
         self.model, self.tokenizer = models.abstractive_models.select_abstractive_model(self.model_type)
 
@@ -106,29 +99,6 @@ class AbstractiveSummarizationModel:
             summary = self.tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces = False)[0]
 
             return summary
-    
-    
-    def train(self, train_data, val_data, epochs, batch_size, learning_rate, warmup_steps, weight_decay, output_dir):
-        """
-        Trains the model using the provided training data.
-
-        Args:
-            train_data (list): The training data.
-            val_data (list): The validation data.
-            epochs (int): The number of training epochs.
-            batch_size (int): The batch size for training.
-            learning_rate (float): The learning rate for training.
-            warmup_steps (int): The number of warmup steps for training.
-            weight_decay (float): The weight decay for training.
-            output_dir (str): The output directory to save the trained model.
-
-        Returns:
-            None
-        """
-        dataset = load_dataset("dennlinger/eur-lex-sum")
-
-
-        return dataset
     
 
 class SummarizationPipeline:

@@ -4,12 +4,14 @@ import warnings
 import warnings
 import math
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter, TokenTextSplitter, TextSplitter
+import concurrent.futures
+
 from datasets import load_dataset
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
+model_type = "RoBERTa"
+extractive_summarizer, extractive_tokenizer = models.extractive_models.select_extractive_model(model_type)
 
-extractive_summarizer, extractive_tokenizer = models.extractive_models.select_extractive_model("RoBERTa")
-print(extractive_summarizer, extractive_tokenizer)
 
 text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
             tokenizer = extractive_tokenizer, 
@@ -78,7 +80,6 @@ def multi_extractive_summarization(text, amount_of_extractive_steps):
     return text
 
 
-
 def tokenize_reference(example, tokenizer):
     example["tokenized_reference"] = tokenizer(example["reference"], return_tensors="pt")
     return example
@@ -87,8 +88,6 @@ def tokenize_reference(example, tokenizer):
 def calculate_token_length(example):
     example["token_length"] = example["tokenized_reference"]["input_ids"].shape[1]
     return example
-
-
 
 # Function to calculate the number of extractive summarization steps
 def calculate_extractive_steps(example):
@@ -119,6 +118,30 @@ def get_summarized_chunks(example):
     return example
 
 
+
+def get_summarized_chunks_version_2(text):
+    model_type = "RoBERTa"
+    extractive_summarizer, extractive_tokenizer = models.extractive_models.select_extractive_model(model_type)
+
+    text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
+            tokenizer = extractive_tokenizer, 
+            chunk_size = extractive_tokenizer.model_max_length - 50,
+            chunk_overlap=50)
+
+    ratio = 0.5  # adjust this as needed
+
+    chunks = text_splitter.split_text(text)  # assuming langchain.TokenTextSplitter() works similarly
+
+    summaries = []
+
+    for chunk in chunks:
+        summary = extractive_summarizer(chunk, ratio=ratio)
+        summaries.append(summary)
+
+    concatenated_summary = " ".join(summaries)
+
+    
+
 if __name__ == "__main__":
     
     #Select the extractive model
@@ -126,50 +149,24 @@ if __name__ == "__main__":
     dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
     print("Dataset loaded")
     #dataset = dataset.map(lambda examples: {'token_length': [len(extractive_tokenizer.tokenize(text)) for text in examples['reference']]}, batched=True, num_proc=4)
-
     #processed_dataset = dataset.map(tokenize_reference, extractive_tokenizer, num_proc=4)
     
+
     processed_dataset = dataset.map(lambda example: {'token_length': len(extractive_tokenizer.tokenize(example['reference']))}, num_proc= 9)
     print("Token length calculated")
     #processed_dataset = processed_dataset.map(calculate_token_length, num_proc=4)
+
+    
     processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
     print("Extractive steps calculated")
-
 
     processed_dataset = processed_dataset.map(get_summarized_chunks)
     print("Summarized chunks")
     print(processed_dataset)
-    # Add the new column using a lambda function, batch processing, and multiprocessing
-    #print(dataset)
-    #Every step should be done with the map function as much as possible to make it faster!!
-
-    #1) Calculate the amount of extractive steps needed for each example in the dataset
+    processed_dataset.save_to_disk(f"datasets/eur_lex_sum_processed_{model_type}_ratio_05")
     
 
-    #1.1) Tokenize the references
-    #1.2) Calculate the amount of tokens in the references: 
-    #dataset = dataset.map(lambda example: {'token_length': len(extractive_tokenizer.tokenize(example['reference']))}, num_proc= 9)
-    #dataset = dataset.map(lambda examples: {'length': len(extractive_tokenizer(examples["reference"])), **examples}, batched=True)
-
-    #1.3) Calculate the amount of extractive steps needed
-
-    #TODO: 512 and 0.5 should be replaced with the actual values of the abstractive model and the extractive compression ratio. Currently they are just placeholders.
-    #dataset = dataset.map(lambda example: {'amount_of_extractive_steps': calculate_amount_of_extractive_steps(example['token_length'], 512, 0.5)}, num_proc= 9)
-
-    #Probably best to do this in one function
-    #2) Pre-process the examples using extractive summarization 
-
-    #2.1) Get text chunks
-
-    #2.2) Extractively summarize the text chunks, beware of the ratio
-
-    #2.3) Concatenate the extractive summaries
-
-
-
-
-
-
+    
     #3) Save the pre-processed examples to a new dataset
 
     #3.1) Save the pre-processed on disk
