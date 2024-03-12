@@ -31,7 +31,6 @@ def initialize_model(model_name):
     return summarizer, tokenizer  
 
 
-
 def select_extractive_model(model_name):
     """
     Selects and initializes the specified extractive model.

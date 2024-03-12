@@ -1,4 +1,4 @@
-import models.extractive_models, models.abstractive_models
+import model_loaders.extractive_models, model_loaders.abstractive_models
 import os
 import warnings
 import warnings
@@ -30,7 +30,7 @@ class ExtractiveSummarizationModel:
         """
 
         
-        self.model, self.tokenizer = models.extractive_models.select_extractive_model(self.model_type)
+        self.model, self.tokenizer = model_loaders.extractive_models.select_extractive_model(self.model_type)
         
         print(f"Succesfully loaded {self.model_type} model and its tokenizer")
         
@@ -74,7 +74,7 @@ class AbstractiveSummarizationModel:
             ValueError: If an invalid abstractive model type is specified by abstractive_models file.
         """
         
-        self.model, self.tokenizer = models.abstractive_models.select_abstractive_model(self.model_type)
+        self.model, self.tokenizer = model_loaders.abstractive_models.select_abstractive_model(self.model_type)
 
         print(f"Succesfully loaded {self.model_type} model and its tokenizer")
 
@@ -191,7 +191,7 @@ class SummarizationPipeline:
     
     
 if __name__ == "__main__":
-
+    
     pipeline = SummarizationPipeline(extractive_model_type = 'RoBERTa', abstractive_model_type='BART')
     
     #Change variable to input text of user
