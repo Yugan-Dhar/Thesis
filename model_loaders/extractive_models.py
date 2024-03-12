@@ -27,6 +27,8 @@ def initialize_model(model_name):
 
     mps_device = 'mps'
     model.to(mps_device) 
+    x = torch.ones(1, device=mps_device)
+    print(x)
 
     summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
     
