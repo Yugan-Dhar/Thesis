@@ -6,7 +6,7 @@ annotated-types==0.6.0
 anyio==4.2.0
 async-timeout==4.0.3
 attrs==23.1.0
-bert-extractive-summarizer==0.10.1
+git+https://github.com/MikaSie/bert-extractive-summarizer.git@mac_gpu
 blis==0.7.11
 catalogue==2.0.10
 certifi==2023.11.17
