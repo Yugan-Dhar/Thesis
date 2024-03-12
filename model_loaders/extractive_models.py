@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from summarizer import Summarizer 
-
+import torch
 
 #TODO: Currently this returns full summarizer object. This is fine for now. But in the future it might need to be changed because we might fine-tune the model and then we only want to return the model and tokenizer.
 
@@ -20,11 +20,13 @@ def initialize_model(model_name):
     - model: The initialized model for abstractive summarization.
     - tokenizer: The tokenizer object for the model.
     """
-
     custom_config = AutoConfig.from_pretrained(model_name)
     custom_config.output_hidden_states = True
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name, config = custom_config)
+
+    mps_device = 'mps'
+    model.to(mps_device) 
 
     summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
     

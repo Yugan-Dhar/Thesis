@@ -81,7 +81,7 @@ def get_summarized_chunks_version_2(text):
     
 
 if __name__ == "__main__":
-    
+
     #Select the extractive model
     dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
 
@@ -110,19 +110,15 @@ if __name__ == "__main__":
         print(processed_dataset)
         #TODO: Change ratio so it is dynamic. Currently hardcoded in the string. Change to a variable that can be changed in the function call.
         
+        #Reorder the columns so that the reference is the last column. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
 
-        #
-        #Save the pre-processed examples to a new dataset
-
-        #Save the pre-processed on disk
+        #Save the pre-processed dataset on disk
         processed_dataset.save_to_disk(f"datasets/eur_lex_sum_processed_{model_type}_ratio_05")
-
-
 
 
     # Work out later
     #4) Train the abstractive summarization model on the pre-processed dataset
-    device = torch.device('mps')
+    mps_device = torch.device('mps')
 
     print(f'Can we use GPU: {torch.backends.mps.is_available()}')
     print(f'Second test: {torch.backends.mps.is_built()}')
@@ -132,34 +128,33 @@ if __name__ == "__main__":
     model_name = "BART"
 
     model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(model_name)
+    model.to(mps_device)
+
+    #Need to tokenize the references and summaries by the abstractive model's tokenizer. This is because the trainer will expect the input to be tokenized by its tokenizer.
+
 
     # Define the training arguments
     training_args = TrainingArguments(
-        output_dir="./results",
-        num_train_epochs=40,
-        per_device_train_batch_size=4,
-        per_device_eval_batch_size=4,
-        warmup_steps=500,
-        weight_decay=0.01,
-        logging_dir="./logs",
+        output_dir = "./results",
+        num_train_epochs = 40,
+        per_device_train_batch_size = 4,
+        per_device_eval_batch_size = 4,
+        warmup_steps = 500,
+        weight_decay = 0.01,
+        logging_dir = "./logs",
     )
-
-    # Define the training dataset
-    train_dataset = processed_dataset["train"]
-    validation_dataset = processed_dataset["validation"] 
-    test_dataset = processed_dataset["test"]
 
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(tokenizer, model=model)
 
-
+    #Feed the trainer the train_dataset and all its required features. So exclude reference, token_length, and amount_of_extractive_steps. Al
     # Create the trainer
     trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_dataset,
-        eval_dataset= validation_dataset,
-        data_collator=data_collator,
+        model = model,
+        args = training_args,
+        train_dataset = processed_dataset["train"],
+        eval_dataset = processed_dataset["validation"] ,
+        data_collator = data_collator,
     )
 
     # Fine-tune the model

@@ -92,12 +92,15 @@ class AbstractiveSummarizationModel:
                 str: The summarized text.
             """
             #TODO: Check if max_length is correct
+            
             inputs = self.tokenizer([text], max_length= self.tokenizer.model_max_length, return_tensors='pt', truncation=True)
 
             # Generate the summarized text
             summary_ids = self.model.generate(inputs['input_ids'], num_beams=4, max_length=250, early_stopping=True)     
             summary = self.tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces = False)[0]
 
+
+            #TODO: Check is this is correct. Not sure if the sequence of tokenize, generate and batch_decode is correct.
             return summary
     
 
