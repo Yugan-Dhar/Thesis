@@ -29,8 +29,10 @@ def calculate_token_length(example):
 
 
 def calculate_extractive_steps(example):
+    #TODO: Change this to dynamic variable, currently both values are hardcoded.
     context_length_abstractive_model = 512  # adjust this according to your model's context length
-    extractive_compression_ratio = 0.5  # adjust this as needed
+    extractive_compression_ratio = 0.5  
+
     variable = 2  # adjust this as needed
     outcome = (math.log10((variable * context_length_abstractive_model) / example["token_length"])) / (math.log10(extractive_compression_ratio))
     example["amount_of_extractive_steps"] = math.floor(outcome)
@@ -40,7 +42,8 @@ def calculate_extractive_steps(example):
 def get_summarized_chunks(example):
 
     #extractive_summarizer, extractive_tokenizer = models.extractive_models.select_extractive_model("RoBERTa")
-    ratio = 0.5  # adjust this as needed
+    #TODO: Ratio is hardcoded, change to dynamic variable which is the same as the one used in the calculate_extractive_steps function.
+    extractive_compression_ratio = 0.5  # adjust this as needed
     text = example["reference"]
 
     chunks = text_splitter.split_text(text)  # assuming langchain.TokenTextSplitter() works similarly
@@ -48,13 +51,12 @@ def get_summarized_chunks(example):
     summaries = []
 
     for chunk in chunks:
-        summary = extractive_summarizer(chunk, ratio=ratio)
+        summary = extractive_summarizer(chunk, ratio = extractive_compression_ratio)
         summaries.append(summary)
 
     example["concatenated_summary"] = " ".join(summaries)
     print("Summary finished")
     return example
-
 
 
 def get_summarized_chunks_version_2(text):
