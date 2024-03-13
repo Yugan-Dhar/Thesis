@@ -16,7 +16,6 @@ class ExtractiveSummarizationModel:
 
         self.model_type = model_type
         self.model, self.tokenizer = self.load_extractive_model()
-
     
     def load_extractive_model(self):
         """

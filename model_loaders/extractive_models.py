@@ -24,11 +24,8 @@ def initialize_model(model_name):
     custom_config.output_hidden_states = True
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name, config = custom_config)
-    #mps_device = 'mps'
-    #model.to(mps_device) 
 
     summarizer = Summarizer(custom_model = model, custom_tokenizer = tokenizer)
-    
     return summarizer, tokenizer  
 
 

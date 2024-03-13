@@ -6,6 +6,7 @@ import math
 from langchain.text_splitter import TokenTextSplitter
 from transformers import Trainer, TrainingArguments, DataCollatorForSeq2Seq
 from datasets import load_dataset
+
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 model_type = "RoBERTa"
@@ -103,7 +104,8 @@ if __name__ == "__main__":
     #print(processed_dataset)
     #TODO: Change this to the following: - Check if dataset is already pre-processed. If not, pre-process it. If it is, load it.
     # For now, bool is just placeholder. 
-    bool = True
+    
+    bool = False
     if bool:
 
         #dataset = dataset.map(lambda examples: {'token_length': [len(extractive_tokenizer.tokenize(text)) for text in examples['reference']]}, batched=True, num_proc=4)
@@ -118,7 +120,7 @@ if __name__ == "__main__":
 
         #TODO: Everything works, including below code. But it is not efficient. It is better to use the map function but it stalls when performing the get_summarized_chunks function using num_proc.
         #Need to fix that numproc issue because currently, trying to extractively summarize the reference without num_proc takes too long --> 24+ hours.
-        processed_dataset = processed_dataset.map(get_summarized_chunks)
+        processed_dataset = processed_dataset.map(get_summarized_chunks, batch_size= 32, batched=True)
         print("Summarized chunks")
         print(processed_dataset)
         #TODO: Change ratio so it is dynamic. Currently hardcoded in the string. Change to a variable that can be changed in the function call.
