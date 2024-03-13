@@ -10,6 +10,17 @@ warnings.filterwarnings('ignore', category=FutureWarning, message='^The default 
 
 model_type = "RoBERTa"
 extractive_summarizer, extractive_tokenizer = model_loaders.extractive_models.select_extractive_model(model_type)
+mps_device = torch.device('mps')
+
+
+if torch.backends.mps.is_available():
+    mps_device = torch.device("mps")
+    x = torch.ones(1, device=mps_device)
+    print (x)
+else:
+    print ("MPS device not found.")
+
+# Print the device where the tensor is located
 
 
 text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
