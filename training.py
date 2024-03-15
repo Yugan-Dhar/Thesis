@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
         #TODO: Everything works, including below code. But it is not efficient. It is better to use the map function but it stalls when performing the get_summarized_chunks function using num_proc.
         #Need to fix that numproc issue because currently, trying to extractively summarize the reference without num_proc takes too long --> 24+ hours.
-        processed_dataset = processed_dataset.map(get_summarized_chunks, batch_size= 32, batched=True)
+        processed_dataset = processed_dataset.map(get_summarized_chunks)
         print("Summarized chunks")
         print(processed_dataset)
         #TODO: Change ratio so it is dynamic. Currently hardcoded in the string. Change to a variable that can be changed in the function call.
