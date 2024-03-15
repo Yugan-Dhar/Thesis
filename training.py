@@ -131,19 +131,26 @@ if __name__ == "__main__":
         #Save the pre-processed dataset on disk
         processed_dataset.save_to_disk(f"datasets/eur_lex_sum_processed_{model_type}_ratio_05")
 
+    model_name = "BART"
+    model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(model_name)
+    mps_device = torch.device('mps')  
+    model.to(mps_device)
+    #TODO: Reshuffle dataset and remove columns that are not necessary for training. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
+    processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
+    print(processed_dataset)
 
+    processed_dataset = processed_dataset.map(lambda example: {'celex_id': tokenizer.tokenize(example['concatenated_summary'])}, num_proc= 9)
+    processed_dataset = processed_dataset.map(lambda example: {'summary': tokenizer.tokenize(example['summary'])}, num_proc= 9)
     # Work out later
     #4) Train the abstractive summarization model on the pre-processed dataset
-    mps_device = torch.device('mps')
+    print(processed_dataset)
 
     print(f'Can we use GPU: {torch.backends.mps.is_available()}')
     print(f'Second test: {torch.backends.mps.is_built()}')
 
 
     # Load the BART model and tokenizer
-    model_name = "BART"
-    model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(model_name)
-    model.to(mps_device)
+
 
     #TODO: Need to tokenize the references and summaries by the abstractive model's tokenizer. This is because the trainer will expect the input to be tokenized by its tokenizer.
 
