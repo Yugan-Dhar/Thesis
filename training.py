@@ -97,11 +97,12 @@ def get_summarized_chunks_version_2(text):
 if __name__ == "__main__":
 
     #Select the extractive model
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
+    #dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
 
-    #processed_dataset = load_dataset("arrow", data_files= {"train": "datasets/eur_lex_sum_processed_RoBERTa_ratio_05/train/data-00000-of-00001.arrow", "validation": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/validation/data-00000-of-00001.arrow", "test": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/test/data-00000-of-00001.arrow"})
-    
-    #print(processed_dataset)
+    #TODO: Argument parser should come here so we can specify the extractive model, extractive compression ratio and abstractive model. Should also include training arguments such as epochs, batch size, etc.
+    processed_dataset = load_dataset("arrow", data_files= {"train": "datasets/eur_lex_sum_processed_RoBERTa_ratio_05/train/data-00000-of-00001.arrow", "validation": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/validation/data-00000-of-00001.arrow", "test": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/test/data-00000-of-00001.arrow"})
+    print(processed_dataset)
+
     #TODO: Change this to the following: - Check if dataset is already pre-processed. If not, pre-process it. If it is, load it.
     # For now, bool is just placeholder. 
     
@@ -125,7 +126,7 @@ if __name__ == "__main__":
         print(processed_dataset)
         #TODO: Change ratio so it is dynamic. Currently hardcoded in the string. Change to a variable that can be changed in the function call.
         
-        #Reorder the columns so that the reference is the last column. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
+        #TODO: Reorder the columns so that the reference is the last column. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
 
         #Save the pre-processed dataset on disk
         processed_dataset.save_to_disk(f"datasets/eur_lex_sum_processed_{model_type}_ratio_05")
@@ -138,14 +139,13 @@ if __name__ == "__main__":
     print(f'Can we use GPU: {torch.backends.mps.is_available()}')
     print(f'Second test: {torch.backends.mps.is_built()}')
 
-    #
+
     # Load the BART model and tokenizer
     model_name = "BART"
-
     model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(model_name)
     model.to(mps_device)
 
-    #Need to tokenize the references and summaries by the abstractive model's tokenizer. This is because the trainer will expect the input to be tokenized by its tokenizer.
+    #TODO: Need to tokenize the references and summaries by the abstractive model's tokenizer. This is because the trainer will expect the input to be tokenized by its tokenizer.
 
 
     # Define the training arguments
