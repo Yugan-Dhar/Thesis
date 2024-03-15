@@ -2,5 +2,5 @@ thesisvenv
 .env
 .pdf
 .DS_store
-datasets
 __pycache__/
+datasets
