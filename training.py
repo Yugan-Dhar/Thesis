@@ -3,22 +3,12 @@ import os
 import torch
 import warnings
 import math
+import argparse
+import logging
 from langchain.text_splitter import TokenTextSplitter
 from transformers import Trainer, TrainingArguments, DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from datasets import load_dataset
-
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
-
-model_type = "RoBERTa"
-extractive_summarizer, extractive_tokenizer = model_loaders.extractive_models.select_extractive_model(model_type)
-# Print the device where the tensor is located
-
-
-text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
-            tokenizer = extractive_tokenizer, 
-            chunk_size = extractive_tokenizer.model_max_length - 50,
-            chunk_overlap=50)
-
 
 def tokenize_reference(example, tokenizer):
     example["tokenized_reference"] = tokenizer(example["reference"], return_tensors="pt")
@@ -72,80 +62,102 @@ def get_feature(batch):
   return encodings
 
 
-
 if __name__ == "__main__":
 
-    #TODO: Argument parser should come here so we can specify:
      #the extractive model, extractive compression ratio and abstractive model. Should also include training arguments such as epochs, batch size, etc.
-    # Arg parser combines the arguments and combines all neccessary information to create the path. Then we check if the path exists. If it does, we load the dataset. If it doesn't, we create the dataset and save it to disk.
-    
+    parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
+
     #path = f"datasets/eur_lex_sum_processed_{model_type}_ratio_05"
 
-    #1) Load the dataset
-    if not os.path.exists("datasets/eur_lex_sum_processed_RoBERTa_ratio_05"):
+    #TODO: Add list of choices
+    parser.add_argument('extractive_model', type= str, 
+                        help= "The extractive model to be used for pre-processing the dataset.")
+    parser.add_argument('compression_ratio', type= int, default= 5, 
+                        help= "The compression ratio to be used for the extractive model. Is in the form of an integer where 5 is 0.5, 10 is 1.0, etc.")
+    #TODO: Add list of choices
+    parser.add_argument('abstractive_model', type= str,
+                        help= "The abstractive model to be used for fine-tuning.")
+    
+    #TODO: Add directory argument? 
+    #Maybe not required becauswe we create a new path variable based on the extractive model, compression ratio and abstractive model.
+
+    #TODO: Add other optional training arguments
+    parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
+                        help= "The amount of epochs to train the abstractive model for.")
+    parser.add_argument('-b', '--batch_size', type= int, default= 4, metavar= "",
+                        help= "The batch size to train the abstractive model with.")
+    parser.add_argument('-w', '--warmup_steps', type= int, default= 500, metavar= "",
+                        help= "The amount of warmup steps to train the abstractive model for.")
+
+    #TODO: Later on, because it requires quite some changes to the code to make it work as desired.
+    parser.add_argument('-v', '--verbose', action= "store_true", default= True,
+                        help= "Turn verbosity on or off.")
+    
+    args = parser.parse_args()
+    args.compression_ratio = args.compression_ratio / 10
+
+    extractive_summarizer, extractive_tokenizer = model_loaders.extractive_models.select_extractive_model(args.extractive_model)
+
+    text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
+                tokenizer = extractive_tokenizer, 
+                chunk_size = extractive_tokenizer.model_max_length - 50,
+                chunk_overlap=50)
+    
+
+    dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_{args.compression_ratio}"
+
+    if not os.path.exists(dataset_path):
+
+        if args.verbose:
+            print(f"Dataset not found. Pre-processing the dataset now......")
+
         processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english')
         processed_dataset = processed_dataset.map(lambda example: {'token_length': len(extractive_tokenizer.tokenize(example['reference']))}, num_proc= 9)
-        print("Token length calculated")
-
         processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
-        print("Extractive steps calculated")
-
-        #TODO: Everything works, including below code. But it is not efficient. It is better to use the map function but it stalls when performing the get_summarized_chunks function using num_proc.
-        #Need to fix that numproc issue because currently, trying to extractively summarize the reference without num_proc takes too long --> 24+ hours.
+        #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         processed_dataset = processed_dataset.map(get_summarized_chunks)
-        print("Summarized chunks")
-        print(processed_dataset)
-        #TODO: Change ratio so it is dynamic. Currently hardcoded in the string. Change to a variable that can be changed in the function call.
-        
-        #TODO: Reorder the columns so that the reference is the last column. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
 
-        #Save the pre-processed dataset on disk
-        processed_dataset.save_to_disk(f"datasets/eur_lex_sum_processed_{model_type}_ratio_05")
+        #TODO: Check HF documentation to see if this is the best way to save the dataset to disk
+        processed_dataset.save_to_disk(dataset_path)
+
+        if args.verbose:
+            print(f"\nDataset pre-processed and saved to {dataset_path}")
 
     else:        
-        #TODO: change the path to the correct one currently hardcoded.
-        
+        #TODO: change the path to the correct one currently hardcoded. Dependent on previous TODO item to be fixed.
+                
         processed_dataset = load_dataset("arrow", data_files= {"train": "datasets/eur_lex_sum_processed_RoBERTa_ratio_05/train/data-00000-of-00001.arrow", "validation": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/validation/data-00000-of-00001.arrow", "test": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/test/data-00000-of-00001.arrow"})
+        if args.verbose:
+            print(f"Dataset found and loaded.")
+
+
+    model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(args.abstractive_model)
+    if args.verbose:
+        print(f"Model and tokenizer loaded: {model} and {tokenizer}")
     
-    
-    print(processed_dataset)
-
-    #TODO: Change this to the following: - Check if dataset is already pre-processed. If not, pre-process it. If it is, load it.
-    # For now, bool is just placeholder. 
-
-        #dataset = dataset.map(lambda examples: {'token_length': [len(extractive_tokenizer.tokenize(text)) for text in examples['reference']]}, batched=True, num_proc=4)
-        #processed_dataset = dataset.map(tokenize_reference, extractive_tokenizer, num_proc=4)
-        
-        #TODO: Finish whole preprocessing pipeline
-
-
-    model_name = "BART"
-    model, tokenizer = model_loaders.abstractive_models.select_abstractive_model(model_name)
     mps_device = torch.device('mps')  
     model.to(mps_device)
-        
-    #TODO: Reshuffle dataset and remove columns that are not necessary for training. This is because the trainer will expect the input to be tokenized by the abstractive model's tokenizer.
+
+
+    # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
 
-    # Work out later
-    #4) Train the abstractive summarization model on the pre-processed dataset
-    print(processed_dataset)
-
-    print(f'Can we use GPU: {torch.backends.mps.is_available()}')
-    print(f'Second test: {torch.backends.mps.is_built()}')
-    # Load the BART model and tokenizer
+    if args.verbose:
+        print(f"Training the abstractive model on the pre-processed dataset.")
+        print(f'Can we use GPU: {torch.backends.mps.is_available()}')
+        print(f'Second test: {torch.backends.mps.is_built()}')
 
     #TODO: Need to tokenize the references and summaries by the abstractive model's tokenizer. This is because the trainer will expect the input to be tokenized by its tokenizer.
 
-    # Define the training arguments
+    #TODO: Implement training arguments as an argument to the function. This is because we want to be able to specify the training arguments from the command line.
     training_args = Seq2SeqTrainingArguments(
         output_dir = "./results",
-        num_train_epochs = 40,
-        per_device_train_batch_size = 2,
-        per_device_eval_batch_size = 1,
-        warmup_steps = 500,
+        num_train_epochs = args.epochs,
+        per_device_train_batch_size = args.batch_size,
+        per_device_eval_batch_size = args.batch_size,
+        warmup_steps = args.warmup_steps,
         weight_decay = 0.01,
         logging_dir = "./logs",
         remove_unused_columns= False
@@ -164,10 +176,15 @@ if __name__ == "__main__":
         data_collator = data_collator
     )
 
-    # Fine-tune the model
+    if not args.verbose:
+        logging.basicConfig(level=logging.ERROR)
+
     trainer.train()
 
+    if args.verbose:
+        print(f"Training finished and model saved to disk")
     # Save the fine-tuned model
+    #TODO: Change the path to the correct one currently hardcoded.
     trainer.save_model("./fine-tuned-model")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
