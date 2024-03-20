@@ -95,7 +95,7 @@ if __name__ == "__main__":
     abstractive_model, abstractive_tokenizer = model_loaders.abstractive_models.select_abstractive_model(args.abstractive_model)
 
     if args.verbose:
-        print(f"Extractive model and tokenizer loaded: {extractive_model} and {extractive_tokenizer}\nAbstractive model and tokenizer loaded: {abstractive_model} and {abstractive_tokenizer}")
+        print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
     
     if torch.cuda.is_available():
         extractive_model.to('cuda')
@@ -147,7 +147,6 @@ if __name__ == "__main__":
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
-
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = f"./results/",
