@@ -98,11 +98,9 @@ if __name__ == "__main__":
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
     
     if torch.cuda.is_available():
-        extractive_model.to('cuda')
         abstractive_model.to('cuda')
 
     elif torch.backends.mps.is_available():
-        extractive_model.to(torch.device('mps'))
         abstractive_model.to(torch.device('mps'))
 
     #Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
@@ -112,8 +110,7 @@ if __name__ == "__main__":
                 chunk_overlap=50)
     
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio})"
-    
+    dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}"
 
     if not os.path.exists(dataset_path):
 
@@ -132,7 +129,7 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"\nDataset pre-processed and saved to {dataset_path}")
 
-    else:        
+    else:      
         #TODO: change the path to the correct one currently hardcoded. Dependent on previous TODO item to be fixed.
                 
         processed_dataset = load_dataset("arrow", data_files= {"train": "datasets/eur_lex_sum_processed_RoBERTa_ratio_05/train/data-00000-of-00001.arrow", "validation": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/validation/data-00000-of-00001.arrow", "test": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/test/data-00000-of-00001.arrow"})
@@ -158,17 +155,16 @@ if __name__ == "__main__":
         logging_dir = f"./logs",
         remove_unused_columns= False
     )
-
+    
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model=abstractive_model)
-
     #Feed the trainer the train_dataset and all its required features. So exclude reference, token_length, and amount_of_extractive_steps. Al
     # Create the trainer
     trainer = Seq2SeqTrainer(
         model = abstractive_model,
         args = training_args,
-        train_dataset = processed_dataset["train"][:10],
-        eval_dataset = processed_dataset["validation"][:1],
+        train_dataset = processed_dataset["train"].shard(num_shards= 1000, index= 0),
+        eval_dataset = processed_dataset["validation"],
         data_collator = data_collator
     )
 
@@ -184,7 +180,4 @@ if __name__ == "__main__":
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
         
-
-
     #6) Save the abstractive summarization model to disk
-    
