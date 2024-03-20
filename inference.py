@@ -91,6 +91,7 @@ class AbstractiveSummarizationModel:
                 str: The summarized text.
             """
             #TODO: Check if max_length is correct
+            #TODO: Check if we can use pipeline instead of generate
             
             inputs = self.tokenizer([text], max_length= self.tokenizer.model_max_length, return_tensors='pt', truncation=True)
 
@@ -134,8 +135,7 @@ class SummarizationPipeline:
         Returns:
         int: The amount of extractive steps needed.
         """
-        
-        amount_of_tokens = len(self.extractive_model.tokenizer.tokenize(text))
+        amount_of_tokens = len(self.extractive_model.tokenizer(text, return_tensors='pt')['input_ids'].shape[1])
         print(f"Amount of tokens in text: {amount_of_tokens}")
         
         #TODO: Check if 1 still applies. This is just a placeholder for now.
@@ -191,6 +191,11 @@ class SummarizationPipeline:
 
         return chunks
     
+
+    def __call__(self, text):
+
+        #Possibly add additional parameters here but this means they should also be given as input to run_inference
+        return self.run_inference(text)
     
 if __name__ == "__main__":
     
