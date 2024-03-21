@@ -30,7 +30,6 @@ def calculate_extractive_steps(example):
     return example
 
 
-
 def get_summarized_chunks(example):
 
     #Could also improve this by using the tokenized_references column and then use the summarizer package to summarize the text. This would be more efficient.
@@ -60,6 +59,7 @@ def get_feature(batch):
                'labels': encodings['labels']}
 
   return encodings
+
 
 
 if __name__ == "__main__":
@@ -123,7 +123,6 @@ if __name__ == "__main__":
         #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         processed_dataset = processed_dataset.map(get_summarized_chunks)
 
-        #TODO: Check HF documentation to see if this is the best way to save the dataset to disk. Change title of arrow datasets cause currently they are very incovenient to work with.
         processed_dataset.save_to_disk(dataset_path)
 
         if args.verbose:
@@ -132,7 +131,7 @@ if __name__ == "__main__":
     else:      
         #TODO: change the path to the correct one currently hardcoded. Dependent on previous TODO item to be fixed.
                 
-        processed_dataset = load_dataset("arrow", data_files= {"train": "datasets/eur_lex_sum_processed_RoBERTa_ratio_05/train/data-00000-of-00001.arrow", "validation": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/validation/data-00000-of-00001.arrow", "test": "/Users/mikasie/Documents/GitHub/Thesis/datasets/eur_lex_sum_processed_RoBERTa_ratio_05/test/data-00000-of-00001.arrow"})
+        processed_dataset = load_dataset("arrow", data_files= {"train": f"{dataset_path}/train/data-00000-of-00001.arrow", "validation": f"{dataset_path}/validation/data-00000-of-00001.arrow", "test": f"{dataset_path}/test/data-00000-of-00001.arrow"})
         if args.verbose:
             print(f"Dataset found and loaded.")
 
@@ -145,15 +144,18 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Starting training on the abstractive model.")
 
+    
     training_args = Seq2SeqTrainingArguments(
-        output_dir = f"./results/",
+        output_dir = f"results/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         num_train_epochs = args.epochs,
         per_device_train_batch_size = args.batch_size,
         per_device_eval_batch_size = args.batch_size,
         warmup_steps = args.warmup_steps,
         weight_decay = 0.01,
-        logging_dir = f"./logs",
-        remove_unused_columns= False
+        logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
+        remove_unused_columns= False,
+        load_best_model_at_end= True
+        #compute_metrics = compute_metrics 
     )
     
     # Define the data collator
@@ -163,7 +165,7 @@ if __name__ == "__main__":
     trainer = Seq2SeqTrainer(
         model = abstractive_model,
         args = training_args,
-        train_dataset = processed_dataset["train"].shard(num_shards= 1000, index= 0),
+        train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator
     )
@@ -172,12 +174,13 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.ERROR)
 
     trainer.train()
+
     # Save the fine-tuned model
-    #TODO: Change the path to the correct one currently hardcoded.
-    trainer.save_model(f"./fine_tuned_models/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}")
+    trainer.save_model(f"fine_tuned_models/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}")
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-        
-    #6) Save the abstractive summarization model to disk
+    
+    results = trainer.predict(processed_dataset["test"])
+    print(results)
