@@ -5,9 +5,11 @@ import warnings
 import math
 import argparse
 import logging
+import evaluate
 from langchain.text_splitter import TokenTextSplitter
 from transformers import Trainer, TrainingArguments, DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from datasets import load_dataset
+
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 #Not used currently
@@ -61,6 +63,17 @@ def get_feature(batch):
   return encodings
 
 
+def compute_metrics(pred):
+    labels_ids = pred.label_ids
+    pred_ids = pred.predictions
+
+    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+    labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
+    label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
+
+    rouge_output = evaluate.rouge(pred_str, label_str)
+    bert_output = evaluate.bert_score(pred_str, label_str)
+    return {**rouge_output, **bert_output}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
@@ -168,6 +181,7 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator
+        #compute_metrics = compute_metrics
     )
 
     if not args.verbose:
@@ -184,3 +198,7 @@ if __name__ == "__main__":
     
     results = trainer.predict(processed_dataset["test"])
     print(results)
+
+    summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
+    summ_metrics_results = summ_metrics.compute(references= processed_dataset["test"]["summary"], predictions= results.predictions)
+    print(summ_metrics_results)

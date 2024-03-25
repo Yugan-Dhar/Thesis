@@ -4,3 +4,5 @@ venv
 .DS_store
 __pycache__/
 datasets
+logs
+mykeys
