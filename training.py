@@ -52,9 +52,10 @@ def get_summarized_chunks(example):
 
     
 def get_feature(batch):
-  #Check max length
-  encodings = extractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length=1024, truncation=True)
+  #TODO: Check max length and if this is correct
+
+  encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
+                        max_length = (args.K_variable * abstractive_tokenizer.model_max_length), truncation=True)
 
   encodings = {'input_ids': encodings['input_ids'],
                'attention_mask': encodings['attention_mask'],
