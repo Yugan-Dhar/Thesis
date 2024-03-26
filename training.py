@@ -108,8 +108,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    extractive_model, extractive_tokenizer = model_loaders.extractive_models.select_extractive_model(args.extractive_model)
-    abstractive_model, abstractive_tokenizer = model_loaders.abstractive_models.select_abstractive_model(args.abstractive_model)
+    extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
+    abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
