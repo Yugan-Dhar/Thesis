@@ -39,7 +39,7 @@ def get_summarized_chunks(example):
     #I think it is possible but maybe do this later on. We need to use cluster_runner, cluster functions from summary_processsor.py and from cluster_features.py. 
     #But it must be noted that we would also need to change our own code a bit because cluster function returns sorted values. So we need to know which sentence correlates with which sorted value(embedding)
    
-    chunks = text_splitter.split_text(example["reference"])  # assuming langchain.TokenTextSplitter() works similarly
+    chunks = text_splitter.split_text(example["reference"])  
     summaries = []
 
     for chunk in chunks:
