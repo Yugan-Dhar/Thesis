@@ -203,3 +203,5 @@ if __name__ == "__main__":
     summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
     summ_metrics_results = summ_metrics.compute(references= processed_dataset["test"]["summary"], predictions= results.predictions)
     print(summ_metrics_results)
+    #Test
+    #But this is new
