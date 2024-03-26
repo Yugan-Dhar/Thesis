@@ -116,9 +116,13 @@ if __name__ == "__main__":
     
     if torch.cuda.is_available():
         abstractive_model.to('cuda')
+        if args.verbose:
+            print(f"Device used:{torch.currentget_device_name(0)}")
 
     elif torch.backends.mps.is_available():
         abstractive_model.to(torch.device('mps'))
+        if args.verbose:
+            print(f"Using the mps backend:{torch.backends.mps.is_available()}")
 
     #Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
     text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
@@ -138,6 +142,8 @@ if __name__ == "__main__":
         processed_dataset = processed_dataset.map(calculate_token_length, num_proc= 9)
         processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
         #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
+        if args.verbose:
+            print("Starting on extractive summaries")
         processed_dataset = processed_dataset.map(get_summarized_chunks)
 
         processed_dataset.save_to_disk(dataset_path)
