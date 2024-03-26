@@ -1,4 +1,4 @@
-import model_loaders.extractive_models, model_loaders.abstractive_models
+import utils.extractive_models, utils.abstractive_models
 import os
 import torch
 import warnings
@@ -77,6 +77,9 @@ def compute_metrics(pred):
     return {**rouge_output, **bert_output}
 
 if __name__ == "__main__":
+
+    #TODO: We probably need to change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
+    #For now it is fine to keep it like this
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
     parser.add_argument('extractive_model', type= str, 
@@ -191,7 +194,7 @@ if __name__ == "__main__":
     trainer.train()
 
     # Save the fine-tuned model
-    trainer.save_model(f"fine_tuned_models/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}")
+    trainer.save_model(f"models/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}")
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
@@ -203,6 +206,8 @@ if __name__ == "__main__":
     summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
     summ_metrics_results = summ_metrics.compute(references= processed_dataset["test"]["summary"], predictions= results.predictions)
     print(summ_metrics_results)
-    #Test
-
-    #What happened
+    
+    
+    #git add - A
+    #git commit - m "Message"
+    #git push {remote} {branch}

@@ -1,4 +1,5 @@
-import model_loaders.extractive_models, model_loaders.abstractive_models
+from utils.extractive_models import select_extractive_model
+from utils.abstractive_models import select_abstractive_model
 import os
 import warnings
 import warnings
@@ -29,7 +30,7 @@ class ExtractiveSummarizationModel:
         """
 
         
-        self.model, self.tokenizer = model_loaders.extractive_models.select_extractive_model(self.model_type)
+        self.model, self.tokenizer = select_extractive_model(self.model_type)
         
         print(f"Succesfully loaded {self.model_type} model and its tokenizer")
         
@@ -73,7 +74,7 @@ class AbstractiveSummarizationModel:
             ValueError: If an invalid abstractive model type is specified by abstractive_models file.
         """
         
-        self.model, self.tokenizer = model_loaders.abstractive_models.select_abstractive_model(self.model_type)
+        self.model, self.tokenizer = select_abstractive_model(self.model_type)
 
         print(f"Succesfully loaded {self.model_type} model and its tokenizer")
 
