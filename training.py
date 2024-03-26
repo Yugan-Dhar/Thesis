@@ -43,7 +43,7 @@ def get_summarized_chunks(example):
     summaries = []
 
     for chunk in chunks:
-        summary = extractive_model(chunk, ratio = args.compression_ratio )
+        summary = extractive_model(chunk, ratio = (args.compression_ratio)/10)
         summaries.append(summary)
 
     example["concatenated_summary"] = " ".join(summaries)
