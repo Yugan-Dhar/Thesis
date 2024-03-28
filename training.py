@@ -106,7 +106,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', action= "store_true", default= True,
                         help= "Turn verbosity on or off.")
     
-    args = parser.parse_args()
+    args = parser.parse_args()  
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     if torch.cuda.is_available():
         abstractive_model.to('cuda')
         if args.verbose:
-            print(f"Device used:{torch.currentget_device_name(0)}")
+            print(f"Device used:{torch.cuda.get_device_name(0)}")
 
     elif torch.backends.mps.is_available():
         abstractive_model.to(torch.device('mps'))
