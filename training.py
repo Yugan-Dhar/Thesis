@@ -128,7 +128,7 @@ if __name__ == "__main__":
     text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
                 tokenizer = extractive_tokenizer, 
                 chunk_size = extractive_tokenizer.model_max_length - 50,
-                chunk_overlap=50)
+                chunk_overlap=50) 
     
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}"
@@ -177,7 +177,9 @@ if __name__ == "__main__":
         weight_decay = 0.01,
         logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         remove_unused_columns= False,
-        load_best_model_at_end= True
+        load_best_model_at_end= True,
+        evaluation_strategy= "epoch",
+        save_strategy = 'epoch'
         #compute_metrics = compute_metrics 
     )
     
