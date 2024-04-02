@@ -6,6 +6,7 @@ import math
 import argparse
 import logging
 import evaluate
+import torch.nn as nn
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from datasets import load_dataset
@@ -93,7 +94,7 @@ if __name__ == "__main__":
     #Maybe not required becauswe we create a new path variable based on the extractive model, compression ratio and abstractive model.
 
     #TODO: Add other optional training arguments
-    parser.add_argument('-k', '--K_variable', type= int, default= 2, metavar= "",
+    parser.add_argument('-k', '--K_variable', type= int, default= 1, metavar= "",
                         help= "The K variable to be used for the extractive model. This is used to calculate the amount of extractive steps needed.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
@@ -115,14 +116,16 @@ if __name__ == "__main__":
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
     
     if torch.cuda.is_available():
-        abstractive_model.to('cuda')
+        device = torch.device('cuda')
+        abstractive_model = nn.DataParallel(abstractive_model)
+        abstractive_model.to(device)
         if args.verbose:
-            print(f"Device used:{torch.cuda.get_device_name(0)}")
+            print(f"Using abstractive model on device: {device}")
 
     elif torch.backends.mps.is_available():
         abstractive_model.to(torch.device('mps'))
         if args.verbose:
-            print(f"Using the mps backend:{torch.backends.mps.is_available()}")
+            print(f"Using the mps backend: {torch.backends.mps.is_available()}")
 
     #Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
     text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
@@ -177,9 +180,9 @@ if __name__ == "__main__":
         weight_decay = 0.01,
         logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         remove_unused_columns= False,
-        load_best_model_at_end= True,
-        evaluation_strategy= "epoch",
-        save_strategy = 'epoch'
+        #load_best_model_at_end= True,
+        #evaluation_strategy= "epoch",
+        #save_strategy = 'epoch'
         #compute_metrics = compute_metrics 
     )
     
