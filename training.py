@@ -26,8 +26,9 @@ def calculate_token_length(example):
 
 def calculate_extractive_steps(example):
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
-
-    outcome = (math.log10((args.K_variable * context_length_abstractive_model) / example["token_length"])) / (math.log10(args.compression_ratio / 10))
+    #Previously:
+    #outcome = (math.log10((args.K_variable * context_length_abstractive_model) / example["token_length"])) / (math.log10(args.compression_ratio / 10))
+    outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
    
     example["amount_of_extractive_steps"] = math.floor(outcome)
     return example
@@ -54,9 +55,9 @@ def get_summarized_chunks(example):
     
 def get_feature(batch):
   #TODO: Check max length and if this is correct
-
+  #Previously: encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'], max_length = (args.K_variable * abstractive_tokenizer.model_max_length),trunction=True)
   encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length = (args.K_variable * abstractive_tokenizer.model_max_length), truncation=True)
+                        max_length = (abstractive_tokenizer.model_max_length))
 
   encodings = {'input_ids': encodings['input_ids'],
                'attention_mask': encodings['attention_mask'],
@@ -94,8 +95,8 @@ if __name__ == "__main__":
     #Maybe not required becauswe we create a new path variable based on the extractive model, compression ratio and abstractive model.
 
     #TODO: Add other optional training arguments
-    parser.add_argument('-k', '--K_variable', type= int, default= 1, metavar= "",
-                        help= "The K variable to be used for the extractive model. This is used to calculate the amount of extractive steps needed.")
+    """parser.add_argument('-k', '--K_variable', type= int, default= 1, metavar= "",
+                        help= "The K variable to be used for the extractive model. This is used to calculate the amount of extractive steps needed.")"""
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
