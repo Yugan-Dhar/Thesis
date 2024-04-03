@@ -66,7 +66,7 @@ def get_feature(batch):
   return encodings
 
 
-def compute_metrics(pred):
+def compute_rouge_during_training(pred):
     labels_ids = pred.label_ids
     pred_ids = pred.predictions
 
@@ -75,8 +75,10 @@ def compute_metrics(pred):
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
     rouge_output = evaluate.rouge(pred_str, label_str)
-    bert_output = evaluate.bert_score(pred_str, label_str)
-    return {**rouge_output, **bert_output}
+    return {**rouge_output}
+
+    
+
 
 if __name__ == "__main__":
 
@@ -202,7 +204,8 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = 10)]
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = 10)],
+        compute_metrics = compute_rouge_during_training
     )
 
     if not args.verbose:
