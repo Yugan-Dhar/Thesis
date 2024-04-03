@@ -120,10 +120,14 @@ if __name__ == "__main__":
     
     if torch.cuda.is_available():
         device = torch.device('cuda')
-        abstractive_model = nn.DataParallel(abstractive_model)
+
+        if torch.cuda.device_count() > 1:
+            abstractive_model = nn.DataParallel(abstractive_model)
+
         abstractive_model.to(device)
+
         if args.verbose:
-            print(f"Using abstractive model on device: {device}")
+            print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
 
     elif torch.backends.mps.is_available():
         abstractive_model.to(torch.device('mps'))
