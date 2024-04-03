@@ -107,7 +107,7 @@ if __name__ == "__main__":
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_steps', type= int, default= 500, metavar= "",
                         help= "The amount of warmup steps to train the abstractive model for.")
-    parser.add_argument('-v', '--verbose', action= "store_true", default= True,
+    parser.add_argument('-v', '--verbose', action= "store_false", default= True,
                         help= "Turn verbosity on or off.")
     
     args = parser.parse_args()  
@@ -162,8 +162,8 @@ if __name__ == "__main__":
             print(f"\nDataset pre-processed and saved to {dataset_path}")
 
     else:      
-        #TODO: change the path to the correct one currently hardcoded. Dependent on previous TODO item to be fixed.
-                
+        #TODO: Maybe push dataset to hub so we don't have to store all of them locally 
+    
         processed_dataset = load_dataset("arrow", data_files= {"train": f"{dataset_path}/train/data-00000-of-00001.arrow", "validation": f"{dataset_path}/validation/data-00000-of-00001.arrow", "test": f"{dataset_path}/test/data-00000-of-00001.arrow"})
         if args.verbose:
             print(f"Dataset found and loaded.")
