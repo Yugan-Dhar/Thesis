@@ -168,7 +168,7 @@ if __name__ == "__main__":
         processed_dataset = load_dataset("arrow", data_files= {"train": f"{dataset_path}/train/data-00000-of-00001.arrow", "validation": f"{dataset_path}/validation/data-00000-of-00001.arrow", "test": f"{dataset_path}/test/data-00000-of-00001.arrow"})
         if args.verbose:
             print(f"Dataset found and loaded.")
-
+        print(type(processed_dataset["test"]))
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
@@ -210,7 +210,6 @@ if __name__ == "__main__":
         compute_metrics = compute_rouge_during_training
     )
 
-
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
@@ -226,7 +225,7 @@ if __name__ == "__main__":
     results = trainer.predict(processed_dataset["test"])
 
     summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
-    summ_metrics_results = summ_metrics.compute(references= processed_dataset["test"]["summary"], predictions= results.predictions)
+    summ_metrics_results = summ_metrics.compute(references= results.label_ids, predictions= results.predictions)
     print(summ_metrics_results)
     
     
