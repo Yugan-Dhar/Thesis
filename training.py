@@ -78,8 +78,6 @@ def compute_rouge_during_training(pred):
     return {**rouge_output}
 
     
-
-
 if __name__ == "__main__":
 
     #TODO: We probably need to change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -88,7 +86,7 @@ if __name__ == "__main__":
 
     parser.add_argument('extractive_model', type= str, 
                         help= "The extractive model to be used for pre-processing the dataset.")
-    parser.add_argument('compression_ratio', type= int, default= 5, choices= range(1, 10),
+    parser.add_argument('compression_ratio', type= int, default= 4, choices= range(1, 10),
                         help= "The compression ratio to be used for the extractive model. Is in the form of an integer where 5 is 0.5, 9 is 0.9, etc.")
     parser.add_argument('abstractive_model', type= str,
                         help= "The abstractive model to be used for fine-tuning.")
