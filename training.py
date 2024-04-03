@@ -70,11 +70,14 @@ def compute_rouge_during_training(pred):
     labels_ids = pred.label_ids
     pred_ids = pred.predictions
 
-    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
-    rouge_output = evaluate.rouge(pred_str, label_str)
+    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+
+
+    rouge_output = rouge.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
+
     return {**rouge_output}
 
     
@@ -105,8 +108,8 @@ if __name__ == "__main__":
     #TODO: Change batch_size to 8 or 16. 4 is too low.
     parser.add_argument('-b', '--batch_size', type= int, default= 4, metavar= "",
                         help= "The batch size to train the abstractive model with.")
-    parser.add_argument('-w', '--warmup_steps', type= int, default= 500, metavar= "",
-                        help= "The amount of warmup steps to train the abstractive model for.")
+    parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
+                        help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
                         help= "Turn verbosity on or off.")
     
@@ -132,7 +135,7 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Using the mps backend: {torch.backends.mps.is_available()}")
 
-    #Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
+    #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
     text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
                 tokenizer = extractive_tokenizer, 
                 chunk_size = extractive_tokenizer.model_max_length - 50,
@@ -172,6 +175,7 @@ if __name__ == "__main__":
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
 
+    rouge = evaluate.load('rouge')
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
@@ -182,7 +186,7 @@ if __name__ == "__main__":
         num_train_epochs = args.epochs,
         per_device_train_batch_size = args.batch_size,
         per_device_eval_batch_size = args.batch_size,
-        warmup_steps = args.warmup_steps,
+        warmup_ratio = args.warmup_ratio,
         weight_decay = 0.01,
         logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         remove_unused_columns= False,        
@@ -206,6 +210,7 @@ if __name__ == "__main__":
         compute_metrics = compute_rouge_during_training
     )
 
+
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
@@ -219,7 +224,6 @@ if __name__ == "__main__":
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
     
     results = trainer.predict(processed_dataset["test"])
-    print(results)
 
     summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
     summ_metrics_results = summ_metrics.compute(references= processed_dataset["test"]["summary"], predictions= results.predictions)
