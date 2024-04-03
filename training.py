@@ -173,7 +173,7 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Starting training on the abstractive model.")
 
-    
+    #TODO: 1) Add checkpoint saving 2) Add early stopping 3) Add evaluation during training with only ROUGE 4) 
     training_args = Seq2SeqTrainingArguments(
         output_dir = f"results/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         num_train_epochs = args.epochs,
@@ -183,15 +183,14 @@ if __name__ == "__main__":
         weight_decay = 0.01,
         logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         remove_unused_columns= False,
-        #load_best_model_at_end= True,
-        #evaluation_strategy= "epoch",
-        #save_strategy = 'epoch'
-        #compute_metrics = compute_metrics 
+        evaluation_strategy= "epoch",
+        save_strategy= "epoch",
+
     )
     
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model=abstractive_model)
-    #Feed the trainer the train_dataset and all its required features. So exclude reference, token_length, and amount_of_extractive_steps. Al
+
     # Create the trainer
     trainer = Seq2SeqTrainer(
         model = abstractive_model,
@@ -199,7 +198,6 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator
-        #compute_metrics = compute_metrics
     )
 
     if not args.verbose:
