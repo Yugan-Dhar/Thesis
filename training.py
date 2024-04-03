@@ -8,10 +8,8 @@ import logging
 import evaluate
 import torch.nn as nn
 from langchain.text_splitter import TokenTextSplitter
-from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments
+from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
 from datasets import load_dataset
-from lightning.pytorch.callbacks.early_stopping import EarlyStopping
-
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -122,12 +120,10 @@ if __name__ == "__main__":
     
     if torch.cuda.is_available():
         device = torch.device('cuda')
-
         if torch.cuda.device_count() > 1:
             abstractive_model = nn.DataParallel(abstractive_model)
 
         abstractive_model.to(device)
-
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
 
@@ -176,13 +172,11 @@ if __name__ == "__main__":
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
 
-    # Early stopping criteria
-    early_stopping_callback = EarlyStopping(monitor = 'eval_loss', patience = 10, mode = 'min')
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
 
-    #TODO: 2) Add early stopping 3) Add evaluation during training with only ROUGE 4) 
+    #TODO: 3) Add evaluation during training with only ROUGE 4) 
     training_args = Seq2SeqTrainingArguments(
         output_dir = f"results/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
         num_train_epochs = args.epochs,
@@ -195,7 +189,7 @@ if __name__ == "__main__":
         load_best_model_at_end = True,
         metric_for_best_model = 'eval_loss',
         save_strategy= "epoch",
-        callbacks = [early_stopping_callback],
+        evaluation_strategy = "epoch"
     )
     
     # Define the data collator
@@ -207,7 +201,8 @@ if __name__ == "__main__":
         args = training_args,
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
-        data_collator = data_collator
+        data_collator = data_collator,
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = 10)]
     )
 
     if not args.verbose:
