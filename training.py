@@ -6,6 +6,7 @@ import math
 import argparse
 import logging
 import evaluate
+import json
 import torch.nn as nn
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}"
-
+    """
     if not os.path.exists(dataset_path):
 
         if args.verbose:
@@ -225,7 +226,27 @@ if __name__ == "__main__":
 
     summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
     summ_metrics_results = summ_metrics.compute(references = results.label_ids, predictions= results.predictions)
-    print(summ_metrics_results)
+
+    #TODO: Add BLANC and BARTScore metrics. They are calculated here and then added to the summ_metrics_results dictionary.
+
+    #TODO: Then, the summ_metrics_results dictionary is saved to json."""
+
+    filename = 'results/evaluation_results.json'
+
+    # Load existing data
+    if os.path.isfile(filename):
+        with open(filename, 'r') as f:
+            data = json.load(f)
+
+    # Assuming `nested_dict` is your nested dictionary
+    print(data)
+
+    # Convert to JSON and write to a file
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4)
+
+    
+    #print(summ_metrics_results)
     
     
     #git add - A

@@ -1,0 +1,16 @@
+{
+    "Model_ID": "1",
+    "Date_Created": "2021-01-01",
+    "Version": "1",
+    "Abstractive_model": "BART",
+    "Extractive_model": "RoBERTa",
+    "Ratio": "5",
+    "Evaluation_metrics": {
+        "ROUGE-1": "0.5",
+        "ROUGE-2": "0.4",
+        "ROUGE-L": "0.6",
+        "BertScore": "0.7",
+        "BARTScore": "0.8",
+        "BLANC": "0.9"
+    }
+}
