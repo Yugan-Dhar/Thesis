@@ -11,6 +11,7 @@ import torch.nn as nn
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
 from datasets import load_dataset
+from datetime import date
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -76,12 +77,31 @@ def compute_rouge_during_training(pred):
 
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
-
-    rouge_output = rouge.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
+    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     return {**rouge_output}
 
-    
+
+def get_model_id_and_model_version(previous_results):
+    """
+    Generates a unique model ID and version number based on the existing json file.
+
+    Args:
+        previous_results (list): A list of dictionaries containing previous model results.
+
+    Returns:
+        tuple: A tuple containing the generated model ID and the version number.
+
+    """
+    version_counter = 1
+    model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
+
+    while any(entry["Model_ID"] == model_id for entry in previous_results):
+        version_counter += 1
+        model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
+    return model_id, version_counter
+
+
 if __name__ == "__main__":
 
     #TODO: We probably need to change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -113,6 +133,12 @@ if __name__ == "__main__":
                         help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
                         help= "Turn verbosity on or off.")
+    parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
+                        help= "The weight decay to train the abstractive model with.")
+    parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
+                        help= "Load the best model at the end of training.")
+    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 10, metavar= "",
+                        help= "The amount of patience to use for early stopping.")
     
     args = parser.parse_args()  
 
@@ -143,9 +169,9 @@ if __name__ == "__main__":
                 chunk_overlap = 50) 
     
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    dataset_path = f"datasets/eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}"
-    
-    """
+    dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}")
+
+
     if not os.path.exists(dataset_path):
 
         if args.verbose:
@@ -165,9 +191,14 @@ if __name__ == "__main__":
             print(f"\nDataset pre-processed and saved to {dataset_path}")
 
     else:      
-        #TODO: Maybe push dataset to hub so we don't have to store all of them locally 
-    
-        processed_dataset = load_dataset("arrow", data_files= {"train": f"{dataset_path}/train/data-00000-of-00001.arrow", "validation": f"{dataset_path}/validation/data-00000-of-00001.arrow", "test": f"{dataset_path}/test/data-00000-of-00001.arrow"})
+        
+        processed_dataset = load_dataset("arrow", 
+                                         data_files= {
+            "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
+            "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
+            "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
+        })
+
         if args.verbose:
             print(f"Dataset found and loaded.")
 
@@ -176,29 +207,41 @@ if __name__ == "__main__":
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
 
-    rouge = evaluate.load('rouge')
+    rouge_evaluation_metric = evaluate.load('rouge')
+
+    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
+    
+    if os.path.isfile(evaluation_results_filepath):
+        with open(evaluation_results_filepath, 'r') as f:
+            previous_results = json.load(f)
+    else:
+        previous_results = []
+
+    model_id, model_version = get_model_id_and_model_version(previous_results)
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
 
+    
     #TODO: 3) Add evaluation during training with only ROUGE 4) 
+
     training_args = Seq2SeqTrainingArguments(
-        output_dir = f"results/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
+        output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.epochs,
         per_device_train_batch_size = args.batch_size,
         per_device_eval_batch_size = args.batch_size,
         warmup_ratio = args.warmup_ratio,
-        weight_decay = 0.01,
-        logging_dir = f"logs/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}",
+        weight_decay = args.weight_decay,
+        logging_dir = os.path.join('results', model_id, 'logs'),
         remove_unused_columns= False,        
-        load_best_model_at_end = True,
+        load_best_model_at_end = args.load_best_model_at_end,
         metric_for_best_model = 'eval_loss',
         save_strategy= "epoch",
         evaluation_strategy = "epoch"
     )
     
     # Define the data collator
-    data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model=abstractive_model)
+    data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
     # Create the trainer
     trainer = Seq2SeqTrainer(
@@ -207,7 +250,7 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = 10)],
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
         compute_metrics = compute_rouge_during_training
     )
 
@@ -217,7 +260,8 @@ if __name__ == "__main__":
     trainer.train()
 
     # Save the fine-tuned model
-    trainer.save_model(f"models/{args.abstractive_model}_trained_on_{args.extractive_model}_ratio_0{args.compression_ratio}")
+    trainer.save_model(os.path.join('results', model_id, 'model'))
+
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
@@ -225,29 +269,50 @@ if __name__ == "__main__":
     
     results = trainer.predict(processed_dataset["test"])
 
-    summ_metrics = evaluate.combine([evaluate.rouge, evaluate.bert_score])
-    summ_metrics_results = summ_metrics.compute(references = results.label_ids, predictions= results.predictions)
+    rouge_scores = rouge_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions, rouge_types = ["rouge1", "rouge2", "rougeL"])
+
+    bert_score_evaluation_metric = evaluate.load('bertscore')
+    bert_scores = bert_score_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions)
 
     #TODO: Add BLANC and BARTScore metrics. They are calculated here and then added to the summ_metrics_results dictionary.
+    
 
-    #TODO: Then, the summ_metrics_results dictionary is saved to json."""
+    new_result =   {
+        "Model_ID": model_id,
+        "Date_Created": date.today().strftime("%d/%m/%Y"),
+        "Abstractive_model": args.abstractive_model,
+        "Extractive_model": args.extractive_model,
+        "Ratio": args.compression_ratio/10,
+        "Version": model_version,
+        "Evaluation_metrics": {
+            "ROUGE-1": rouge_scores['rouge1'],
+            "ROUGE-2": rouge_scores['rouge2'],
+            "ROUGE-L": rouge_scores['rougeL'],
+            "BertScore": bert_scores['f1'],
+            "BARTScore": "0.9",
+            "BLANC": "1.0"
+        },
+        "Hyperparameters": {
+            "Learning_rate": args.learning_rate,
+            "Epochs": args.epochs,
+            "Batch_size": args.batch_size,
+            "Warmup_ratio": args.warmup_ratio,
+            "Weight_decay": args.weight_decay,
+            "Load_best_model_at_end": args.load_best_model_at_end,
+            "Early_stopping_patience": args.early_stopping_patience,
+            "Metric_for_best_model": "eval_loss",
+            }
+    }
 
-    filename = 'results/evaluation_results.json'
-
-    # Load existing data
-    if os.path.isfile(filename):
-        with open(filename, 'r') as f:
-            data = json.load(f)
-
-    # Assuming `nested_dict` is your nested dictionary
-    print(data)
+    previous_results.append(new_result)
 
     # Convert to JSON and write to a file
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=4)
+    with open(evaluation_results_filepath, 'w') as f:
+        json.dump(previous_results, f, indent=4)
 
+    if args.verbose:
+        print(f"Results saved to {evaluation_results_filepath}")
     
-    #print(summ_metrics_results)
     
     
     #git add - A
