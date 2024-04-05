@@ -1,2 +1,76 @@
 [
+    {
+        "Model_ID": "BART_RoBERTa_ratio_04_V1",
+        "Date_Created": "2021-09-01",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio": "0.4",
+        "Version": 1,
+        "Evaluation_metrics": {
+            "ROUGE-1": "0.6",
+            "ROUGE-2": "0.5",
+            "ROUGE-L": "0.7",
+            "BertScore": "0.8",
+            "BARTScore": "0.9",
+            "BLANC": "1.0"
+        }
+    },
+    {
+        "Model_ID": "BART_RoBERTa_ratio_04_V2",
+        "Date_Created": "2021-09-01",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio": "0.4",
+        "Version": 2,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.5,
+            "ROUGE-2": "0.5",
+            "ROUGE-L": "0.7",
+            "BertScore": "0.8",
+            "BARTScore": "0.9",
+            "BLANC": "1.0"
+        }
+    },
+    {
+        "Model_ID": "BART_RoBERTa_ratio_04_V3",
+        "Date_Created": "2021-09-01",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio": 0.4,
+        "Version": 3,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.5,
+            "ROUGE-2": "0.5",
+            "ROUGE-L": "0.7",
+            "BertScore": "0.8",
+            "BARTScore": "0.9",
+            "BLANC": "1.0"
+        }
+    },
+    {
+        "Model_ID": "BART_RoBERTa_ratio_04_V4",
+        "Date_Created": "05/04/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio": 0.4,
+        "Version": 4,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.5,
+            "ROUGE-2": "0.5",
+            "ROUGE-L": "0.7",
+            "BertScore": "0.8",
+            "BARTScore": "0.9",
+            "BLANC": "1.0"
+        },
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 4,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 10,
+            "Metric_for_best_model": "eval_loss"
+        }
+    }
 ]

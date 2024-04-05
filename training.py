@@ -8,6 +8,7 @@ import logging
 import evaluate
 import json
 import torch.nn as nn
+from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
 from datasets import load_dataset
@@ -82,7 +83,7 @@ def compute_rouge_during_training(pred):
     return {**rouge_output}
 
 
-def get_model_id_and_model_version(previous_results):
+def get__id_and__version_and_prev_results(evaluation_results_filepath):
     """
     Generates a unique model ID and version number based on the existing json file.
 
@@ -93,12 +94,19 @@ def get_model_id_and_model_version(previous_results):
         tuple: A tuple containing the generated model ID and the version number.
 
     """
+    if os.path.isfile(evaluation_results_filepath):
+        with open(evaluation_results_filepath, 'r') as f:
+            previous_results = json.load(f)
+    else:
+            previous_results = []
+
     version_counter = 1
     model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
 
     while any(entry["Model_ID"] == model_id for entry in previous_results):
         version_counter += 1
         model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
+
     return model_id, version_counter
 
 
@@ -150,6 +158,7 @@ if __name__ == "__main__":
     
     if torch.cuda.is_available():
         device = torch.device('cuda')
+
         if torch.cuda.device_count() > 1:
             abstractive_model = nn.DataParallel(abstractive_model)
 
@@ -193,7 +202,7 @@ if __name__ == "__main__":
     else:      
         
         processed_dataset = load_dataset("arrow", 
-                                         data_files= {
+            data_files= {
             "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
@@ -210,21 +219,13 @@ if __name__ == "__main__":
     rouge_evaluation_metric = evaluate.load('rouge')
 
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
-    
-    if os.path.isfile(evaluation_results_filepath):
-        with open(evaluation_results_filepath, 'r') as f:
-            previous_results = json.load(f)
-    else:
-        previous_results = []
 
-    model_id, model_version = get_model_id_and_model_version(previous_results)
+    model_id, model_version, previous_results = get__id_and__version_and_prev_results(evaluation_results_filepath)
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
 
     
-    #TODO: 3) Add evaluation during training with only ROUGE 4) 
-
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.epochs,
@@ -259,7 +260,6 @@ if __name__ == "__main__":
 
     trainer.train()
 
-    # Save the fine-tuned model
     trainer.save_model(os.path.join('results', model_id, 'model'))
 
     if args.verbose:
@@ -274,8 +274,10 @@ if __name__ == "__main__":
     bert_score_evaluation_metric = evaluate.load('bertscore')
     bert_scores = bert_score_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions)
 
-    #TODO: Add BLANC and BARTScore metrics. They are calculated here and then added to the summ_metrics_results dictionary.
+    #TODO:  and BARTScore metrics. They are calculated here and then added to the summ_metrics_results dictionary.
     
+    blanc_scores = BlancHelp.eval_pairs(results.label_ids, results.predictions, device = device, batch_size = 32)
+    blanc_score = sum(blanc_scores) / len(blanc_scores)
 
     new_result =   {
         "Model_ID": model_id,
@@ -290,7 +292,7 @@ if __name__ == "__main__":
             "ROUGE-L": rouge_scores['rougeL'],
             "BertScore": bert_scores['f1'],
             "BARTScore": "0.9",
-            "BLANC": "1.0"
+            "BLANC": blanc_score
         },
         "Hyperparameters": {
             "Learning_rate": args.learning_rate,
