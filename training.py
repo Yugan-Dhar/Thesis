@@ -8,6 +8,7 @@ import logging
 import evaluate
 import json
 import torch.nn as nn
+from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
@@ -107,7 +108,7 @@ def get__id_and__version_and_prev_results(evaluation_results_filepath):
         version_counter += 1
         model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
 
-    return model_id, version_counter
+    return model_id, version_counter, previous_results
 
 
 if __name__ == "__main__":
@@ -145,8 +146,9 @@ if __name__ == "__main__":
     parser.add_argument('-es', '--early_stopping_patience', type= int, default= 10, metavar= "",
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
-                        help= "The metric to use for selection of the best model.")                    
-    
+                        help= "The metric to use for selection of the best model.")
+    parser.add_argument('-p', '--peft', action= "store_true", default= False, 
+                        help= "Use PEFT for training.")                    
     
     args = parser.parse_args()  
 
@@ -159,9 +161,12 @@ if __name__ == "__main__":
     if torch.cuda.is_available():
         device = torch.device('cuda')
 
-        if torch.cuda.device_count() > 1:
+        if torch.cuda.device_count() > 1 and not args.peft:
             abstractive_model = nn.DataParallel(abstractive_model)
-
+        
+        if args.peft:
+            device = torch.device('cuda:0')
+            
         abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
@@ -179,7 +184,6 @@ if __name__ == "__main__":
     
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}")
-
 
     if not os.path.exists(dataset_path):
 
@@ -224,7 +228,15 @@ if __name__ == "__main__":
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
-
+    
+    if args.peft:
+        print('Using PEFT!')
+        print(abstractive_model)
+        
+        peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
+        abstractive_model = get_peft_model(abstractive_model, peft_config)
+        abstractive_model.print_trainable_parameters()
+        
     
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
@@ -278,6 +290,8 @@ if __name__ == "__main__":
     
     blanc_scores = BlancHelp.eval_pairs(results.label_ids, results.predictions, device = device, batch_size = 32)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
+
+    print(f"Results:\nROUGE: {rouge_scores}\nBertScore: {bert_scores['f1']}\nBLANC: {blanc_score}")
 
     new_result =   {
         "Model_ID": model_id,
