@@ -123,8 +123,6 @@ if __name__ == "__main__":
     parser.add_argument('abstractive_model', type= str,
                         help= "The abstractive model to be used for fine-tuning.")
     
-    #TODO: Add directory argument? 
-    #Maybe not required becauswe we create a new path variable based on the extractive model, compression ratio and abstractive model.
 
     #TODO: Add other optional training arguments
     """parser.add_argument('-k', '--K_variable', type= int, default= 1, metavar= "",
@@ -134,7 +132,6 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
     
-    #TODO: Change batch_size to 8 or 16. 4 is too low.
     parser.add_argument('-b', '--batch_size', type= int, default= 4, metavar= "",
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
@@ -147,6 +144,9 @@ if __name__ == "__main__":
                         help= "Load the best model at the end of training.")
     parser.add_argument('-es', '--early_stopping_patience', type= int, default= 10, metavar= "",
                         help= "The amount of patience to use for early stopping.")
+    parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
+                        help= "The metric to use for selection of the best model.")                    
+    
     
     args = parser.parse_args()  
 
@@ -236,7 +236,7 @@ if __name__ == "__main__":
         logging_dir = os.path.join('results', model_id, 'logs'),
         remove_unused_columns= False,        
         load_best_model_at_end = args.load_best_model_at_end,
-        metric_for_best_model = 'eval_loss',
+        metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
         evaluation_strategy = "epoch"
     )
