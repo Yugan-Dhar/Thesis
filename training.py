@@ -37,6 +37,11 @@ def calculate_extractive_steps(example):
     example["amount_of_extractive_steps"] = math.floor(outcome)
     return example
 
+def get_adaptive_compression_ratio(example):
+    
+    context_length_abstractive_model = abstractive_tokenizer.model_max_length   
+
+    return {'adaptive_compression_ratio':  example['token_length'] / context_length_abstractive_model}
 
 def get_summarized_chunks(example):
 
@@ -272,7 +277,7 @@ if __name__ == "__main__":
 
     trainer.train()
 
-    trainer.save_model(os.path.join('results', model_id, 'model'))
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
@@ -305,7 +310,7 @@ if __name__ == "__main__":
             "ROUGE-2": rouge_scores['rouge2'],
             "ROUGE-L": rouge_scores['rougeL'],
             "BertScore": bert_scores['f1'],
-            "BARTScore": "0.9",
+            "BARTScore": "Not implemented yet.",
             "BLANC": blanc_score
         },
         "Hyperparameters": {
