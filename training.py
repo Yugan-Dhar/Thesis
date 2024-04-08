@@ -7,6 +7,7 @@ import argparse
 import logging
 import evaluate
 import json
+import gc
 import torch.nn as nn
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
@@ -17,21 +18,13 @@ from datetime import date
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
-#Not used currently
-def tokenize_reference(example, tokenizer):
-    example["tokenized_reference"] = tokenizer(example["reference"], return_tensors="pt")
-    return example
-
 
 def calculate_token_length(example):    
-    #Old lambda (which was actually used): 'token_length': len(extractive_tokenizer.tokenize(example['reference']))
     return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
 
 
 def calculate_extractive_steps(example):
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
-    #Previously:
-    #outcome = (math.log10((args.K_variable * context_length_abstractive_model) / example["token_length"])) / (math.log10(args.compression_ratio / 10))
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
    
     example["amount_of_extractive_steps"] = math.floor(outcome)
@@ -44,11 +37,6 @@ def get_adaptive_compression_ratio(example):
     return {'adaptive_compression_ratio':  example['token_length'] / context_length_abstractive_model}
 
 def get_summarized_chunks(example):
-
-    #Could also improve this by using the tokenized_references column and then use the summarizer package to summarize the text. This would be more efficient.
-    #Currently we have to tokenize the references twice. 1) In the calculate_token_length function and 2) in this function. 
-    #I think it is possible but maybe do this later on. We need to use cluster_runner, cluster functions from summary_processsor.py and from cluster_features.py. 
-    #But it must be noted that we would also need to change our own code a bit because cluster function returns sorted values. So we need to know which sentence correlates with which sorted value(embedding)
    
     chunks = text_splitter.split_text(example["reference"])  
     summaries = []
@@ -63,7 +51,7 @@ def get_summarized_chunks(example):
 
     
 def get_feature(batch):
-  #TODO: Check max length and if this is correct
+  
   #Previously: encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'], max_length = (args.K_variable * abstractive_tokenizer.model_max_length),trunction=True)
   encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
                         max_length = (abstractive_tokenizer.model_max_length))
@@ -268,8 +256,8 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-        compute_metrics = compute_rouge_during_training
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        #,compute_metrics = compute_rouge_during_training
     )
 
     if not args.verbose:
