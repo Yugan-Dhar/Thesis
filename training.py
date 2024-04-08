@@ -243,7 +243,8 @@ if __name__ == "__main__":
         load_best_model_at_end = args.load_best_model_at_end,
         metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
-        evaluation_strategy = "epoch"
+        evaluation_strategy = "epoch",
+        label_names=["labels"]
     )
     
     # Define the data collator
@@ -309,7 +310,7 @@ if __name__ == "__main__":
             "Weight_decay": args.weight_decay,
             "Load_best_model_at_end": args.load_best_model_at_end,
             "Early_stopping_patience": args.early_stopping_patience,
-            "Metric_for_best_model": "eval_loss",
+            "Metric_for_best_model": args.metric_for_best_model,
             }
     }
 
