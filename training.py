@@ -273,16 +273,17 @@ if __name__ == "__main__":
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    trainer.train()
+    """trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))"""
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
     
-    results = trainer.predict(processed_dataset["test"])
+    results = abstractive_model.generate(processed_dataset["test"]["input_ids"], max_length = abstractive_tokenizer.model_max_length, num_beams = 4, early_stopping = True)
+    #results = trainer.predict(processed_dataset["test"])
 
     rouge_scores = rouge_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
