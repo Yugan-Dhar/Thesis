@@ -7,7 +7,6 @@ import argparse
 import logging
 import evaluate
 import json
-import torch.nn as nn
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -157,9 +156,6 @@ if __name__ == "__main__":
     
     if torch.cuda.is_available():
         device = torch.device('cuda')
-
-        if torch.cuda.device_count() > 1 and not args.peft:
-            abstractive_model = nn.DataParallel(abstractive_model)
         
         if args.peft:
             device = torch.device('cuda:0')
@@ -211,8 +207,6 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"Dataset found and loaded.")
-    print(f"Concatenated summary: \n{processed_dataset['train']['reference'][0]} \n\n")    
-
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
@@ -251,7 +245,8 @@ if __name__ == "__main__":
         metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
-        label_names=["labels"]
+        label_names=["labels"],
+        predict_with_generate = True
     )
     
     # Define the data collator
@@ -264,8 +259,8 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-        compute_metrics = compute_rouge_during_training
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        #compute_metrics = compute_rouge_during_training
         #preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
@@ -273,42 +268,48 @@ if __name__ == "__main__":
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    """trainer.train()
+    #trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))"""
+    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    
-    results = abstractive_model.generate(processed_dataset["test"]["input_ids"], max_length = abstractive_tokenizer.model_max_length, num_beams = 4, early_stopping = True)
+    small_dataset = processed_dataset["test"].select(range(4))
+
+    results = trainer.predict(small_dataset)
     #results = trainer.predict(processed_dataset["test"])
 
-    rouge_scores = rouge_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions, rouge_types = ["rouge1", "rouge2", "rougeL"])
+    label_ids = results.label_ids
+    pred_ids = results.predictions
+
+    label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
+    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+
+    rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references = results.label_ids, predictions = results.predictions)
-
-    #TODO:  and BARTScore metrics. They are calculated here and then added to the summ_metrics_results dictionary.
+    # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 512
+    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-large-4096")
+    bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
     
-    blanc_scores = BlancHelp.eval_pairs(results.label_ids, results.predictions, device = device, batch_size = 32)
+    blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 4)
+    blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
-
-    print(f"Results:\nROUGE: {rouge_scores}\nBertScore: {bert_scores['f1']}\nBLANC: {blanc_score}")
 
     new_result =   {
         "Model_ID": model_id,
         "Date_Created": date.today().strftime("%d/%m/%Y"),
         "Abstractive_model": args.abstractive_model,
         "Extractive_model": args.extractive_model,
-        "Ratio": args.compression_ratio/10,
+        "Ratio": args.compression_ratio / 10,
         "Version": model_version,
         "Evaluation_metrics": {
             "ROUGE-1": rouge_scores['rouge1'],
             "ROUGE-2": rouge_scores['rouge2'],
             "ROUGE-L": rouge_scores['rougeL'],
-            "BertScore": bert_scores['f1'],
+            "BertScore": bert_score,
             "BARTScore": "Not implemented yet.",
             "BLANC": blanc_score
         },
