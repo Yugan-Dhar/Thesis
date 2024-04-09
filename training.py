@@ -7,7 +7,6 @@ import argparse
 import logging
 import evaluate
 import json
-import gc
 import torch.nn as nn
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
@@ -187,7 +186,7 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
-        processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+        processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         
         processed_dataset = processed_dataset.map(calculate_token_length, num_proc= 9)
         processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
@@ -212,14 +211,17 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"Dataset found and loaded.")
+    print(f"Concatenated summary: \n{processed_dataset['train']['reference'][0]} \n\n")    
+
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
+
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
 
     rouge_evaluation_metric = evaluate.load('rouge')
-
+    
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     model_id, model_version, previous_results = get__id_and__version_and_prev_results(evaluation_results_filepath)
@@ -263,8 +265,8 @@ if __name__ == "__main__":
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-        compute_metrics = compute_rouge_during_training,
-        preprocess_logits_for_metrics= preprocess_logits_for_metrics
+        compute_metrics = compute_rouge_during_training
+        #preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
 
