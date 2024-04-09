@@ -70,6 +70,7 @@ def compute_rouge_during_training(pred):
     labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
 
+    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
     rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
@@ -106,7 +107,8 @@ def get__id_and__version_and_prev_results(evaluation_results_filepath):
 
 def preprocess_logits_for_metrics(logits, labels):
 
-    pred_ids = torch.argmax(logits, dim=-1)
+    pred_ids = torch.argmax(logits[0], dim=-1)
+
     return pred_ids, labels
 
 
@@ -262,7 +264,7 @@ if __name__ == "__main__":
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
         compute_metrics = compute_rouge_during_training,
-        preprocess_logits_for_metrics= pre_process_logits_for_metrics()
+        preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
 
