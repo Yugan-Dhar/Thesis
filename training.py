@@ -104,6 +104,12 @@ def get__id_and__version_and_prev_results(evaluation_results_filepath):
     return model_id, version_counter, previous_results
 
 
+def preprocess_logits_for_metrics(logits, labels):
+
+    pred_ids = torch.argmax(logits, dim=-1)
+    return pred_ids, labels
+
+
 if __name__ == "__main__":
 
     #TODO: We probably need to change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -117,10 +123,7 @@ if __name__ == "__main__":
     parser.add_argument('abstractive_model', type= str,
                         help= "The abstractive model to be used for fine-tuning.")
     
-
-    #TODO: Add other optional training arguments
-    """parser.add_argument('-k', '--K_variable', type= int, default= 1, metavar= "",
-                        help= "The K variable to be used for the extractive model. This is used to calculate the amount of extractive steps needed.")"""
+    #Optional arguments
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
@@ -257,8 +260,10 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
-        #,compute_metrics = compute_rouge_during_training
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+        compute_metrics = compute_rouge_during_training,
+        preprocess_logits_for_metrics= pre_process_logits_for_metrics()
+
     )
 
     if not args.verbose:
