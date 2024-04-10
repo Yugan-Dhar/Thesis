@@ -14,6 +14,7 @@ from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
 from datasets import load_dataset
 from datetime import date
+from string2string.similarity import BARTScore
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -66,15 +67,15 @@ def compute_rouge_during_training(pred):
 
     labels_ids = pred.label_ids
     pred_ids = pred.predictions
-    
+    pred_ids = pred_ids[0]
+
     labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
     
-    pred_ids = np.argmax(pred_ids, axis=-1)
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
         
-    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = [label_str], rouge_types = ["rouge1", "rouge2", "rougeL"])
+    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     return {**rouge_output}
 
@@ -249,7 +250,8 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
-        predict_with_generate = True
+        predict_with_generate = True,
+        generation_max_length = 1000
     )
     
     # Define the data collator
@@ -291,14 +293,18 @@ if __name__ == "__main__":
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
+    # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
-    bert_score_evaluation_metric = evaluate.load('bertscore')
-    
+    # Calculate BERTScore
     # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 512
+    bert_score_evaluation_metric = evaluate.load('bertscore')
     bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-large-4096")
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
     
+    # Calculate BARTScore
+
+    # Calculate Blanc scores
     blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 4)
     blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
