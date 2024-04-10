@@ -269,13 +269,13 @@ if __name__ == "__main__":
         #preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
-    test = 5
+
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    #trainer.train()
+    trainer.train()
 
-    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
@@ -348,8 +348,3 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Results saved to {evaluation_results_filepath}")
     
-    
-    
-    #git add - A
-    #git commit - m "Message"
-    #git push {remote} {branch}
