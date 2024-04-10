@@ -269,7 +269,7 @@ if __name__ == "__main__":
         #preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
-
+    test = 5
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 4)
     blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
-    
+
     new_result =   {
         "Model_ID": model_id,
         "Date_Created": date.today().strftime("%d/%m/%Y"),
