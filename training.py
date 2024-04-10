@@ -259,18 +259,18 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
-        #compute_metrics = compute_rouge_during_training
-        #preprocess_logits_for_metrics= preprocess_logits_for_metrics
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+        compute_metrics = compute_rouge_during_training,
+        preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    #trainer.train()
+    trainer.train()
 
-    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
