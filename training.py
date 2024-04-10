@@ -1,4 +1,4 @@
-import utils.extractive_models, utils.abstractive_models
+import utils.extractive_models, utils.abstractive_models, utils.tools
 import os
 import torch
 import warnings
@@ -30,11 +30,14 @@ def calculate_extractive_steps(example):
     example["amount_of_extractive_steps"] = math.floor(outcome)
     return example
 
+
 def get_adaptive_compression_ratio(example):
     
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
 
     return {'adaptive_compression_ratio':  example['token_length'] / context_length_abstractive_model}
+
+
 
 def get_summarized_chunks(example):
    
@@ -78,33 +81,6 @@ def compute_rouge_during_training(pred):
     rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     return {**rouge_output}
-
-
-def get_id_and_version_and_prev_results(evaluation_results_filepath):
-    """
-    Generates a unique model ID and version number based on the existing json file.
-
-    Args:
-        previous_results (list): A list of dictionaries containing previous model results.
-
-    Returns:
-        tuple: A tuple containing the generated model ID and the version number.
-
-    """
-    if os.path.isfile(evaluation_results_filepath):
-        with open(evaluation_results_filepath, 'r') as f:
-            previous_results = json.load(f)
-    else:
-            previous_results = []
-
-    version_counter = 1
-    model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
-
-    while any(entry["Model_ID"] == model_id for entry in previous_results):
-        version_counter += 1
-        model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
-
-    return model_id, version_counter, previous_results
 
 
 def preprocess_logits_for_metrics(logits, labels):
@@ -222,7 +198,7 @@ if __name__ == "__main__":
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath)
+    model_id, model_version, previous_results = utils.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
