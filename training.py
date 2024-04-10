@@ -7,6 +7,7 @@ import argparse
 import logging
 import evaluate
 import json
+import numpy as np
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -62,21 +63,23 @@ def get_feature(batch):
 
 
 def compute_rouge_during_training(pred):
+
     labels_ids = pred.label_ids
     pred_ids = pred.predictions
-
+    
     labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
-
+    
+    pred_ids = np.argmax(pred_ids, axis=-1)
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-
-    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
+        
+    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = [label_str], rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     return {**rouge_output}
 
 
-def get__id_and__version_and_prev_results(evaluation_results_filepath):
+def get_id_and_version_and_prev_results(evaluation_results_filepath):
     """
     Generates a unique model ID and version number based on the existing json file.
 
@@ -218,7 +221,7 @@ if __name__ == "__main__":
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    model_id, model_version, previous_results = get__id_and__version_and_prev_results(evaluation_results_filepath)
+    model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath)
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
@@ -276,10 +279,11 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    small_dataset = processed_dataset["test"].select(range(4))
+    """small_dataset = processed_dataset["test"].select(range(4))
 
-    results = trainer.predict(small_dataset)
-    #results = trainer.predict(processed_dataset["test"])
+    results = trainer.predict(small_dataset)"""
+    
+    results = trainer.predict(processed_dataset["test"])
 
     label_ids = results.label_ids
     pred_ids = results.predictions
