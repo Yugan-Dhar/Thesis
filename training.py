@@ -264,28 +264,28 @@ if __name__ == "__main__":
         train_dataset = processed_dataset["train"],
         eval_dataset = processed_dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-        compute_metrics = compute_rouge_during_training,
-        preprocess_logits_for_metrics= preprocess_logits_for_metrics
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        #,compute_metrics = compute_rouge_during_training,
+        #preprocess_logits_for_metrics= preprocess_logits_for_metrics
 
     )
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    trainer.train()
+    #trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    """small_dataset = processed_dataset["test"].select(range(4))
+    small_dataset = processed_dataset["test"].select(range(4))
 
-    results = trainer.predict(small_dataset)"""
+    results = trainer.predict(small_dataset)
     
-    results = trainer.predict(processed_dataset["test"])
+    #results = trainer.predict(processed_dataset["test"])
 
     label_ids = results.label_ids
     pred_ids = results.predictions
@@ -303,12 +303,15 @@ if __name__ == "__main__":
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
     
     # Calculate BARTScore
+    bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
+    bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 4)
+    bart_score = (sum(bart_scores['score']) / len(bart_scores['score']))
 
     # Calculate Blanc scores
     blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 4)
     blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
-
+    
     new_result =   {
         "Model_ID": model_id,
         "Date_Created": date.today().strftime("%d/%m/%Y"),
@@ -321,7 +324,7 @@ if __name__ == "__main__":
             "ROUGE-2": rouge_scores['rouge2'],
             "ROUGE-L": rouge_scores['rougeL'],
             "BertScore": bert_score,
-            "BARTScore": "Not implemented yet.",
+            "BARTScore": bart_score,
             "BLANC": blanc_score
         },
         "Hyperparameters": {
