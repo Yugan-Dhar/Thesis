@@ -290,6 +290,7 @@ if __name__ == "__main__":
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     bert_score_evaluation_metric = evaluate.load('bertscore')
+    
     # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 512
     bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-large-4096")
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
