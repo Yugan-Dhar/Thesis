@@ -143,6 +143,9 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--peft', action= "store_true", default= False, 
                         help= "Use PEFT for training.")                    
     
+    #TODO: Idea to change compression_ratio to three different argument types: fixed, dependent and hybrid. This way we can use the dependent compression ratio in the pre-processing and the fixed compression ratio in the training.
+    # Then if the ratio is fixed we want to save the rate that is used, we wait on Albert to see if we use 0.4 or if we want to use different ratios.
+    # If we want to use the fixed ratio, we add an optional argument which is set to default of 0.4 or something else. This way we can always use it. Then we can also add it
     args = parser.parse_args()  
         
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
@@ -175,6 +178,7 @@ if __name__ == "__main__":
     if args.dependent_compression_ratio:
         args.compression_ratio = "dependent"
         print("Using dependent compression ratio")
+
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}")
     print(dataset_path)
@@ -340,7 +344,7 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
-
+ 
     previous_results.append(new_result)
 
     # Convert to JSON and write to a file
