@@ -27,31 +27,47 @@ def calculate_extractive_steps(example):
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
    
-    example["amount_of_extractive_steps"] = math.floor(outcome)
+    #TODO: Check floor operation, maybe it should be ceil for when we use a fixed ratio
+    #TODO: If it's the hybrid ratio this needs to be changed
+    example["amount_of_extractive_steps"] = math.ceil(outcome)
     return example
 
 
-def get_adaptive_compression_ratio(example):
+def get_dependent_compression_ratio(example):
     
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
 
-    return {'adaptive_compression_ratio':  example['token_length'] / context_length_abstractive_model}
-
+    return {'dependent_compression_ratio': (example['token_length'] / context_length_abstractive_model)}
 
 
 def get_summarized_chunks(example):
    
-    chunks = text_splitter.split_text(example["reference"])  
-    summaries = []
+    text = example["reference"]
 
-    for chunk in chunks:
-        summary = extractive_model(chunk, ratio = (args.compression_ratio)/10)
-        summaries.append(summary)
+    # In case of document dependent compression ratio
+    if args.dependent_compression_ratio:
+        chunks = text_splitter.split_text(text)
+        summaries = []
+        for chunk in chunks:
+            summary = extractive_model(chunk, ratio = example["dependent_compression_ratio"])
+            summaries.append(summary)
+        text = " ".join(summaries)
 
-    example["concatenated_summary"] = " ".join(summaries)
+    # In case of fixed compression ratio
+    else:
+        for _ in range(example["amount_of_extractive_steps"]):
+            chunks = text_splitter.split_text(text)
+            summaries = []
+            for chunk in chunks:
+                summary = extractive_model(chunk, ratio = (args.compression_ratio)/10)
+                summaries.append(summary)
 
-    return example
+            text = " ".join(summaries)
 
+    # TODO: Add hybrid compression ratio. This is a combination of the fixed and dependent compression ratio.
+
+
+    return {'concatenated_summary': text}
     
 def get_feature(batch):
   
@@ -92,8 +108,7 @@ def preprocess_logits_for_metrics(logits, labels):
 
 if __name__ == "__main__":
 
-    #TODO: We probably need to change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
-    #For now it is fine to keep it like this
+    #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
     parser.add_argument('extractive_model', type= str, 
@@ -104,6 +119,8 @@ if __name__ == "__main__":
                         help= "The abstractive model to be used for fine-tuning.")
     
     #Optional arguments
+    parser.add_argument('-dcr', '--dependent_compression_ratio', action = "store_true", default= False,
+                        help= "Whether or not to use the dependent compression ratio. If this is used, the compression ratio will be overwritten and dependent on document length.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
@@ -127,7 +144,7 @@ if __name__ == "__main__":
                         help= "Use PEFT for training.")                    
     
     args = parser.parse_args()  
-
+        
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
@@ -135,8 +152,8 @@ if __name__ == "__main__":
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
     
     if torch.cuda.is_available():
+        torch.set_default_device('cuda')
         device = torch.device('cuda')
-        
         if args.peft:
             device = torch.device('cuda:0')
             
@@ -155,20 +172,28 @@ if __name__ == "__main__":
                 chunk_size = extractive_tokenizer.model_max_length - 50,
                 chunk_overlap = 50) 
     
+    if args.dependent_compression_ratio:
+        args.compression_ratio = "dependent"
+        print("Using dependent compression ratio")
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}")
+    print(dataset_path)
 
     if not os.path.exists(dataset_path):
-
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
         processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        
         processed_dataset = processed_dataset.map(calculate_token_length, num_proc= 9)
-        processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
+
+        if args.dependent_compression_ratio:
+            processed_dataset = processed_dataset.map(get_dependent_compression_ratio, num_proc= 9)
+        else:  
+            processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
+
         #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         if args.verbose:
             print("Starting on extractive summaries")
+
         processed_dataset = processed_dataset.map(get_summarized_chunks)
 
         processed_dataset.save_to_disk(dataset_path)
@@ -193,11 +218,12 @@ if __name__ == "__main__":
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
 
     processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
-
+    
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
+    #TODO: Currently, doesn't acount for dependent ratio!!
     model_id, model_version, previous_results = utils.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
     if args.verbose:
