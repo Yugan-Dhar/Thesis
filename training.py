@@ -28,7 +28,7 @@ def calculate_extractive_steps(example):
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
    
     #TODO: Check floor operation, maybe it should be ceil for when we use a fixed ratio
-    #TODO: If it's the hybrid ratio this needs to be changed
+    #TODO: If it's the hybrid ratio this needs to be changed 
     example["amount_of_extractive_steps"] = math.ceil(outcome)
     return example
 
@@ -43,7 +43,8 @@ def get_dependent_compression_ratio(example):
 def get_summarized_chunks(example):
    
     text = example["reference"]
-
+    ratio = args.compression_ratio / 10
+    
     # In case of document dependent compression ratio
     if args.dependent_compression_ratio:
         chunks = text_splitter.split_text(text)
@@ -53,22 +54,36 @@ def get_summarized_chunks(example):
             summaries.append(summary)
         text = " ".join(summaries)
 
-    # In case of fixed compression ratio
+        # In case of fixed compression ratio
     else:
         for _ in range(example["amount_of_extractive_steps"]):
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio = (args.compression_ratio)/10)
+                summary = extractive_model(chunk, ratio = ratio)
                 summaries.append(summary)
 
             text = " ".join(summaries)
 
-    # TODO: Add hybrid compression ratio. This is a combination of the fixed and dependent compression ratio.
+     # TODO: Add hybrid compression ratio. This is a combination of the fixed and dependent compression ratio.
+    """elif args.compression_ratio == "dependent":
+        for i, step in enumerate(example["amount_of_extractive_steps"]):
+            if i == len(example["amount_of_extractive_steps"]) - 1:
+                ratio = utils.tools.calculate_dependent_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
 
+            chunks = text_splitter.split_text(text)
+            summaries = []
+            for chunk in chunks:
+                summary = extractive_model(chunk, ratio=ratio)
+                summaries.append(summary)
+
+            text = " ".join(summaries)"""
 
     return {'concatenated_summary': text}
-    
+
+
+
+
 def get_feature(batch):
   
   #Previously: encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'], max_length = (args.K_variable * abstractive_tokenizer.model_max_length),trunction=True)

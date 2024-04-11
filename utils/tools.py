@@ -28,3 +28,9 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
         model_id = f"{args.abstractive_model}_{args.extractive_model}_ratio_0{args.compression_ratio}_V{version_counter}"
 
     return model_id, version_counter, previous_results
+
+
+def calculate_dependent_ratio(intermediate_summary, abstractive_model_token_length, extractive_tokenizer):
+     
+    token_length = token_length = extractive_tokenizer(intermediate_summary, return_tensors='pt')['input_ids'].shape[1]
+    return (abstractive_model_token_length / token_length)
