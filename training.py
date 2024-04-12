@@ -69,7 +69,7 @@ def get_summarized_chunks(example):
     """elif args.compression_ratio == "dependent":
         for i, step in enumerate(example["amount_of_extractive_steps"]):
             if i == len(example["amount_of_extractive_steps"]) - 1:
-                ratio = utils.tools.calculate_dependent_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
+                ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
 
             chunks = text_splitter.split_text(text)
             summaries = []
@@ -80,8 +80,6 @@ def get_summarized_chunks(example):
             text = " ".join(summaries)"""
 
     return {'concatenated_summary': text}
-
-
 
 
 def get_feature(batch):

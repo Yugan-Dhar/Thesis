@@ -30,7 +30,7 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     return model_id, version_counter, previous_results
 
 
-def calculate_dependent_ratio(intermediate_summary, abstractive_model_token_length, extractive_tokenizer):
+def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_token_length, extractive_tokenizer):
      
     token_length = token_length = extractive_tokenizer(intermediate_summary, return_tensors='pt')['input_ids'].shape[1]
     return (abstractive_model_token_length / token_length)
