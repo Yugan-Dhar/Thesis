@@ -122,7 +122,6 @@ def preprocess_logits_for_metrics(logits, labels):
     return pred_ids, labels
 
 
-
 if __name__ == "__main__":
 
     #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -211,6 +210,7 @@ if __name__ == "__main__":
         else:  
             processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
 
+        #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         if args.verbose:
             print("Starting on extractive summaries")
 
@@ -234,14 +234,11 @@ if __name__ == "__main__":
             print(f"Dataset found and loaded.")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-
-
+    processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
-    columns_to_keep = ['input_ids', 'attention_mask', 'labels']
-    all_columns = processed_dataset.column_names
-    columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
-    processed_dataset = processed_dataset.remove_columns(columns_to_remove)
 
+    processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
+    
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
@@ -306,11 +303,11 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    #small_dataset = processed_dataset["test"].select(range(4))
+    small_dataset = processed_dataset["test"].select(range(4))
 
-    #results = trainer.predict(small_dataset)
+    results = trainer.predict(small_dataset)
     
-    results = trainer.predict(processed_dataset["test"])
+    #results = trainer.predict(processed_dataset["test"])
 
     label_ids = results.label_ids
     pred_ids = results.predictions
