@@ -27,7 +27,7 @@ def calculate_token_length(example):
 def calculate_extractive_steps(example):
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
-   
+
     example["amount_of_extractive_steps"] = math.ceil(outcome)
     return example
 
@@ -69,11 +69,13 @@ def get_summarized_chunks(example):
     elif args.mode == "Hybrid":
         ratio = args.compression_ratio / 10
         for i in range(example["amount_of_extractive_steps"]):
-            print(i)
-            print(example["amount_of_extractive_steps"])
+            
             if i == example["amount_of_extractive_steps"] - 1:
                 ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
-                print(f"Final step ratio: {ratio}")
+                
+            # If the ratio is larger than 1, skip iteration as summarization is not needed!
+            if ratio > 1:
+                continue
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
