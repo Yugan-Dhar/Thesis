@@ -27,8 +27,6 @@ def calculate_extractive_steps(example):
     context_length_abstractive_model = abstractive_tokenizer.model_max_length   
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
    
-    #TODO: Check floor operation, maybe it should be ceil for when we use a fixed ratio
-    #TODO: If it's the hybrid ratio this needs to be changed 
     example["amount_of_extractive_steps"] = math.ceil(outcome)
     return example
 
@@ -48,17 +46,8 @@ def get_summarized_chunks(example):
    
     text = example["reference"]
     
-    # In case of document dependent compression ratio
-    if args.dependent_compression_ratio:
-        chunks = text_splitter.split_text(text)
-        summaries = []
-        for chunk in chunks:
-            summary = extractive_model(chunk, ratio = example["dependent_compression_ratio"])
-            summaries.append(summary)
-        text = " ".join(summaries)
-
-        # In case of fixed compression ratio
-    else:
+    # In case of fixed compression ratio
+    if args.mode == 'Fixed':
         for _ in range(example["amount_of_extractive_steps"]):
             chunks = text_splitter.split_text(text)
             summaries = []
@@ -68,8 +57,16 @@ def get_summarized_chunks(example):
 
             text = " ".join(summaries)
 
-     # TODO: Add hybrid compression ratio. This is a combination of the fixed and dependent compression ratio.
-    """elif args.compression_ratio == "dependent":
+    elif args.mode == 'Dependent':
+        chunks = text_splitter.split_text(text)
+        summaries = []
+        for chunk in chunks:
+            summary = extractive_model(chunk, ratio = example["dependent_compression_ratio"])
+            summaries.append(summary)
+        text = " ".join(summaries)
+
+
+    elif args.compression_ratio == "Hybrid":
         for i, step in enumerate(example["amount_of_extractive_steps"]):
             if i == len(example["amount_of_extractive_steps"]) - 1:
                 ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
@@ -80,7 +77,7 @@ def get_summarized_chunks(example):
                 summary = extractive_model(chunk, ratio=ratio)
                 summaries.append(summary)
 
-            text = " ".join(summaries)"""
+            text = " ".join(summaries)
 
     return {'concatenated_summary': text}
 
@@ -135,13 +132,12 @@ if __name__ == "__main__":
                         help= "The abstractive model to be used for fine-tuning.")
     
     #Optional arguments
-    parser.add_argument('-dcr', '--dependent_compression_ratio', action = "store_true", default= False,
-                        help= "Whether or not to use the dependent compression ratio. If this is used, the compression ratio will be overwritten and dependent on document length.")
+    parser.add_argument('-m', '--mode', choices= ['Fixed', 'Dependent', 'Hybrid'], type= str, default= 'Fixed',
+                        help= "The mode to use for the compression ratio.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
-    
     parser.add_argument('-b', '--batch_size', type= int, default= 4, metavar= "",
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
@@ -159,9 +155,6 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--peft', action= "store_true", default= False, 
                         help= "Use PEFT for training.")                    
     
-    #TODO: Idea to change compression_ratio to three different argument types: fixed, dependent and hybrid. This way we can use the dependent compression ratio in the pre-processing and the fixed compression ratio in the training.
-    # Then if the ratio is fixed we want to save the rate that is used, we wait on Albert to see if we use 0.4 or if we want to use different ratios.
-    # If we want to use the fixed ratio, we add an optional argument which is set to default of 0.4 or something else. This way we can always use it. Then we can also add it
     args = parser.parse_args()  
         
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
@@ -190,13 +183,13 @@ if __name__ == "__main__":
                 tokenizer = extractive_tokenizer, 
                 chunk_size = extractive_tokenizer.model_max_length - 50,
                 chunk_overlap = 50) 
-    
-    if args.dependent_compression_ratio:
-        args.compression_ratio = "dependent"
-        print("Using dependent compression ratio")
 
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_ratio_0{args.compression_ratio}")
+    if args.mode == 'Fixed' or args.mode == 'Hybrid':
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}")
+    else:
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}")
+
     print(dataset_path)
 
     if not os.path.exists(dataset_path):
@@ -206,12 +199,11 @@ if __name__ == "__main__":
         processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         processed_dataset = processed_dataset.map(calculate_token_length)
 
-        if args.dependent_compression_ratio:
+        if args.mode == 'Dependent':
             processed_dataset = processed_dataset.map(get_dependent_compression_ratio)
         else:  
             processed_dataset = processed_dataset.map(calculate_extractive_steps)
 
-        #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         if args.verbose:
             print("Starting on extractive summaries")
 
@@ -235,16 +227,18 @@ if __name__ == "__main__":
             print(f"Dataset found and loaded.")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    processed_dataset = processed_dataset.remove_columns(["reference", "token_length", "amount_of_extractive_steps"])
     processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
 
-    processed_dataset = processed_dataset.remove_columns(["celex_id", "summary", "concatenated_summary"])
+    # Remove the columns
+    columns_to_keep = ["input_ids", "attention_mask", "labels"]
+    all_columns = processed_dataset.column_names
+    columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
+    processed_dataset = processed_dataset.remove_columns(columns_to_remove)
     
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    #TODO: Currently, doesn't acount for dependent ratio!!
     model_id, model_version, previous_results = utils.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
     if args.verbose:
@@ -340,7 +334,7 @@ if __name__ == "__main__":
         "Date_Created": date.today().strftime("%d/%m/%Y"),
         "Abstractive_model": args.abstractive_model,
         "Extractive_model": args.extractive_model,
-        "Ratio": args.compression_ratio / 10,
+        "Ratio": args.mode,
         "Version": model_version,
         "Evaluation_metrics": {
             "ROUGE-1": rouge_scores['rouge1'],
@@ -361,7 +355,10 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
- 
+    
+    if args.mode == 'Fixed' or args.mode == 'Hybrid':
+        new_result["Compression_ratio"] = args.compression_ratio / 10
+
     previous_results.append(new_result)
 
     # Convert to JSON and write to a file

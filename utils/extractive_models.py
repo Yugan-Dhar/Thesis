@@ -51,7 +51,7 @@ def select_extractive_model(model_name):
     'LexLM': 'lexlms/legal-roberta-large',
     'LexLM_Longformer': 'lexlms/legal-longformer-large'
     }
-  
+    
     if model_name in models:
         return initialize_model(models[model_name])
     else:
