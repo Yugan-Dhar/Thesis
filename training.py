@@ -202,13 +202,14 @@ if __name__ == "__main__":
     if not os.path.exists(dataset_path):
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
+
         processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        processed_dataset = processed_dataset.map(calculate_token_length, num_proc= 9)
+        processed_dataset = processed_dataset.map(calculate_token_length)
 
         if args.dependent_compression_ratio:
-            processed_dataset = processed_dataset.map(get_dependent_compression_ratio, num_proc= 9)
+            processed_dataset = processed_dataset.map(get_dependent_compression_ratio)
         else:  
-            processed_dataset = processed_dataset.map(calculate_extractive_steps, num_proc=9)
+            processed_dataset = processed_dataset.map(calculate_extractive_steps)
 
         #TODO: Maybe check if we can fx this so it uses num_proc=9 but for now it doens't work. Ensuring that a CUDA device is available speeds it up enough
         if args.verbose:
@@ -303,11 +304,11 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    small_dataset = processed_dataset["test"].select(range(4))
+    """small_dataset = processed_dataset["test"].select(range(4))
 
-    results = trainer.predict(small_dataset)
+    results = trainer.predict(small_dataset)"""
     
-    #results = trainer.predict(processed_dataset["test"])
+    results = trainer.predict(processed_dataset["test"])
 
     label_ids = results.label_ids
     pred_ids = results.predictions
