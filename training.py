@@ -8,6 +8,7 @@ import logging
 import evaluate
 import json
 import numpy as np
+import sys
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -84,8 +85,11 @@ def get_summarized_chunks(example):
 
 def get_feature(batch):
   
-  #Previously: encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'], max_length = (args.K_variable * abstractive_tokenizer.model_max_length),trunction=True)
-  encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
+  if args.baseline_bart_training:
+        encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
+                        max_length = (abstractive_tokenizer.model_max_length), truncation= True)
+  else:
+        encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
                         max_length = (abstractive_tokenizer.model_max_length))
 
   encodings = {'input_ids': encodings['input_ids'],
@@ -119,6 +123,23 @@ def preprocess_logits_for_metrics(logits, labels):
     return pred_ids, labels
 
 
+def set_device(abstractive_model, args):
+    if torch.cuda.is_available():
+        torch.set_default_device('cuda')
+        device = torch.device('cuda')
+        if args.peft:
+            device = torch.device('cuda:0')
+                
+        abstractive_model.to(device)
+        if args.verbose:
+            print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
+
+    elif torch.backends.mps.is_available():
+        abstractive_model.to(torch.device('mps'))
+        if args.verbose:
+            print(f"Using the mps backend: {torch.backends.mps.is_available()}")
+
+
 if __name__ == "__main__":
 
     #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -133,7 +154,7 @@ if __name__ == "__main__":
     
     #Optional arguments
     parser.add_argument('-m', '--mode', choices= ['Fixed', 'Dependent', 'Hybrid'], type= str, default= 'Fixed',
-                        help= "The mode to use for the compression ratio.")
+                        help= "The ratio mode to use for the extractive summarization stage.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
@@ -153,30 +174,21 @@ if __name__ == "__main__":
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-p', '--peft', action= "store_true", default= False, 
-                        help= "Use PEFT for training.")                    
+                        help= "Use PEFT for training.")    
+    parser.add_argument('-bbt', '--baseline_bart_training', action= "store_true", default= False,
+                        help= "Finetune a BART model on the whole dataset as a baseline.")                
     
     args = parser.parse_args()  
-        
+
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
-    
-    if torch.cuda.is_available():
-        torch.set_default_device('cuda')
-        device = torch.device('cuda')
-        if args.peft:
-            device = torch.device('cuda:0')
-            
-        abstractive_model.to(device)
-        if args.verbose:
-            print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
+        if args.baseline_bart_training:
+            print("Baseline BART training is enabled.")
 
-    elif torch.backends.mps.is_available():
-        abstractive_model.to(torch.device('mps'))
-        if args.verbose:
-            print(f"Using the mps backend: {torch.backends.mps.is_available()}")
+    set_device(abstractive_model, args)
 
     #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
     text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
@@ -190,33 +202,35 @@ if __name__ == "__main__":
     else:
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}")
 
-    print(dataset_path)
 
-    if not os.path.exists(dataset_path):
+    if args.baseline_bart_training:
+        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
+        
+    elif not os.path.exists(dataset_path) and not args.baseline_bart_training:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
 
-        processed_dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        processed_dataset = processed_dataset.map(calculate_token_length)
+        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
+        dataset = dataset.map(calculate_token_length)
 
         if args.mode == 'Dependent':
-            processed_dataset = processed_dataset.map(get_dependent_compression_ratio)
+            dataset = dataset.map(get_dependent_compression_ratio)
         else:  
-            processed_dataset = processed_dataset.map(calculate_extractive_steps)
+            dataset = dataset.map(calculate_extractive_steps)
 
         if args.verbose:
             print("Starting on extractive summaries")
 
-        processed_dataset = processed_dataset.map(get_summarized_chunks)
+        dataset = dataset.map(get_summarized_chunks)
 
-        processed_dataset.save_to_disk(dataset_path)
+        dataset.save_to_disk(dataset_path)
 
         if args.verbose:
             print(f"\nDataset pre-processed and saved to {dataset_path}")
 
     else:      
         
-        processed_dataset = load_dataset("arrow", 
+        dataset = load_dataset("arrow", 
             data_files= {
             "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
@@ -226,28 +240,29 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Dataset found and loaded.")
 
+    
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    processed_dataset = processed_dataset.map(get_feature, num_proc= 9, batched= True)
+    dataset = dataset.map(get_feature, num_proc= 9, batched= True)
 
-    # Remove the columns
+    # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
-    all_columns = processed_dataset.column_names
-    columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
-    processed_dataset = processed_dataset.remove_columns(columns_to_remove)
+    all_datasets = ["train", "validation", "test"]
+    for dataset_name in all_datasets:
+        all_columns = dataset[dataset_name].column_names
+        columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
+        dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    model_id, model_version, previous_results = utils.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+    model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
     if args.verbose:
         print(f"Starting training on the abstractive model.")
     
     if args.peft:
-        print('Using PEFT!')
-        print(abstractive_model)
-        
+        print('Using PEFT!')        
         peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
@@ -278,8 +293,8 @@ if __name__ == "__main__":
     trainer = Seq2SeqTrainer(
         model = abstractive_model,
         args = training_args,
-        train_dataset = processed_dataset["train"],
-        eval_dataset = processed_dataset["validation"],
+        train_dataset = dataset["train"],
+        eval_dataset = dataset["validation"],
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         #,compute_metrics = compute_rouge_during_training,
@@ -298,11 +313,11 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    """small_dataset = processed_dataset["test"].select(range(4))
+    """small_dataset = dataset["test"].select(range(4))
 
     results = trainer.predict(small_dataset)"""
     
-    results = trainer.predict(processed_dataset["test"])
+    results = trainer.predict(dataset["test"])
 
     label_ids = results.label_ids
     pred_ids = results.predictions
@@ -334,7 +349,7 @@ if __name__ == "__main__":
         "Date_Created": date.today().strftime("%d/%m/%Y"),
         "Abstractive_model": args.abstractive_model,
         "Extractive_model": args.extractive_model,
-        "Ratio": args.mode,
+        "Ratio_mode": args.mode,
         "Version": model_version,
         "Evaluation_metrics": {
             "ROUGE-1": rouge_scores['rouge1'],
@@ -355,9 +370,13 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
-    
-    if args.mode == 'Fixed' or args.mode == 'Hybrid':
+    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.baseline_bart_training:
         new_result["Compression_ratio"] = args.compression_ratio / 10
+
+    if args.baseline_bart_training:
+        new_result = new_result.pop("Extractive_model")
+        new_result = new_result.pop("Ratio_mode")
+        new_result = new_result['Baseline_BART_Training'] = True
 
     previous_results.append(new_result)
 
@@ -367,4 +386,3 @@ if __name__ == "__main__":
 
     if args.verbose:
         print(f"Results saved to {evaluation_results_filepath}")
-    
