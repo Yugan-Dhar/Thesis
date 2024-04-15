@@ -53,7 +53,7 @@ def get_summarized_chunks(example):
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio = args.compression_ratio / 10)
+                summary = extractive_model(chunk, ratio=ratio)
                 summaries.append(summary)
 
             text = " ".join(summaries)
@@ -76,7 +76,7 @@ def get_summarized_chunks(example):
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio=ratio)
+                summary = extractive_model(chunk, ratio = args.compression_ratio / 10)
                 summaries.append(summary)
 
             text = " ".join(summaries)
@@ -284,7 +284,7 @@ if __name__ == "__main__":
         evaluation_strategy = "epoch",
         label_names=["labels"],
         predict_with_generate = True,
-        generation_max_length = 1000
+        generation_max_length = 1024
     )
     
     # Define the data collator
