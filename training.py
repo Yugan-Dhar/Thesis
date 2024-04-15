@@ -286,7 +286,7 @@ if __name__ == "__main__":
         evaluation_strategy = "epoch",
         label_names=["labels"],
         predict_with_generate = True,
-        generation_max_length = 1024
+        generation_max_length = 1300
     )
     
     # Define the data collator
