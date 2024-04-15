@@ -126,7 +126,6 @@ def preprocess_logits_for_metrics(logits, labels):
 
 def set_device(abstractive_model, args):
     if torch.cuda.is_available():
-        torch.set_default_device('cuda')
         device = torch.device('cuda')
         if args.peft:
             device = torch.device('cuda:0')
