@@ -35,15 +35,18 @@ def calculate_extractive_steps(example):
 
 def get_dependent_compression_ratio(example):
     
-    context_length_abstractive_model = abstractive_tokenizer.model_max_length   
+    context_length_abstractive_model = abstractive_tokenizer.model_max_length  
+    dependent_ratio = (context_length_abstractive_model / example['token_length'])
 
-    return {'dependent_compression_ratio': (example['token_length'] / context_length_abstractive_model)}
+    if dependent_ratio > 1:
+        dependent_ratio = 1
+
+    return {'dependent_compression_ratio': dependent_ratio}
 
 
 def get_summarized_chunks(example):
    
     text = example["reference"]
-    ratio = args.compression_ratio / 10
     
     # In case of document dependent compression ratio
     if args.dependent_compression_ratio:
@@ -60,7 +63,7 @@ def get_summarized_chunks(example):
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio = ratio)
+                summary = extractive_model(chunk, ratio = args.compression_ratio / 10)
                 summaries.append(summary)
 
             text = " ".join(summaries)
