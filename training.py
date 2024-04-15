@@ -46,7 +46,6 @@ def get_dependent_compression_ratio(example):
 def get_summarized_chunks(example):
    
     text = example["reference"]
-    
     # In case of fixed compression ratio
     if args.mode == 'Fixed':
         for _ in range(example["amount_of_extractive_steps"]):
@@ -67,16 +66,18 @@ def get_summarized_chunks(example):
         text = " ".join(summaries)
 
 
-    elif args.compression_ratio == "Hybrid":
+    elif args.mode == "Hybrid":
         ratio = args.compression_ratio / 10
-        for i, step in enumerate(example["amount_of_extractive_steps"]):
-            if i == len(example["amount_of_extractive_steps"]) - 1:
+        for i in range(example["amount_of_extractive_steps"]):
+            print(i)
+            print(example["amount_of_extractive_steps"])
+            if i == example["amount_of_extractive_steps"] - 1:
                 ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
-
+                print(f"Final step ratio: {ratio}")
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio = args.compression_ratio / 10)
+                summary = extractive_model(chunk, ratio = ratio)
                 summaries.append(summary)
 
             text = " ".join(summaries)
