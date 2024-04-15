@@ -68,6 +68,7 @@ def get_summarized_chunks(example):
 
 
     elif args.compression_ratio == "Hybrid":
+        ratio = args.compression_ratio / 10
         for i, step in enumerate(example["amount_of_extractive_steps"]):
             if i == len(example["amount_of_extractive_steps"]) - 1:
                 ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
