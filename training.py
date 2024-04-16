@@ -285,7 +285,6 @@ if __name__ == "__main__":
         evaluation_strategy = "epoch",
         label_names=["labels"],
         predict_with_generate = True,
-        generation_max_length = 1300
     )
     
     # Define the data collator
@@ -299,13 +298,11 @@ if __name__ == "__main__":
         eval_dataset = dataset["validation"],
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
-        #,compute_metrics = compute_rouge_during_training,
-        #preprocess_logits_for_metrics= preprocess_logits_for_metrics
     )
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
-
+    
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
@@ -314,9 +311,6 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    """small_dataset = dataset["test"].select(range(4))
-
-    results = trainer.predict(small_dataset)"""
     
     results = trainer.predict(dataset["test"])
 
@@ -375,9 +369,9 @@ if __name__ == "__main__":
         new_result["Compression_ratio"] = args.compression_ratio / 10
 
     if args.baseline_bart_training:
-        new_result = new_result.pop("Extractive_model")
-        new_result = new_result.pop("Ratio_mode")
-        new_result = new_result['Baseline_BART_Training'] = True
+        new_result.pop("Extractive_model")
+        new_result.pop("Ratio_mode")
+        new_result['Baseline_BART_Training'] = True
 
     previous_results.append(new_result)
 
