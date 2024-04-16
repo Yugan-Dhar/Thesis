@@ -301,7 +301,6 @@ if __name__ == "__main__":
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         #,compute_metrics = compute_rouge_during_training,
         #preprocess_logits_for_metrics= preprocess_logits_for_metrics
-
     )
 
     if not args.verbose:
