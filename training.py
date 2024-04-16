@@ -8,7 +8,6 @@ import logging
 import evaluate
 import json
 import numpy as np
-import sys
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
