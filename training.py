@@ -51,7 +51,7 @@ def get_summarized_chunks(example):
             chunks = text_splitter.split_text(text)
             summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio=ratio)
+                summary = extractive_model(chunk, ratio= args.compression_ratio / 10)
                 summaries.append(summary)
 
             text = " ".join(summaries)
@@ -68,7 +68,7 @@ def get_summarized_chunks(example):
     elif args.mode == "Hybrid":
         ratio = args.compression_ratio / 10
         for i in range(example["amount_of_extractive_steps"]):
-            
+
             if i == example["amount_of_extractive_steps"] - 1:
                 ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
                 
