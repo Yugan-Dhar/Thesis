@@ -191,7 +191,6 @@ if __name__ == "__main__":
             print("Baseline BART training is enabled.")
 
     set_device(abstractive_model, args)
-    torch.cuda.set_defaul
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'Fixed' or args.mode == 'Hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}")
