@@ -181,8 +181,11 @@ if __name__ == "__main__":
                         help= "Finetune a BART model on the whole dataset as a baseline.")                
     
     args = parser.parse_args()  
-
-    extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
+    if not args.baseline_bart_training:
+        extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
+    else:
+        extractive_model, extractive_tokenizer = args.extractive_model, args.extractive_model
+        
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
     if args.verbose:
@@ -191,12 +194,6 @@ if __name__ == "__main__":
             print("Baseline BART training is enabled.")
 
     set_device(abstractive_model, args)
-
-    #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
-    text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
-                tokenizer = extractive_tokenizer, 
-                chunk_size = extractive_tokenizer.model_max_length - 50,
-                chunk_overlap = 50) 
 
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'Fixed' or args.mode == 'Hybrid':
@@ -211,6 +208,12 @@ if __name__ == "__main__":
     elif not os.path.exists(dataset_path) and not args.baseline_bart_training:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
+        
+            #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
+        text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
+                    tokenizer = extractive_tokenizer, 
+                    chunk_size = extractive_tokenizer.model_max_length - 50,
+                    chunk_overlap = 50) 
 
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         dataset = dataset.map(calculate_token_length)
