@@ -8,6 +8,7 @@ import logging
 import evaluate
 import json
 import numpy as np
+import torch.nn as nn
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -131,8 +132,8 @@ def set_device(abstractive_model, args):
         device = torch.device('cuda')
         if args.peft:
             device = torch.device('cuda:0')
-        torch.set_default_device(device)
-        #abstractive_model.to(device)
+        abstractive_model= nn.DataParallel(abstractive_model)
+        abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
 
@@ -191,6 +192,7 @@ if __name__ == "__main__":
             print("Baseline BART training is enabled.")
 
     set_device(abstractive_model, args)
+
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'Fixed' or args.mode == 'Hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}")
