@@ -98,7 +98,6 @@ langchain-core==0.1.33
 langchain-text-splitters==0.0.1
 langcodes==3.3.0
 langsmith==0.1.31
-language-selector==0.1
 launchpadlib==1.10.13
 lazr.restfulclient==0.14.2
 lazr.uri==1.0.3
