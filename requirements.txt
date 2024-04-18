@@ -174,9 +174,7 @@ pyOpenSSL==24.1.0
 pyRFC3339==1.1
 pyrsistent==0.15.5
 pyserial==3.4
-python-apt==2.0.1+ubuntu0.20.4.1
 python-dateutil==2.9.0.post0
-python-debian==0.1.36+ubuntu1.1
 python-irodsclient==2.0.0
 python-json-logger==2.0.7
 pytorch-lightning==2.2.1
