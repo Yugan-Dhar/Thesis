@@ -195,8 +195,6 @@ ruamel.yaml.clib==0.2.8
 safetensors==0.4.2
 scikit-learn==1.3.2
 scipy==1.10.1
-screen-resolution-extra==0.0.0
-SecretStorage==2.3.1
 Send2Trash==1.8.2
 service-identity==18.1.0
 simplejson==3.16.0
