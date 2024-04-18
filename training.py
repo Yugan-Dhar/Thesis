@@ -250,11 +250,15 @@ if __name__ == "__main__":
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
     all_datasets = ["train", "validation", "test"]
+    print(dataset)
     for dataset_name in all_datasets:
         print(f"Removing columns from {dataset_name}")
         all_columns = dataset[dataset_name].column_names
+        print(all_columns)
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
+        print(columns_to_remove)
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
+        print(dataset[dataset_name])
     
     print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
     rouge_evaluation_metric = evaluate.load('rouge')
