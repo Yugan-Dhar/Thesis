@@ -304,9 +304,10 @@ if __name__ == "__main__":
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
-        
+
     if args.verbose:
         print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
+    
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
