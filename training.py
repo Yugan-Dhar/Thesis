@@ -132,7 +132,7 @@ def set_device(abstractive_model, args):
         device = torch.device('cuda')
         if args.peft:
             device = torch.device('cuda:0')
-        abstractive_model= nn.DataParallel(abstractive_model)
+        #abstractive_model= nn.DataParallel(abstractive_model)
         abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
