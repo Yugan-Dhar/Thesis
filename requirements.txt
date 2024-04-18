@@ -32,7 +32,6 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.3
 comm==0.2.2
-command-not-found==0.3
 confection==0.1.4
 configobj==5.0.6
 constantly==15.1.0
