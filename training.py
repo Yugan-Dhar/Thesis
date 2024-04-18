@@ -88,7 +88,6 @@ def get_summarized_chunks(example):
 
 
 def get_feature(batch):
-  print('getting features....')
   
   if args.baseline_bart_training:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
@@ -252,10 +251,12 @@ if __name__ == "__main__":
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
     all_datasets = ["train", "validation", "test"]
     for dataset_name in all_datasets:
+        print(f"Removing columns from {dataset_name}")
         all_columns = dataset[dataset_name].column_names
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
+    print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
