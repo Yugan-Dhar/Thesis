@@ -244,7 +244,7 @@ if __name__ == "__main__":
 
     
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    dataset = dataset.map(get_feature, num_proc= 9, batched= True)
+    dataset = dataset.map(get_feature, batched= True)
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
