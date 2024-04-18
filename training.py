@@ -244,34 +244,29 @@ if __name__ == "__main__":
 
     
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    print("Starting to preprocess the dataset for training the abstractive model.")
     dataset = dataset.map(get_feature, batched= True)
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
     all_datasets = ["train", "validation", "test"]
-    print(dataset)
     for dataset_name in all_datasets:
-        print(f"Removing columns from {dataset_name}")
         all_columns = dataset[dataset_name].column_names
-        print(all_columns)
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
-        print(columns_to_remove)
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
-        print(dataset[dataset_name])
     
-    print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
+    if args.verbose:
+        print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-    if args.verbose:
-        print(f"Starting training on the abstractive model.")
+
     
     if args.peft:
-        print('Using PEFT!')        
+        if args.verbose:
+            print('Using PEFT!')        
         peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
@@ -309,7 +304,9 @@ if __name__ == "__main__":
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
-    
+        
+    if args.verbose:
+        print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
