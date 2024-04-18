@@ -88,6 +88,7 @@ def get_summarized_chunks(example):
 
 
 def get_feature(batch):
+  print('getting features....')
   
   if args.baseline_bart_training:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
@@ -244,6 +245,7 @@ if __name__ == "__main__":
 
     
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
+    print("Starting to preprocess the dataset for training the abstractive model.")
     dataset = dataset.map(get_feature, batched= True)
 
     # Remove the columns from all datasets
