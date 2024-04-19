@@ -129,7 +129,7 @@ def preprocess_logits_for_metrics(logits, labels):
 
 def set_device(abstractive_model, args):
     if torch.cuda.is_available():
-        device = torch.device('cuda')
+        device = torch.device('cuda:3')
         if args.peft:
             device = torch.device('cuda:0')
         #abstractive_model= nn.DataParallel(abstractive_model)
