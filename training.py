@@ -262,8 +262,6 @@ if __name__ == "__main__":
 
     model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-
-    
     if args.peft:
         if args.verbose:
             print('Using PEFT!')        
@@ -286,12 +284,10 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
-        predict_with_generate = True
+        #predict_with_generate = True
     )
-    print("Training arguments loaded.")
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
-    print("Data collator loaded.")
 
     # Create the trainer
     trainer = Seq2SeqTrainer(
@@ -302,7 +298,6 @@ if __name__ == "__main__":
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
     )
-    print("Trainer loaded.")
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
