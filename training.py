@@ -295,8 +295,8 @@ if __name__ == "__main__":
         args = training_args,
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
-        data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        data_collator = data_collator
+        #callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
     )
 
     if not args.verbose:
