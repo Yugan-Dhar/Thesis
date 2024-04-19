@@ -129,7 +129,7 @@ def preprocess_logits_for_metrics(logits, labels):
 
 def set_device(abstractive_model, args):
     if torch.cuda.is_available():
-        device = torch.device('cuda:3')
+        device = torch.device('cuda')
         if args.peft:
             device = torch.device('cuda:0')
         #abstractive_model= nn.DataParallel(abstractive_model)
@@ -272,18 +272,18 @@ if __name__ == "__main__":
     
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
-        num_train_epochs = args.epochs
-        #per_device_train_batch_size = args.batch_size,
-        #per_device_eval_batch_size = args.batch_size,
-        #warmup_ratio = args.warmup_ratio,
-        #weight_decay = args.weight_decay,
-        #logging_dir = os.path.join('results', model_id, 'logs'),
-        #remove_unused_columns= False,        
-        #load_best_model_at_end = args.load_best_model_at_end,
-        #metric_for_best_model = args.metric_for_best_model,
-        #save_strategy= "epoch",
-        #evaluation_strategy = "epoch",
-        #label_names=["labels"],
+        num_train_epochs = args.epochs,
+        per_device_train_batch_size = args.batch_size,
+        per_device_eval_batch_size = args.batch_size,
+        warmup_ratio = args.warmup_ratio,
+        weight_decay = args.weight_decay,
+        logging_dir = os.path.join('results', model_id, 'logs'),
+        remove_unused_columns= False,        
+        load_best_model_at_end = args.load_best_model_at_end,
+        metric_for_best_model = args.metric_for_best_model,
+        save_strategy= "epoch",
+        evaluation_strategy = "epoch",
+        label_names=["labels"],
         #predict_with_generate = True
     )
     # Define the data collator
@@ -295,8 +295,8 @@ if __name__ == "__main__":
         args = training_args,
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
-        data_collator = data_collator
-        #callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        data_collator = data_collator,
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
     )
 
     if not args.verbose:
