@@ -89,7 +89,7 @@ def get_summarized_chunks(example):
 
 def get_feature(batch):
   
-  if args.baseline_bart_training:
+  if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
                         max_length = (abstractive_tokenizer.model_max_length), truncation= True)
   else:
@@ -156,7 +156,7 @@ if __name__ == "__main__":
                         help= "The abstractive model to be used for fine-tuning.")
     
     #Optional arguments
-    parser.add_argument('-m', '--mode', choices= ['Fixed', 'Dependent', 'Hybrid'], type= str, default= 'Fixed',
+    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
                         help= "The ratio mode to use for the extractive summarization stage.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
@@ -172,38 +172,45 @@ if __name__ == "__main__":
                         help= "The weight decay to train the abstractive model with.")
     parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
                         help= "Load the best model at the end of training.")
-    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 10, metavar= "",
+    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-p', '--peft', action= "store_true", default= False, 
                         help= "Use PEFT for training.")    
-    parser.add_argument('-bbt', '--baseline_bart_training', action= "store_true", default= False,
-                        help= "Finetune a BART model on the whole dataset as a baseline.")                
+    parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
+                        help= "Finetune a model on the whole dataset without any extractive steps.")                
     
     args = parser.parse_args()  
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
+    """_, t5 = utils.abstractive_models.select_abstractive_model('T5')
+    _, longt5 = utils.abstractive_models.select_abstractive_model('LongT5')
+    _, pegasus = utils.abstractive_models.select_abstractive_model('Pegasus')
+    _, pegasusx = utils.abstractive_models.select_abstractive_model('PegasusX')
+    #_, llama2 = utils.abstractive_models.select_abstractive_model('LLama3')
+
+    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")"""
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
-        if args.baseline_bart_training:
-            print("Baseline BART training is enabled.")
+        if args.no_extraction:
+            print("No extractive steps are enabled.")
 
     set_device(abstractive_model, args)
 
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    if args.mode == 'Fixed' or args.mode == 'Hybrid':
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}")
+    #TODO: Add the context length to dataset
+    if args.mode == 'fixed' or args.mode == 'hybrid':
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{abstractive_tokenizer.model_max_length}")
     else:
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}")
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{abstractive_tokenizer.model_max_length}")
 
-
-    if args.baseline_bart_training:
+    if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         
-    elif not os.path.exists(dataset_path) and not args.baseline_bart_training:
+    elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
             #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
@@ -367,10 +374,10 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
-    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.baseline_bart_training:
+    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.no_extraction:
         new_result["Compression_ratio"] = args.compression_ratio / 10
 
-    if args.baseline_bart_training:
+    if args.no_extraction:
         new_result.pop("Extractive_model")
         new_result.pop("Ratio_mode")
         new_result['Baseline_BART_Training'] = True

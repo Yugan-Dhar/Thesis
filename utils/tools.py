@@ -18,11 +18,11 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     else:
             previous_results = []
 
-    if args.baseline_bart_training:
-        return "BART_Baseline", 1, previous_results
-
     version_counter = 1
-
+        
+    if args.no_extractive:
+        return "No_extractive", version_counter, previous_results
+    
     model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
     if args.mode == "Fixed" or args.mode == "Hybrid":
         model_id += f"_ratio_{args.compression_ratio}"
