@@ -190,13 +190,13 @@ if __name__ == "__main__":
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
-    _, t5 = utils.abstractive_models.select_abstractive_model('T5')
+    """_, t5 = utils.abstractive_models.select_abstractive_model('T5')
     _, longt5 = utils.abstractive_models.select_abstractive_model('LongT5')
     _, pegasus = utils.abstractive_models.select_abstractive_model('Pegasus')
     _, pegasusx = utils.abstractive_models.select_abstractive_model('PegasusX')
     #_, llama2 = utils.abstractive_models.select_abstractive_model('LLama3')
 
-    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")
+    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")"""
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
         if args.no_extraction:
