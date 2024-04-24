@@ -8,6 +8,8 @@ import logging
 import evaluate
 import json
 import numpy as np
+import torch.nn as nn
+import wandb
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -88,7 +90,7 @@ def get_summarized_chunks(example):
 
 def get_feature(batch):
   
-  if args.baseline_bart_training:
+  if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
                         max_length = (abstractive_tokenizer.model_max_length), truncation= True)
   else:
@@ -131,7 +133,7 @@ def set_device(abstractive_model, args):
         device = torch.device('cuda')
         if args.peft:
             device = torch.device('cuda:0')
-                
+        #abstractive_model= nn.DataParallel(abstractive_model)
         abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
@@ -155,7 +157,7 @@ if __name__ == "__main__":
                         help= "The abstractive model to be used for fine-tuning.")
     
     #Optional arguments
-    parser.add_argument('-m', '--mode', choices= ['Fixed', 'Dependent', 'Hybrid'], type= str, default= 'Fixed',
+    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
                         help= "The ratio mode to use for the extractive summarization stage.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
                         help= "The learning rate to train the abstractive model with.")
@@ -171,47 +173,56 @@ if __name__ == "__main__":
                         help= "The weight decay to train the abstractive model with.")
     parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
                         help= "Load the best model at the end of training.")
-    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 10, metavar= "",
+    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-p', '--peft', action= "store_true", default= False, 
                         help= "Use PEFT for training.")    
-    parser.add_argument('-bbt', '--baseline_bart_training', action= "store_true", default= False,
-                        help= "Finetune a BART model on the whole dataset as a baseline.")                
+    parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
+                        help= "Finetune a model on the whole dataset without any extractive steps.")                
     
     args = parser.parse_args()  
+
+    os.environ["WANDB_PROJECT"] = "thesis_sie"
+    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
+    """_, t5 = utils.abstractive_models.select_abstractive_model('T5')
+    _, longt5 = utils.abstractive_models.select_abstractive_model('LongT5')
+    _, pegasus = utils.abstractive_models.select_abstractive_model('Pegasus')
+    _, pegasusx = utils.abstractive_models.select_abstractive_model('PegasusX')
+    #_, llama2 = utils.abstractive_models.select_abstractive_model('LLama3')
+
+    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")"""
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
-        if args.baseline_bart_training:
-            print("Baseline BART training is enabled.")
+        if args.no_extraction:
+            print("No extractive steps are enabled.")
 
     set_device(abstractive_model, args)
 
-    #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
-    text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
-                tokenizer = extractive_tokenizer, 
-                chunk_size = extractive_tokenizer.model_max_length - 50,
-                chunk_overlap = 50) 
-
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    if args.mode == 'Fixed' or args.mode == 'Hybrid':
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}")
+    #TODO: Add the context length to dataset
+    if args.mode == 'fixed' or args.mode == 'hybrid':
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{abstractive_tokenizer.model_max_length}")
     else:
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}")
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{abstractive_tokenizer.model_max_length}")
 
-
-    if args.baseline_bart_training:
+    if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         
-    elif not os.path.exists(dataset_path) and not args.baseline_bart_training:
+    elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
-
+            #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
+        text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
+                    tokenizer = extractive_tokenizer, 
+                    chunk_size = extractive_tokenizer.model_max_length - 50,
+                    chunk_overlap = 50) 
+        
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         dataset = dataset.map(calculate_token_length)
 
@@ -244,7 +255,7 @@ if __name__ == "__main__":
 
     
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    dataset = dataset.map(get_feature, num_proc= 9, batched= True)
+    dataset = dataset.map(get_feature, batched= True)
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
@@ -254,17 +265,17 @@ if __name__ == "__main__":
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
+    if args.verbose:
+        print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-    if args.verbose:
-        print(f"Starting training on the abstractive model.")
-    
     if args.peft:
-        print('Using PEFT!')        
+        if args.verbose:
+            print('Using PEFT!')        
         peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
@@ -284,9 +295,9 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
-        predict_with_generate = True,
+        report_to = "wandb",
+        #predict_with_generate = True
     )
-    
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -302,6 +313,9 @@ if __name__ == "__main__":
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
+
+    if args.verbose:
+        print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     
     trainer.train()
 
@@ -365,10 +379,10 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
-    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.baseline_bart_training:
+    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.no_extraction:
         new_result["Compression_ratio"] = args.compression_ratio / 10
 
-    if args.baseline_bart_training:
+    if args.no_extraction:
         new_result.pop("Extractive_model")
         new_result.pop("Ratio_mode")
         new_result['Baseline_BART_Training'] = True
