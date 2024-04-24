@@ -6,6 +6,10 @@ __pycache__/
 datasets
 logs
 .ipynb_checkpoints
-results
+# Ignore everything in the results directory
+results/*
+
+# But don't ignore evaluation_results.json
+!results/evaluation_results.json
 run_from_personal.sh
 wandb
