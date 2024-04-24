@@ -273,7 +273,6 @@ if __name__ == "__main__":
 
     model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-    print(f"Model ID: {model_id}, Model Version: {model_version}")
     if args.peft:
         if args.verbose:
             print('Using PEFT!')        
