@@ -26,7 +26,7 @@ def calculate_token_length(example):
 
 
 def calculate_extractive_steps(example):
-    context_length_abstractive_model = abstractive_tokenizer.model_max_length   
+
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
 
     example["amount_of_extractive_steps"] = math.ceil(outcome)
@@ -35,7 +35,6 @@ def calculate_extractive_steps(example):
 
 def get_dependent_compression_ratio(example):
     
-    context_length_abstractive_model = abstractive_tokenizer.model_max_length  
     dependent_ratio = (context_length_abstractive_model / example['token_length'])
 
     if dependent_ratio > 1:
@@ -72,7 +71,7 @@ def get_summarized_chunks(example):
         for i in range(example["amount_of_extractive_steps"]):
 
             if i == example["amount_of_extractive_steps"] - 1:
-                ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
+                ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 
             # If the ratio is larger than 1, skip iteration as summarization is not needed!
             if ratio > 1:
@@ -114,7 +113,7 @@ def get_summarized_chunks_batch_version(batch):
             ratio = args.compression_ratio / 10
             for i in range(batch["amount_of_extractive_steps"]):
                 if i == batch["amount_of_extractive_steps"] - 1:
-                    ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
+                    ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 # If the ratio is larger than 1, skip iteration as summarization is not needed!
                 if ratio > 1:
                     continue
@@ -139,10 +138,10 @@ def get_feature(batch):
 
   if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length = (abstractive_tokenizer.model_max_length), truncation= True)
+                        max_length = context_length_abstractive_model, truncation= True)
   else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length = (abstractive_tokenizer.model_max_length))
+                        max_length = context_length_abstractive_model)
 
   encodings = {'input_ids': encodings['input_ids'],
                'attention_mask': encodings['attention_mask'],
@@ -237,13 +236,14 @@ if __name__ == "__main__":
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
-    """_, t5 = utils.abstractive_models.select_abstractive_model('T5')
-    _, longt5 = utils.abstractive_models.select_abstractive_model('LongT5')
-    _, pegasus = utils.abstractive_models.select_abstractive_model('Pegasus')
-    _, pegasusx = utils.abstractive_models.select_abstractive_model('PegasusX')
-    #_, llama2 = utils.abstractive_models.select_abstractive_model('LLama3')
+    context_length_abstractive_model = abstractive_model.config.max_position_embeddings
 
-    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")"""
+    #Needs to be set manually because not all models have same config setup
+    if args.abstractive_model == 'T5':
+        context_length_abstractive_model = 512
+    elif args.abstractive_model == 'LongT5':
+        context_length_abstractive_model = 16384
+
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
         if args.no_extraction:
@@ -254,9 +254,10 @@ if __name__ == "__main__":
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     #TODO: Add the context length to dataset
     if args.mode == 'fixed' or args.mode == 'hybrid':
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{abstractive_tokenizer.model_max_length}")
+
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
     else:
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{abstractive_tokenizer.model_max_length}")
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
 
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)

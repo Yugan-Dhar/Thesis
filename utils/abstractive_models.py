@@ -25,7 +25,6 @@ def initialize_model(model_init):
         model = AutoModelForCausalLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
-
     else:
         model = AutoModelForSeq2SeqLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
@@ -49,7 +48,7 @@ def select_abstractive_model(model_name):
     models = {
     'BART': 'facebook/bart-large',
     'T5': 't5-large',
-    'LongT5': 'google/long-t5-local-base', 
+    'LongT5': 'google/long-t5-tglobal-large', 
     'Pegasus': 'google/pegasus-large',
     'PegasusX': 'google/pegasus-x-large',
     'LLama3': 'meta-llama/Meta-Llama-3-8B'}
