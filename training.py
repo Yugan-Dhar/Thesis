@@ -252,7 +252,6 @@ if __name__ == "__main__":
     set_device(abstractive_model, args)
 
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    #TODO: Add the context length to dataset
     if args.mode == 'fixed' or args.mode == 'hybrid':
 
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
