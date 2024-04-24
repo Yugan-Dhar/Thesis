@@ -88,8 +88,55 @@ def get_summarized_chunks(example):
     return {'concatenated_summary': text}
 
 
+def get_summarized_chunks_batch_version(batch):
+    texts = batch["reference"]
+    summaries = []
+    for text in texts:
+        # In case of fixed compression ratio
+        if args.mode == 'Fixed':
+            for _ in range(batch["amount_of_extractive_steps"]):
+                chunks = text_splitter.split_text(text)
+                chunk_summaries = []
+                for chunk in chunks:
+                    summary = extractive_model(chunk, ratio=args.compression_ratio / 10)
+                    chunk_summaries.append(summary)
+                text = " ".join(chunk_summaries)
+
+        elif args.mode == 'Dependent':
+            chunks = text_splitter.split_text(text)
+            chunk_summaries = []
+            for chunk in chunks:
+                summary = extractive_model(chunk, ratio=batch["dependent_compression_ratio"])
+                chunk_summaries.append(summary)
+            text = " ".join(chunk_summaries)
+
+        elif args.mode == "Hybrid":
+            ratio = args.compression_ratio / 10
+            for i in range(batch["amount_of_extractive_steps"]):
+                if i == batch["amount_of_extractive_steps"] - 1:
+                    ratio = utils.tools.calculate_hybrid_final_step_ratio(text, abstractive_tokenizer.model_max_length, extractive_tokenizer)
+                # If the ratio is larger than 1, skip iteration as summarization is not needed!
+                if ratio > 1:
+                    continue
+                chunks = text_splitter.split_text(text)
+                chunk_summaries = []
+                for chunk in chunks:
+                    summary = extractive_model(chunk, ratio=ratio)
+                    chunk_summaries.append(summary)
+                text = " ".join(chunk_summaries)
+        summaries.append(text)
+    return {'concatenated_summary': summaries}
+
+
+def add_prefix(batch):
+
+    batch['reference'] = ['summarize: ' + ref for ref in batch['reference']]
+
+    return batch
+
+
 def get_feature(batch):
-  
+
   if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
                         max_length = (abstractive_tokenizer.model_max_length), truncation= True)
@@ -224,6 +271,10 @@ if __name__ == "__main__":
                     chunk_overlap = 50) 
         
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
+
+        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+            dataset = dataset.map(add_prefix, batched= True)
+
         dataset = dataset.map(calculate_token_length)
 
         if args.mode == 'Dependent':
