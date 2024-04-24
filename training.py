@@ -184,7 +184,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    os.environ["WANDB_PROJECT"] = "eur-lex-summarization"
+    os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
