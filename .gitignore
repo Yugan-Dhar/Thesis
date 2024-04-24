@@ -8,3 +8,4 @@ logs
 .ipynb_checkpoints
 results
 run_from_personal.sh
+wandb

@@ -21,7 +21,13 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     version_counter = 1
         
     if args.no_extraction:
-        return "No_extractive", version_counter, previous_results
+        model_id = f"{args.abstractive_model}_no_extraction_V{version_counter}"
+
+        while any(entry["Model_ID"] == model_id for entry in previous_results):
+            version_counter += 1
+            model_id = f"{args.abstractive_model}_no_extraction_V{version_counter}"
+            
+        return model_id, version_counter, previous_results
     
     model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
     if args.mode == "Fixed" or args.mode == "Hybrid":
