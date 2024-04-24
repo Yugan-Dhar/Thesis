@@ -20,7 +20,7 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
 
     version_counter = 1
         
-    if args.no_extractive:
+    if args.no_extraction:
         return "No_extractive", version_counter, previous_results
     
     model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
