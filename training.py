@@ -9,6 +9,7 @@ import evaluate
 import json
 import numpy as np
 import torch.nn as nn
+import wandb
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -183,16 +184,19 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
+    os.environ["WANDB_PROJECT"] = "eur-lex-summarization"
+    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
-    """_, t5 = utils.abstractive_models.select_abstractive_model('T5')
+    _, t5 = utils.abstractive_models.select_abstractive_model('T5')
     _, longt5 = utils.abstractive_models.select_abstractive_model('LongT5')
     _, pegasus = utils.abstractive_models.select_abstractive_model('Pegasus')
     _, pegasusx = utils.abstractive_models.select_abstractive_model('PegasusX')
     #_, llama2 = utils.abstractive_models.select_abstractive_model('LLama3')
 
-    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")"""
+    print(f"Context lengths: T5: {t5.model_max_length}, LongT5: {longt5.model_max_length}, Pegasus: {pegasus.model_max_length}, PegasusX: {pegasusx.model_max_length}")
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
         if args.no_extraction:
@@ -291,6 +295,7 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
+        report_to = "wandb",
         #predict_with_generate = True
     )
     # Define the data collator

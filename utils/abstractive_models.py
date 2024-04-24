@@ -20,11 +20,10 @@ def initialize_model(model_init):
     elif model_init == 'google/pegasus-x-large':
         model = PegasusXForConditionalGeneration.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
-        
+
     elif model_init == 'meta-llama/Meta-Llama-3-8B':
         model = AutoModelForCausalLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
-
 
 
     else:
@@ -50,7 +49,7 @@ def select_abstractive_model(model_name):
     models = {
     'BART': 'facebook/bart-large',
     'T5': 't5-large',
-    'LongT5': 'google/long-t5-tglobal-base', 
+    'LongT5': 'google/long-t5-local-base', 
     'Pegasus': 'google/pegasus-large',
     'PegasusX': 'google/pegasus-x-large',
     'LLama3': 'meta-llama/Meta-Llama-3-8B'}
