@@ -351,7 +351,7 @@ if __name__ == "__main__":
         report_to = "wandb",
         run_name= model_id,
         predict_with_generate= True,
-        eval_accumulation_steps= args.batch_size,
+        eval_accumulation_steps= 32,
     )
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
@@ -372,9 +372,9 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     
-    #trainer.train()
+    trainer.train()
 
-    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
@@ -407,17 +407,13 @@ if __name__ == "__main__":
 
     label_ids = results.label_ids
     pred_ids = results.predictions
-    #print(f"Type label_ids: {type(label_ids)}\nType pred_ids: {type(pred_ids)}\n")
-    #print(f"Label_ids shape: {label_ids.shape}\nPred_ids shape: {pred_ids.shape}\n")
 
+    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
+    label_ids[label_ids == -100] = abstractive_tokenizer.pad_token_id
 
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-    #print(f"Label type: {type(label_str)}\nPrediction type: {type(pred_str)}\n")
-    #print(f"Label one: {label_str[0]}\nPrediction one: {pred_str[0]}\n")
-    #
 
-    #Change the predict function to a loop because currently we encounter out of memory errors, this way we can take memory off the gpu and free it up by sending it to the cpu
     # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
         
