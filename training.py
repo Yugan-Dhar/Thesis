@@ -230,19 +230,21 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    #os.environ["WANDB_PROJECT"] = "thesis_sie"
+    #os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
-    context_length_abstractive_model = abstractive_model.config.max_position_embeddings
 
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
     elif args.abstractive_model == 'LongT5':
         context_length_abstractive_model = 16384
+    
+    else:
+        context_length_abstractive_model = abstractive_model.config.max_position_embeddings
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
@@ -348,7 +350,8 @@ if __name__ == "__main__":
         label_names=["labels"],
         report_to = "wandb",
         run_name= model_id,
-        #predict_with_generate = True
+        predict_with_generate= True,
+        eval_accumulation_steps= args.batch_size,
     )
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
@@ -369,26 +372,55 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     
-    trainer.train()
+    #trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    
     results = trainer.predict(dataset["test"])
+
+    # Batched version:
+
+    """dataloader = trainer.get_test_dataloader(dataset["test"].select(range(8)))
+
+    labels_list = []
+    preds_list = []
+
+    for i, batch in enumerate(dataloader): 
+        print(type(batch))
+        results = trainer.predict(batch)
+        label_ids = results.label_ids
+        pred_ids = results.predictions
+        labels_list.append(label_ids)
+        preds_list.append(pred_ids)
+
+    label_str = abstractive_tokenizer.batch_decode(labels_list, skip_special_tokens=True)
+    pred_str = abstractive_tokenizer.batch_decode(preds_list, skip_special_tokens=True)
+    print(f"Label: {label_str[0]}\nPrediction: {pred_str[0]}\n")
+
+    small_dataset = dataset["test"].select(range(8))
+
+    results = trainer.predict(small_dataset)"""
 
     label_ids = results.label_ids
     pred_ids = results.predictions
+    #print(f"Type label_ids: {type(label_ids)}\nType pred_ids: {type(pred_ids)}\n")
+    #print(f"Label_ids shape: {label_ids.shape}\nPred_ids shape: {pred_ids.shape}\n")
+
 
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+    #print(f"Label type: {type(label_str)}\nPrediction type: {type(pred_str)}\n")
+    #print(f"Label one: {label_str[0]}\nPrediction one: {pred_str[0]}\n")
+    #
 
+    #Change the predict function to a loop because currently we encounter out of memory errors, this way we can take memory off the gpu and free it up by sending it to the cpu
     # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
-
+        
     # Calculate BERTScore
     # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 512
     bert_score_evaluation_metric = evaluate.load('bertscore')
