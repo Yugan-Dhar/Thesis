@@ -14,5 +14,5 @@ results/*
 run_from_personal.sh
 wandb
 
-slurm_outpus
+slurm_outputs
 slurm_errors
