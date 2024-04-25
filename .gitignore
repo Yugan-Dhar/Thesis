@@ -13,3 +13,6 @@ results/*
 !results/evaluation_results.json
 run_from_personal.sh
 wandb
+
+slurm_outpus
+slurm_errors
