@@ -209,7 +209,7 @@ if __name__ == "__main__":
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
-    parser.add_argument('-b', '--batch_size', type= int, default= 4, metavar= "",
+    parser.add_argument('-b', '--batch_size', type= int, default= 8, metavar= "",
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
