@@ -373,6 +373,7 @@ if __name__ == "__main__":
     
     if args.verbose:
         print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
+
     rouge_evaluation_metric = evaluate.load('rouge')
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
@@ -385,7 +386,6 @@ if __name__ == "__main__":
         peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
-        
     
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
