@@ -23,5 +23,31 @@
             "Metric_for_best_model": "eval_loss"
         },
         "No_extraction": true
+    },
+    {
+        "Model_ID": "RoBERTa_BART_fixed_V1",
+        "Date_Created": "26/04/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "fixed",
+        "Version": 1,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.02716388128267236,
+            "ROUGE-2": 0.014003111309444184,
+            "ROUGE-L": 0.02523410388063677,
+            "BertScore": 0.8181998517285002,
+            "BARTScore": -3.98046324354537,
+            "BLANC": 0.029905691897795857
+        },
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        }
     }
 ]
