@@ -465,7 +465,7 @@ if __name__ == "__main__":
     if args.no_extraction:
         new_result.pop("Extractive_model")
         new_result.pop("Ratio_mode")
-        new_result['Baseline_BART_Training'] = True
+        new_result['No_extraction'] = True
 
     previous_results.append(new_result)
 
