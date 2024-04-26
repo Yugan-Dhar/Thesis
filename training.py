@@ -190,8 +190,58 @@ def set_device(abstractive_model, args):
             print(f"Using the mps backend: {torch.backends.mps.is_available()}")
 
 
-if __name__ == "__main__":
+def write_actual_summaries_to_file():
+    """
+    Writes the actual summaries from the 'eur-lex-sum' dataset to a file named 'actual_summaries.txt'.
+    ONLY NEEDS TO BE RUN ONCE TO WRITE THE ACTUAL SUMMARIES TO A FILE.
 
+    This function loads the 'eur-lex-sum' dataset, opens a file in write mode, and writes the actual summaries
+    from the 'test' subset of the dataset to the file. Each summary is preceded by a header indicating its index.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
+    eur_lex_sum = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+    path = os.path.join('results', 'actual_summaries.txt')
+    # Open the file in write mode
+    with open(path, 'w') as f:
+        # Iterate over the dataset
+        for i in range(len(eur_lex_sum['test'])):
+            # Write the summary to the file
+            f.write(f"Summary {i}:\n")
+            f.write(eur_lex_sum['test']['summary'][i] + '\n\n\n\n')
+    f.close()
+
+    print("Summaries written to file.")
+
+
+def write_predicted_summaries_to_file(path, summary_list):
+    """
+    Write a list of summaries to a file.
+
+    Args:
+        path (str): The path to the file where the summaries will be written.
+        summary_list (list): A list of summaries to be written to the file.
+
+    Returns:
+        None
+    """
+    file = open(path,'w')
+    i = 0
+    for summary in summary_list:
+        file.write(f"Summary {i}:\n")
+        file.write(summary+"\n\n\n\n")
+        i+=1
+    file.close()
+    if args.verbose:
+        print(f"Summaries written to {path}")
+
+
+if __name__ == "__main__":
+    
     #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
@@ -236,15 +286,19 @@ if __name__ == "__main__":
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
 
+    # Set to True if you want to write the actual summaries to a file
+    write_original_summaries = False 
+    if write_original_summaries:
+        write_actual_summaries_to_file()
 
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
     elif args.abstractive_model == 'LongT5':
         context_length_abstractive_model = 16384
-    
     else:
         context_length_abstractive_model = abstractive_model.config.max_position_embeddings
+
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
@@ -255,14 +309,13 @@ if __name__ == "__main__":
 
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
-
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
     else:
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
 
+
     if args.no_extraction:
-        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        
+        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)        
     elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
@@ -414,6 +467,8 @@ if __name__ == "__main__":
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
+    write_predicted_summaries_to_file(os.path.join('results', model_id, 'predictions_in_text.txt'), pred_str)
+    
     # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
         
