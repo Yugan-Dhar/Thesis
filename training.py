@@ -88,9 +88,10 @@ def get_summarized_chunks(example):
 
 
 def get_summarized_chunks_batch_version(batch):
-
     texts = batch["reference"]
     summaries = []
+
+    i = 0 
     for text in texts:
         # In case of fixed compression ratio
         if args.mode == 'fixed':
@@ -111,9 +112,14 @@ def get_summarized_chunks_batch_version(batch):
             text = " ".join(chunk_summaries)
 
         elif args.mode == "hybrid":
+            pr
+            for step in range(len(batch["amount_of_extractive_steps"])):
+                print(batch["amount_of_extractive_steps"][step])
             ratio = args.compression_ratio / 10
-            for i in range(batch["amount_of_extractive_steps"]):
-                if i == batch["amount_of_extractive_steps"] - 1:
+            for x in range(batch["amount_of_extractive_steps"]):
+                print(batch["amount_of_extractive_steps"])
+                if x == batch["amount_of_extractive_steps"] - 1:
+                    print(x)
                     ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 # If the ratio is larger than 1, skip iteration as summarization is not needed!
                 if ratio > 1:
@@ -282,8 +288,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    #os.environ["WANDB_PROJECT"] = "thesis_sie"
+    #os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
@@ -342,7 +348,8 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks)
+        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
+        #dataset = dataset.map(get_summarized_chunks)
 
         dataset.save_to_disk(dataset_path)
 
@@ -405,8 +412,8 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
-        report_to = "wandb",
-        run_name= model_id,
+        #report_to = "wandb",
+        #run_name= model_id,
         predict_with_generate= True,
         eval_accumulation_steps= 32,
         generation_max_length= gen_max_length
@@ -434,7 +441,7 @@ if __name__ == "__main__":
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    trainer.push_to_hub(commit_message= f"Training finished for model {model_id}")
+    #trainer.push_to_hub(commit_message= f"Training finished for model {model_id}")
 
 
     if args.verbose:
