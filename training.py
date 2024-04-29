@@ -184,10 +184,11 @@ def set_device(abstractive_model, args):
         if args.verbose:
             print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
 
-    elif torch.backends.mps.is_available():
+    # Currently disabled because evaluation metrics are not supported on MPS
+    """ elif torch.backends.mps.is_available():
         abstractive_model.to(torch.device('mps'))
         if args.verbose:
-            print(f"Using the mps backend: {torch.backends.mps.is_available()}")
+            print(f"Using the mps backend: {torch.backends.mps.is_available()}")"""
 
 
 def write_actual_summaries_to_file():
@@ -406,6 +407,7 @@ if __name__ == "__main__":
         predict_with_generate= True,
         eval_accumulation_steps= 32,
     )
+    
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -429,11 +431,14 @@ if __name__ == "__main__":
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
 
+    trainer.push_to_hub(commit_message= f"Training finished for model {model_id}")
+
+
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset["test"])
+    results = trainer.predict(dataset["test"], max_length = 1250)
 
     # Batched version:
 
@@ -467,7 +472,7 @@ if __name__ == "__main__":
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
-    write_predicted_summaries_to_file(os.path.join('results', model_id, 'predictions_in_text.txt'), pred_str)
+    write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', model_id), pred_str)
     
     # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
