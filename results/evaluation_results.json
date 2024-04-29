@@ -49,5 +49,57 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         }
+    },
+    {
+        "Model_ID": "RoBERTa_BART_hybrid_V1",
+        "Date_Created": "26/04/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "hybrid",
+        "Version": 1,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.027285385224297885,
+            "ROUGE-2": 0.014270257320356378,
+            "ROUGE-L": 0.02546805082449745,
+            "BertScore": 0.8176369625837245,
+            "BARTScore": -4.009033969108095,
+            "BLANC": 0.034008270351109156
+        },
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        }
+    },
+    {
+        "Model_ID": "RoBERTa_BART_fixed_V2",
+        "Date_Created": "27/04/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "fixed",
+        "Version": 2,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.028344882373453003,
+            "ROUGE-2": 0.014091145232704968,
+            "ROUGE-L": 0.02589690828241993,
+            "BertScore": 0.8168985355407634,
+            "BARTScore": -4.029179491261218,
+            "BLANC": 0.030058906661023222
+        },
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        }
     }
 ]
