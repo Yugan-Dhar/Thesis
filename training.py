@@ -47,7 +47,7 @@ def get_summarized_chunks(example):
    
     text = example["reference"]
     # In case of fixed compression ratio
-    if args.mode == 'Fixed':
+    if args.mode == 'fixed':
         for _ in range(example["amount_of_extractive_steps"]):
             chunks = text_splitter.split_text(text)
             summaries = []
@@ -57,7 +57,7 @@ def get_summarized_chunks(example):
 
             text = " ".join(summaries)
 
-    elif args.mode == 'Dependent':
+    elif args.mode == 'dependent':
         chunks = text_splitter.split_text(text)
         summaries = []
         for chunk in chunks:
@@ -66,7 +66,7 @@ def get_summarized_chunks(example):
         text = " ".join(summaries)
 
 
-    elif args.mode == "Hybrid":
+    elif args.mode == "hybrid":
         ratio = args.compression_ratio / 10
         for i in range(example["amount_of_extractive_steps"]):
 
@@ -88,11 +88,12 @@ def get_summarized_chunks(example):
 
 
 def get_summarized_chunks_batch_version(batch):
+
     texts = batch["reference"]
     summaries = []
     for text in texts:
         # In case of fixed compression ratio
-        if args.mode == 'Fixed':
+        if args.mode == 'fixed':
             for _ in range(batch["amount_of_extractive_steps"]):
                 chunks = text_splitter.split_text(text)
                 chunk_summaries = []
@@ -101,7 +102,7 @@ def get_summarized_chunks_batch_version(batch):
                     chunk_summaries.append(summary)
                 text = " ".join(chunk_summaries)
 
-        elif args.mode == 'Dependent':
+        elif args.mode == 'dependent':
             chunks = text_splitter.split_text(text)
             chunk_summaries = []
             for chunk in chunks:
@@ -109,7 +110,7 @@ def get_summarized_chunks_batch_version(batch):
                 chunk_summaries.append(summary)
             text = " ".join(chunk_summaries)
 
-        elif args.mode == "Hybrid":
+        elif args.mode == "hybrid":
             ratio = args.compression_ratio / 10
             for i in range(batch["amount_of_extractive_steps"]):
                 if i == batch["amount_of_extractive_steps"] - 1:
@@ -333,7 +334,7 @@ if __name__ == "__main__":
 
         dataset = dataset.map(calculate_token_length)
 
-        if args.mode == 'Dependent':
+        if args.mode == 'dependent':
             dataset = dataset.map(get_dependent_compression_ratio)
         else:  
             dataset = dataset.map(calculate_extractive_steps)
@@ -521,7 +522,7 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
-    if args.mode == 'Fixed' or args.mode == 'Hybrid' and not args.no_extraction:
+    if args.mode == 'fxed' or args.mode == 'hybrid' and not args.no_extraction:
         new_result["Compression_ratio"] = args.compression_ratio / 10
 
     if args.no_extraction:
