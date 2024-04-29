@@ -388,6 +388,8 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
+    gen_max_length = 1250
+
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.epochs,
@@ -406,6 +408,7 @@ if __name__ == "__main__":
         run_name= model_id,
         predict_with_generate= True,
         eval_accumulation_steps= 32,
+        generation_max_length= gen_max_length
     )
     
     # Define the data collator
