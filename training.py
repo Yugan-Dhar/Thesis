@@ -89,7 +89,7 @@ def get_summarized_chunks(example):
 
 def get_summarized_chunks_batch_version(batch):
     texts = batch["reference"]
-    summaries = []
+    concatenated_summaries = []
 
     i = 0 
     for text in texts:
@@ -111,17 +111,16 @@ def get_summarized_chunks_batch_version(batch):
                 chunk_summaries.append(summary)
             text = " ".join(chunk_summaries)
 
+
         elif args.mode == "hybrid":
-            pr
-            for step in range(len(batch["amount_of_extractive_steps"])):
-                print(batch["amount_of_extractive_steps"][step])
+
             ratio = args.compression_ratio / 10
-            for x in range(batch["amount_of_extractive_steps"]):
-                print(batch["amount_of_extractive_steps"])
-                if x == batch["amount_of_extractive_steps"] - 1:
-                    print(x)
+            for x in range(batch["amount_of_extractive_steps"][i]):
+
+                if x == batch["amount_of_extractive_steps"][i] - 1:
                     ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 # If the ratio is larger than 1, skip iteration as summarization is not needed!
+                
                 if ratio > 1:
                     continue
                 chunks = text_splitter.split_text(text)
@@ -130,8 +129,12 @@ def get_summarized_chunks_batch_version(batch):
                     summary = extractive_model(chunk, ratio=ratio)
                     chunk_summaries.append(summary)
                 text = " ".join(chunk_summaries)
-        summaries.append(text)
-    return {'concatenated_summary': summaries}
+
+        i+=1
+
+
+        concatenated_summaries.append(text)
+    return {'concatenated_summary': concatenated_summaries}
 
 
 def add_prefix(batch):
