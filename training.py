@@ -430,7 +430,6 @@ if __name__ == "__main__":
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-
     trainer.push_to_hub(commit_message= f"Training finished for model {model_id}")
 
 
