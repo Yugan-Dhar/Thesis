@@ -435,7 +435,7 @@ if __name__ == "__main__":
 
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    trainer.push_to_hub(commit_message= f"Training finished for model {model_id}")
+    trainer.push_to_hub(f"{model_id}", commit_message= f"Training finished for model {model_id}")
 
     if args.verbose:
         print(f"Training finished and model saved to disk")
