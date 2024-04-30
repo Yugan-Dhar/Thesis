@@ -79,12 +79,11 @@ def create_model_card(args, model_id):
     
     
     
-    card_data = ModelCardData(language='en', license='mit', library='timm')
-
-    
     content = f"""
     ---
-    { card_data.to_yaml() }
+
+    {card_data.to_yaml()}
+
     ---
 
     # Model Card for {model_id}
