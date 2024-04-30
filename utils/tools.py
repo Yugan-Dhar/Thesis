@@ -74,15 +74,34 @@ def create_model_card(args, model_id):
                               pipeline_tag = 'summarization',
                               tags= ['summarization', 'extractive', 'abstractive', 'multi-step'],
                               dataset='eur-lex-sum',
-                              metrics= ['ROUGE-1', 'ROUGE-2', 'ROUGE-L', 'BERTScore', 'BARTScore', 'BLANC'],
-                              model_name= model_id
+                              metrics= ['ROUGE-1', 'ROUGE-2', 'ROUGE-L', 'BERTScore', 'BARTScore', 'BLANC']
                               )
     
     
     
-    card = ModelCard.from_template(card_data=card_data,
-                                   model_description = 'This model does this',
-                                   developed_by = 'Mika Sie',
-                                   )
+    card_data = ModelCardData(language='en', license='mit', library='timm')
+
+    
+    content = f"""
+    ---
+    { card_data.to_yaml() }
+    ---
+
+    # Model Card for {model_id}
+
+    ## Model Details
+
+    ### Model Description
+
+    ### Model Sources
+
+    - **Repository**: https://github.com/MikaSie/Thesis
+    - **Paper**: 
+
+
+
+    """
+
+    card = ModelCard(content)
 
     return card
