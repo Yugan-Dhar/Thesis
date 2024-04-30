@@ -82,7 +82,7 @@ def create_model_card(args, model_id):
     content = f"""
     ---
 
-    {card_data.to_yaml()}
+      {card_data.to_yaml()}
 
     ---
 
