@@ -18,3 +18,4 @@ run_from_personal.sh
 wandb
 
 slurm_outputs
+artifacts

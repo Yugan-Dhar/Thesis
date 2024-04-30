@@ -8,6 +8,7 @@
 #SBATCH --mail-type=END             # Email user when job finishes
 #SBATCH --mail-user=m.s.y.sie@students.uu.nl
 
+#TODO: Create new scripts for running locally instead of on the cluster
 
 # Add arguments to the python script and run it
 /storage/scratch/6603726/Thesis/venv2/bin/python3.9 training.py "$@"

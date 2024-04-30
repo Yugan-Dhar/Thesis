@@ -1,4 +1,4 @@
-import utils.extractive_models, utils.abstractive_models, utils.tools
+import utils.models, utils.tools
 import os
 import torch
 import warnings
@@ -17,7 +17,8 @@ from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTraining
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
-
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PegasusForConditionalGeneration, PegasusTokenizerFast, PegasusXForConditionalGeneration
+from huggingface_hub import whoami
 
 def get_feature(batch):
     encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
@@ -62,19 +63,30 @@ if __name__ == "__main__":
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
-    parser.add_argument('-p', '--peft', action= "store_true", default= False, 
-                        help= "Use PEFT for training.")    
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     
     args = parser.parse_args()  
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-
-    dataset = dataset.map(get_feature)
-
-    # load abstract model
 
     
+    abstractive_model = AutoModelForSeq2SeqLM.from_pretrained("MikaSie/BART_no_extraction_V1")
+    abstractive_tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large")
+    #Needs to be set manually because not all models have same config setup
+    if args.abstractive_model == 'T5':
+        context_length_abstractive_model = 512
+    elif args.abstractive_model == 'LongT5':
+        context_length_abstractive_model = 16384
+    else:
+        context_length_abstractive_model = abstractive_model.config.max_position_embeddings
+
+
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
+
+    #dataset = dataset.map(get_feature)
+
+    # load abstract model
+    model_id = 'SNaphetniet'
+
     training_args = Seq2SeqTrainingArguments(
             output_dir = os.path.join('results', model_id, 'output'),
             num_train_epochs = args.epochs,
@@ -89,10 +101,9 @@ if __name__ == "__main__":
             save_strategy= "epoch",
             evaluation_strategy = "epoch",
             label_names=["labels"],
-            report_to = "wandb",
-            run_name= model_id,
             predict_with_generate= True,
             eval_accumulation_steps= 32,
+            hub_model_id= f"{model_id}",
         )
         # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
@@ -100,9 +111,17 @@ if __name__ == "__main__":
         # Create the trainer
     trainer = Seq2SeqTrainer(
             model = abstractive_model,
+            tokenizer = abstractive_tokenizer,
             args = training_args,
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
             data_collator = data_collator,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         )
+    
+    #trainer.push_to_hub()
+    model_card = utils.tools.create_model_card(args, model_id)
+
+    #TODO: Add WHOAMI here  
+    user = whoami()['name']
+    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
