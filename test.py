@@ -18,7 +18,7 @@ from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PegasusForConditionalGeneration, PegasusTokenizerFast, PegasusXForConditionalGeneration
-
+from huggingface_hub import whoami
 
 def get_feature(batch):
     encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
@@ -69,8 +69,8 @@ if __name__ == "__main__":
     args = parser.parse_args()  
 
     
-    abstractive_model = AutoModelForSeq2SeqLM.from_pretrained("MikaSie/SNaphetniet")
-    abstractive_tokenizer = AutoTokenizer.from_pretrained("MikaSie/SNaphetniet")
+    abstractive_model = AutoModelForSeq2SeqLM.from_pretrained("MikaSie/BART_no_extraction_V1")
+    abstractive_tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large")
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
@@ -120,3 +120,8 @@ if __name__ == "__main__":
         )
     
     #trainer.push_to_hub()
+    model_card = utils.tools.create_model_card(args, model_id)
+
+    #TODO: Add WHOAMI here  
+    user = whoami()['name']
+    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")

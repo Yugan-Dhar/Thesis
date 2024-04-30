@@ -440,6 +440,11 @@ if __name__ == "__main__":
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
     trainer.push_to_hub()
 
+    #TODO: Edit this to push the model card to the hub
+    #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
+
+    
+     
     if args.verbose:
         print(f"Training finished and model saved to disk")
 
