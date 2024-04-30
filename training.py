@@ -1,4 +1,4 @@
-import utils.extractive_models, utils.abstractive_models, utils.tools
+import utils.models, utils.tools
 import os
 import torch
 import warnings
@@ -285,13 +285,14 @@ if __name__ == "__main__":
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
-    extractive_model, extractive_tokenizer = utils.extractive_models.select_extractive_model(args.extractive_model)
-    abstractive_model, abstractive_tokenizer = utils.abstractive_models.select_abstractive_model(args.abstractive_model)
+    extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
+    abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
 
     # Set to True if you want to write the actual summaries to a file
     write_original_summaries = False 
     if write_original_summaries:
         write_actual_summaries_to_file()
+
 
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
@@ -409,7 +410,8 @@ if __name__ == "__main__":
         run_name= model_id,
         predict_with_generate= True,
         eval_accumulation_steps= 32,
-        generation_max_length= gen_max_length
+        generation_max_length= gen_max_length,
+        hub_model_id= f"{model_id}",
     )
     
     # Define the data collator
@@ -418,6 +420,7 @@ if __name__ == "__main__":
     # Create the trainer
     trainer = Seq2SeqTrainer(
         model = abstractive_model,
+        tokenizer = abstractive_tokenizer,
         args = training_args,
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
@@ -435,7 +438,7 @@ if __name__ == "__main__":
 
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    trainer.push_to_hub(f"{model_id}", commit_message= f"Training finished for model {model_id}")
+    trainer.push_to_hub()
 
     if args.verbose:
         print(f"Training finished and model saved to disk")

@@ -1,5 +1,4 @@
-from utils.extractive_models import select_extractive_model
-from utils.abstractive_models import select_abstractive_model
+from utils.models import select_extractive_model, select_abstractive_model
 import os
 import warnings
 import warnings
