@@ -63,8 +63,6 @@ if __name__ == "__main__":
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
-    parser.add_argument('-p', '--peft', action= "store_true", default= False, 
-                        help= "Use PEFT for training.")    
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     

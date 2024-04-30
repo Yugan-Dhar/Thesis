@@ -50,6 +50,4 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
     token_length = extractive_tokenizer(intermediate_summary, return_tensors='pt')['input_ids'].shape[1]
     final_ratio = (abstractive_model_token_length / token_length)
 
-    #Disabled this because it shouldn't be necessary!! If the ratio is larger than 1, then something is going wrong.
-    #If the ratio is larger than 1, it means that the ab. token length is larger than the text token length, which should not be possible as it's the last step of extractive summarization
     return final_ratio
