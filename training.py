@@ -10,6 +10,7 @@ import json
 import numpy as np
 import torch.nn as nn
 import wandb
+from huggingface_hub import whoami
 from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
@@ -540,6 +541,10 @@ if __name__ == "__main__":
 
     previous_results.append(new_result)
 
+    #TODO: Add modelcard implementation here
+    model_card = utils.tools.create_model_card(args, model_id, new_result)
+    user = whoami()['name']
+    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
     # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)

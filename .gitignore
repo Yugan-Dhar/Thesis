@@ -19,3 +19,4 @@ wandb
 
 slurm_outputs
 artifacts
+#TODO: Add card_template so other people can't use it

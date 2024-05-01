@@ -126,7 +126,33 @@ if __name__ == "__main__":
     #TODO: after testing, no need to push to hub. This is just for testing purposes personally.
     #TODO: Add note that results will not be pushed to hub and that this will only happen if training + testing is done.
     #trainer.push_to_hub()
+    new_result =   {
+        "Model_ID": model_id,
+        "Date_Created": date.today().strftime("%d/%m/%Y"),
+        "Abstractive_model": args.abstractive_model,
+        "Extractive_model": args.extractive_model,
+        "Ratio_mode": args.mode,
+        "Version": 5,
+        "Evaluation_metrics": {
+            "ROUGE-1": 2,
+            "ROUGE-2": 2,
+            "ROUGE-L": 2,
+            "BertScore": 2,
+            "BARTScore": 2,
+            "BLANC": 2
+        },
+        "Hyperparameters": {
+            "Learning_rate": args.learning_rate,
+            "Epochs": args.epochs,
+            "Batch_size": args.batch_size,
+            "Warmup_ratio": args.warmup_ratio,
+            "Weight_decay": args.weight_decay,
+            "Load_best_model_at_end": args.load_best_model_at_end,
+            "Early_stopping_patience": args.early_stopping_patience,
+            "Metric_for_best_model": args.metric_for_best_model,
+            }
+    }
+    model_card = utils.tools.create_model_card(new_result)
 
-    model_card = utils.tools.create_model_card(args, model_id)
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")

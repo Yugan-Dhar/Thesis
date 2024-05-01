@@ -1,6 +1,6 @@
 import os
 import json
-from huggingface_hub import ModelCard, ModelCardData, RepoCard
+from huggingface_hub import ModelCard
 
 def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     """
@@ -67,15 +67,33 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
     return final_ratio
 
 
-def create_model_card(args, model_id):
+def create_model_card(results):
     
+    file_path = os.path.join('docs', 'card_template.md')
     content = ''
-    with open('docs/card_template.md', 'r') as f:
-        content += f.read()
 
-    content = content.replace('PAPER_TITLE', 'testeeee')
+    if os.path.exists(file_path):
+        with open('docs/card_template.md', 'r') as f:
+            content += f.read()
 
-    card = ModelCard(content)
+        #TODO: Add all the necessary information to the model card
+
+        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID'])
+        content = content.replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
+        content = content.replace('PLACEHOLDER_EXTRACTIVE_MODEL', results['Extractive_model'])
+        content = content.replace('PLACEHOLDER_ROUGE1', str(results['Evaluation_metrics']['ROUGE-1']))
+        content = content.replace('PLACEHOLDER_ROUGE2', str(results['Evaluation_metrics']['ROUGE-2']))
+        content = content.replace('PLACEHOLDER_ROUGEL', str(results['Evaluation_metrics']['ROUGE-L']))
+        content = content.replace('PLACEHOLDER_BERTSCORE', str(results['Evaluation_metrics']['BertScore']))
+        content = content.replace('PLACEHOLDER_BARTSCORE', str(results['Evaluation_metrics']['BARTScore']))    
+        content = content.replace('PLACEHOLDER_BLANC', str(results['Evaluation_metrics']['BLANC']))
+        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID'])
+        content = content.replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
+        
+        
+        card = ModelCard(content)
+
+    else:
+        card = ModelCard.from_template()
 
     return card
-
