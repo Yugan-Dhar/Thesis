@@ -95,7 +95,7 @@ def get_summarized_chunks_batch_version(batch):
     for text in texts:
         # In case of fixed compression ratio
         if args.mode == 'fixed':
-            for _ in range(batch["amount_of_extractive_steps"]):
+            for _ in range(batch["amount_of_extractive_steps"][i]):
                 chunks = text_splitter.split_text(text)
                 chunk_summaries = []
                 for chunk in chunks:
@@ -107,7 +107,7 @@ def get_summarized_chunks_batch_version(batch):
             chunks = text_splitter.split_text(text)
             chunk_summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio=batch["dependent_compression_ratio"])
+                summary = extractive_model(chunk, ratio=batch["dependent_compression_ratio"][i])
                 chunk_summaries.append(summary)
             text = " ".join(chunk_summaries)
 
@@ -132,8 +132,8 @@ def get_summarized_chunks_batch_version(batch):
 
         i+=1
 
-
         concatenated_summaries.append(text)
+
     return {'concatenated_summary': concatenated_summaries}
 
 
@@ -291,8 +291,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    #os.environ["WANDB_PROJECT"] = "thesis_sie"
-    #os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    os.environ["WANDB_PROJECT"] = "thesis_sie"
+    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
@@ -352,8 +352,7 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 32)
-        #dataset = dataset.map(get_summarized_chunks)
+        dataset = dataset.map(get_summarized_chunks_batch_version, batched= True, batch_size = 8)
 
         dataset.save_to_disk(dataset_path)
 
@@ -416,8 +415,8 @@ if __name__ == "__main__":
         save_strategy= "epoch",
         evaluation_strategy = "epoch",
         label_names=["labels"],
-        #report_to = "wandb",
-        #run_name= model_id,
+        report_to = "wandb",
+        run_name= model_id,
         predict_with_generate= True,
         eval_accumulation_steps= 32,
         generation_max_length= gen_max_length,
