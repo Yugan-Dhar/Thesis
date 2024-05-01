@@ -122,6 +122,5 @@ if __name__ == "__main__":
     #trainer.push_to_hub()
     model_card = utils.tools.create_model_card(args, model_id)
 
-    #TODO: Add WHOAMI here  
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
