@@ -550,8 +550,8 @@ if __name__ == "__main__":
 
     previous_results.append(new_result)
 
-    #TODO: Add modelcard implementation here
-    model_card = utils.tools.create_model_card(args, model_id, new_result)
+    model_card = utils.tools.create_model_card(new_result)
+
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
     
@@ -560,4 +560,4 @@ if __name__ == "__main__":
         json.dump(previous_results, f, indent=4)
 
     if args.verbose:
-        print(f"Results saved to {evaluation_results_filepath}")
+        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
