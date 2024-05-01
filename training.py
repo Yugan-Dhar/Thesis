@@ -414,6 +414,7 @@ if __name__ == "__main__":
         hub_model_id= f"{model_id}",
     )
     
+    
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -442,8 +443,7 @@ if __name__ == "__main__":
 
     #TODO: Edit this to push the model card to the hub
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
-
-    
+        
      
     if args.verbose:
         print(f"Training finished and model saved to disk")

@@ -1,6 +1,6 @@
 import os
 import json
-from huggingface_hub import ModelCard, ModelCardData
+from huggingface_hub import ModelCard, ModelCardData, RepoCard
 
 def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     """
@@ -68,39 +68,14 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
 
 
 def create_model_card(args, model_id):
-
-    card_data = ModelCardData(language="en", 
-                              license='mit', 
-                              pipeline_tag = 'summarization',
-                              tags= ['summarization', 'extractive', 'abstractive', 'multi-step'],
-                              dataset='eur-lex-sum',
-                              metrics= ['ROUGE-1', 'ROUGE-2', 'ROUGE-L', 'BERTScore', 'BARTScore', 'BLANC']
-                              )
     
-    
-    
-    content = f"""
-    ---
+    content = ''
+    with open('docs/card_template.md', 'r') as f:
+        content += f.read()
 
-      {card_data.to_yaml()}
-
-    ---
-
-    # Model Card for {model_id}
-
-    ## Model Details
-
-    ### Model Description
-
-    ### Model Sources
-
-    - **Repository**: https://github.com/MikaSie/Thesis
-    - **Paper**: 
-
-
-
-    """
+    content = content.replace('PAPER_TITLE', 'testeeee')
 
     card = ModelCard(content)
 
     return card
+

@@ -84,8 +84,9 @@ if __name__ == "__main__":
 
     #dataset = dataset.map(get_feature)
 
-    # load abstract model
+    #TODO: Change this to a more general model_id
     model_id = 'SNaphetniet'
+    gen_max_length = 1250
 
     training_args = Seq2SeqTrainingArguments(
             output_dir = os.path.join('results', model_id, 'output'),
@@ -101,10 +102,13 @@ if __name__ == "__main__":
             save_strategy= "epoch",
             evaluation_strategy = "epoch",
             label_names=["labels"],
+            report_to = "wandb",
+            run_name= model_id,
             predict_with_generate= True,
             eval_accumulation_steps= 32,
+            generation_max_length= gen_max_length,
             hub_model_id= f"{model_id}",
-        )
+    )
         # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -119,9 +123,10 @@ if __name__ == "__main__":
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         )
     
+    #TODO: after testing, no need to push to hub. This is just for testing purposes personally.
+    #TODO: Add note that results will not be pushed to hub and that this will only happen if training + testing is done.
     #trainer.push_to_hub()
-    model_card = utils.tools.create_model_card(args, model_id)
 
-    #TODO: Add WHOAMI here  
+    model_card = utils.tools.create_model_card(args, model_id)
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
