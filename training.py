@@ -192,7 +192,7 @@ def set_device(abstractive_model, args):
         #abstractive_model= nn.DataParallel(abstractive_model)
         abstractive_model.to(device)
         if args.verbose:
-            print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
+            print(f"Using abstractive model on device: {device}")
 
     # Currently disabled because evaluation metrics are not supported on MPS
     """ elif torch.backends.mps.is_available():
@@ -351,7 +351,7 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
+        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 32)
         #dataset = dataset.map(get_summarized_chunks)
 
         dataset.save_to_disk(dataset_path)
