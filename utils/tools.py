@@ -68,14 +68,22 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
 
 
 def create_model_card(results):
-    
+    """
+    Creates a model card based on the provided results. If a template is not found, a default model card is generated, so it is recommended to have a template in the 'docs' directory.
+
+    Args:
+        results (dict): A dictionary containing the model evaluation results.
+
+    Returns:
+        ModelCard: The generated model card.
+
+    """
     file_path = os.path.join('docs', 'card_template.md')
     content = ''
 
     if os.path.exists(file_path):
         with open('docs/card_template.md', 'r') as f:
             content += f.read()
-
 
         content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
                            .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model']) \
@@ -93,7 +101,7 @@ def create_model_card(results):
 
     else:
         # Placeholder model card data
-        card_data = ModelCardData(language= 'en')
+        card_data = ModelCardData(language='en')
         card = ModelCard.from_template(card_data)
 
     return card
