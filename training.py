@@ -89,13 +89,14 @@ def get_summarized_chunks(example):
 
 
 def get_summarized_chunks_batch_version(batch):
-
     texts = batch["reference"]
-    summaries = []
+    concatenated_summaries = []
+
+    i = 0 
     for text in texts:
         # In case of fixed compression ratio
         if args.mode == 'fixed':
-            for _ in range(batch["amount_of_extractive_steps"]):
+            for _ in range(batch["amount_of_extractive_steps"][i]):
                 chunks = text_splitter.split_text(text)
                 chunk_summaries = []
                 for chunk in chunks:
@@ -107,16 +108,20 @@ def get_summarized_chunks_batch_version(batch):
             chunks = text_splitter.split_text(text)
             chunk_summaries = []
             for chunk in chunks:
-                summary = extractive_model(chunk, ratio=batch["dependent_compression_ratio"])
+                summary = extractive_model(chunk, ratio=batch["dependent_compression_ratio"][i])
                 chunk_summaries.append(summary)
             text = " ".join(chunk_summaries)
 
+
         elif args.mode == "hybrid":
+
             ratio = args.compression_ratio / 10
-            for i in range(batch["amount_of_extractive_steps"]):
-                if i == batch["amount_of_extractive_steps"] - 1:
+            for x in range(batch["amount_of_extractive_steps"][i]):
+
+                if x == batch["amount_of_extractive_steps"][i] - 1:
                     ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 # If the ratio is larger than 1, skip iteration as summarization is not needed!
+                
                 if ratio > 1:
                     continue
                 chunks = text_splitter.split_text(text)
@@ -125,8 +130,12 @@ def get_summarized_chunks_batch_version(batch):
                     summary = extractive_model(chunk, ratio=ratio)
                     chunk_summaries.append(summary)
                 text = " ".join(chunk_summaries)
-        summaries.append(text)
-    return {'concatenated_summary': summaries}
+
+        i+=1
+
+        concatenated_summaries.append(text)
+
+    return {'concatenated_summary': concatenated_summaries}
 
 
 def add_prefix(batch):
@@ -184,7 +193,7 @@ def set_device(abstractive_model, args):
         #abstractive_model= nn.DataParallel(abstractive_model)
         abstractive_model.to(device)
         if args.verbose:
-            print(f"Using abstractive model on device: {device} using {torch.cuda.device_count()} GPU(s).")
+            print(f"Using abstractive model on device: {device}")
 
     # Currently disabled because evaluation metrics are not supported on MPS
     """ elif torch.backends.mps.is_available():
@@ -344,7 +353,7 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks)
+        dataset = dataset.map(get_summarized_chunks_batch_version, batched= True, batch_size = 8)
 
         dataset.save_to_disk(dataset_path)
 
