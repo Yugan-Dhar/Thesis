@@ -1,6 +1,6 @@
 import os
 import json
-from huggingface_hub import ModelCard
+from huggingface_hub import ModelCard, ModelCardData
 
 def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     """
@@ -76,24 +76,24 @@ def create_model_card(results):
         with open('docs/card_template.md', 'r') as f:
             content += f.read()
 
-        #TODO: Add all the necessary information to the model card
 
-        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID'])
-        content = content.replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
-        content = content.replace('PLACEHOLDER_EXTRACTIVE_MODEL', results['Extractive_model'])
-        content = content.replace('PLACEHOLDER_ROUGE1', str(results['Evaluation_metrics']['ROUGE-1']))
-        content = content.replace('PLACEHOLDER_ROUGE2', str(results['Evaluation_metrics']['ROUGE-2']))
-        content = content.replace('PLACEHOLDER_ROUGEL', str(results['Evaluation_metrics']['ROUGE-L']))
-        content = content.replace('PLACEHOLDER_BERTSCORE', str(results['Evaluation_metrics']['BertScore']))
-        content = content.replace('PLACEHOLDER_BARTSCORE', str(results['Evaluation_metrics']['BARTScore']))    
-        content = content.replace('PLACEHOLDER_BLANC', str(results['Evaluation_metrics']['BLANC']))
-        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID'])
-        content = content.replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
-        
+        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
+                           .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model']) \
+                           .replace('PLACEHOLDER_EXTRACTIVE_MODEL', results['Extractive_model']) \
+                           .replace('PLACEHOLDER_ROUGE1', str(results['Evaluation_metrics']['ROUGE-1'])) \
+                           .replace('PLACEHOLDER_ROUGE2', str(results['Evaluation_metrics']['ROUGE-2'])) \
+                           .replace('PLACEHOLDER_ROUGEL', str(results['Evaluation_metrics']['ROUGE-L'])) \
+                           .replace('PLACEHOLDER_BERTSCORE', str(results['Evaluation_metrics']['BertScore'])) \
+                           .replace('PLACEHOLDER_BARTSCORE', str(results['Evaluation_metrics']['BARTScore'])) \
+                           .replace('PLACEHOLDER_BLANC', str(results['Evaluation_metrics']['BLANC'])) \
+                           .replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
+                           .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
         
         card = ModelCard(content)
 
     else:
-        card = ModelCard.from_template()
+        # Placeholder model card data
+        card_data = ModelCardData(language= 'en')
+        card = ModelCard.from_template(card_data)
 
     return card

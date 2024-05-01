@@ -545,6 +545,7 @@ if __name__ == "__main__":
     model_card = utils.tools.create_model_card(args, model_id, new_result)
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
+    
     # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)
