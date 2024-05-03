@@ -110,4 +110,3 @@ def select_abstractive_model(model_name):
         return initialize_abstractive_model(models[model_name])
     else:
         raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from: {', '.join(models)}")  
-

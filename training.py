@@ -165,15 +165,18 @@ def compute_rouge_during_training(pred):
 
     labels_ids = pred.label_ids
     pred_ids = pred.predictions
-    pred_ids = pred_ids[0]
 
     labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
     label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
     
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-        
+
+    print(pred_str)
+
     rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
+
+    
 
     return {**rouge_output}
 
@@ -241,7 +244,7 @@ def write_predicted_summaries_to_file(path, summary_list):
     Returns:
         None
     """
-    file = open(path,'w')
+    file = open(path,'w+')
     i = 0
     for summary in summary_list:
         file.write(f"Summary {i}:\n")
@@ -400,7 +403,7 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
-    gen_max_length = 1250
+    gen_max_length = 1024
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
@@ -436,7 +439,7 @@ if __name__ == "__main__":
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
         data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
+        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
     )
 
     if not args.verbose:
@@ -446,7 +449,6 @@ if __name__ == "__main__":
         print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     
     trainer.train()
-
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
     trainer.push_to_hub()
@@ -459,7 +461,7 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset["test"])
+    results = trainer.predict(dataset['test'])
 
     # Batched version:
 
@@ -484,14 +486,21 @@ if __name__ == "__main__":
 
     results = trainer.predict(small_dataset)"""
 
+    #TODO: Maybe we shouldn't use label_ids but use the actual summaries from the dataset instead. This way we can compare the predicted summaries to the actual summaries.
+    # I think that label_ids are being cut off, so if an actual summary is longer than 1024 tokens, it will be cut off. This is not the case with the actual summaries from the dataset.
+
+
     label_ids = results.label_ids
     pred_ids = results.predictions
 
-    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     label_ids[label_ids == -100] = abstractive_tokenizer.pad_token_id
+    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+
+    """for n in range(5):
+        print(f"This is the length of the predicted summary {n}: {abstractive_tokenizer(pred_str[n], return_tensors='pt')['input_ids'].shape[1]}")"""
 
     write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
     
