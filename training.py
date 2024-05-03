@@ -459,7 +459,7 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset["test"], max_length = 1250)
+    results = trainer.predict(dataset["test"])
 
     # Batched version:
 
