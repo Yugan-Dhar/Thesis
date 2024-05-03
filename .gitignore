@@ -13,7 +13,7 @@ docs/card_template.md
 
 # But don't ignore evaluation_results.json
 !results/evaluation_results.json
-!results/text_outputs/
+!results/text_outputs
 
 run_from_personal.sh
 wandb
