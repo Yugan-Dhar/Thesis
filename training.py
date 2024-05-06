@@ -244,6 +244,8 @@ def write_predicted_summaries_to_file(path, summary_list):
     Returns:
         None
     """
+
+
     file = open(path,'w+')
     i = 0
     for summary in summary_list:
@@ -450,8 +452,8 @@ if __name__ == "__main__":
     
     trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    trainer.push_to_hub()
+    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    #trainer.push_to_hub()
 
     #TODO: Edit this to push the model card to the hub
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
@@ -461,7 +463,8 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset['test'])
+    small_dataset = dataset["test"].select(range(4))
+    results = trainer.predict(small_dataset)
 
     # Batched version:
 
@@ -495,6 +498,10 @@ if __name__ == "__main__":
 
     label_ids[label_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
+
+    for n in range(2):
+        print(f"This is the length of the predicted summary {n}: {len(pred_ids[n])}")
+        print(f"This is the length of the label summary {n}: {len(label_ids[n])}")
 
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
