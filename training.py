@@ -412,8 +412,13 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
+    del extractive_model, extractive_tokenizer
 
-    gen_max_length = 1024
+    if args.abstractive_model == 'BART':
+        gen_max_length = 1024
+    else:
+        #TODO: 
+        gen_max_length = 1500
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
