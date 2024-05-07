@@ -244,6 +244,7 @@ def write_predicted_summaries_to_file(path, summary_list):
     Returns:
         None
     """
+
     file = open(path,'w+')
     i = 0
     for summary in summary_list:
@@ -332,6 +333,7 @@ if __name__ == "__main__":
 
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)        
+    
     elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
@@ -356,7 +358,7 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks_batch_version, batched= True, batch_size = 8)
+        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
 
         dataset.save_to_disk(dataset_path)
 
