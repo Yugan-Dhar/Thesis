@@ -22,15 +22,19 @@ from string2string.similarity import BARTScore
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 
-def calculate_token_length(example):    
+def calculate_token_length(example):   
     return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
 
 
 def calculate_extractive_steps(example):
 
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
-
-    example["amount_of_extractive_steps"] = math.ceil(outcome)
+    #TODO: Adda check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values. Otherwise, if value is -1.4 it will be set to -1. This isn't possible
+    if outcome < 0:
+        example["amount_of_extractive_steps"] = 0
+    else:
+        example["amount_of_extractive_steps"] = math.ceil(outcome)
+    
     return example
 
 
@@ -98,6 +102,7 @@ def get_summarized_chunks_batch_version(batch):
         if args.mode == 'fixed':
             for _ in range(batch["amount_of_extractive_steps"][i]):
                 chunks = text_splitter.split_text(text)
+                print(len(chunks))
                 chunk_summaries = []
                 for chunk in chunks:
                     summary = extractive_model(chunk, ratio=args.compression_ratio / 10)
@@ -332,17 +337,19 @@ if __name__ == "__main__":
 
 
     if args.no_extraction:
-        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)        
+        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
+
+        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+            dataset = dataset.map(add_prefix, batched= True)      
     
     elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
-            #TODO: Check is 50 is the correct value for chunk_overlap and to deduct from chunk_size.
         text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
                     tokenizer = extractive_tokenizer, 
                     chunk_size = extractive_tokenizer.model_max_length - 50,
                     chunk_overlap = 50) 
-        
+
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
@@ -379,7 +386,7 @@ if __name__ == "__main__":
 
     
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    dataset = dataset.map(get_feature, batched= True)
+    dataset = dataset.map(get_feature, batched= True, batch_size = 32)
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
@@ -455,7 +462,6 @@ if __name__ == "__main__":
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
     trainer.push_to_hub()
 
-    #TODO: Edit this to push the model card to the hub
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
         
      
@@ -500,9 +506,6 @@ if __name__ == "__main__":
 
     label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-
-    """for n in range(5):
-        print(f"This is the length of the predicted summary {n}: {abstractive_tokenizer(pred_str[n], return_tensors='pt')['input_ids'].shape[1]}")"""
 
     write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
     
