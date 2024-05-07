@@ -30,6 +30,8 @@ def get_feature(batch):
 
     return encodings
 
+
+
 if __name__ == "__main__":
     
     #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -123,9 +125,7 @@ if __name__ == "__main__":
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         )
     
-    #TODO: after testing, no need to push to hub. This is just for testing purposes personally.
     #TODO: Add note that results will not be pushed to hub and that this will only happen if training + testing is done.
-    #trainer.push_to_hub()
     new_result =   {
         "Model_ID": model_id,
         "Date_Created": date.today().strftime("%d/%m/%Y"),
