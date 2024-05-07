@@ -88,6 +88,7 @@ def create_model_card(results):
         content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
                            .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model']) \
                            .replace('PLACEHOLDER_EXTRACTIVE_MODEL', results['Extractive_model']) \
+                           .replace('PLACEHOLDER_RATIO_MODE', results['Ratio_mode']) \
                            .replace('PLACEHOLDER_ROUGE1', str(results['Evaluation_metrics']['ROUGE-1'])) \
                            .replace('PLACEHOLDER_ROUGE2', str(results['Evaluation_metrics']['ROUGE-2'])) \
                            .replace('PLACEHOLDER_ROUGEL', str(results['Evaluation_metrics']['ROUGE-L'])) \

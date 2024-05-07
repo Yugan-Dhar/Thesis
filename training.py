@@ -301,8 +301,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    #os.environ["WANDB_PROJECT"] = "thesis_sie"
+    #os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
@@ -412,6 +412,7 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
+
     gen_max_length = 1024
 
     training_args = Seq2SeqTrainingArguments(
@@ -457,10 +458,10 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
     
-    trainer.train()
+    #trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    trainer.push_to_hub()
+    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    #trainer.push_to_hub()
 
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
         
@@ -469,8 +470,10 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset['test'])
+    #results = trainer.predict(dataset['test'])
 
+    small_dataset = dataset["test"].select(range(2))
+    results = trainer.predict(small_dataset)
     # Batched version:
 
     """dataloader = trainer.get_test_dataloader(dataset["test"].select(range(8)))
@@ -558,8 +561,8 @@ if __name__ == "__main__":
         new_result["Compression_ratio"] = args.compression_ratio / 10
 
     if args.no_extraction:
-        new_result.pop("Extractive_model")
-        new_result.pop("Ratio_mode")
+        new_result["Extractive_model"] = "No extractive model"
+        new_result["Ratio_mode"] = "No ratio"
         new_result['No_extraction'] = True
 
     previous_results.append(new_result)
