@@ -25,6 +25,8 @@ warnings.filterwarnings('ignore', category=FutureWarning, message='^The default 
 def calculate_token_length(example):   
     return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
 
+def calculate_token_length_summary(example):   
+    return {'token_length': extractive_tokenizer(example['summary'], return_tensors='pt')['input_ids'].shape[1]}
 
 def calculate_extractive_steps(example):
 
@@ -261,6 +263,29 @@ def write_predicted_summaries_to_file(path, summary_list):
         print(f"Summaries written to {path}")
 
 
+def remove_outliers_from_dataset(dataset):
+
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
+    averages = []
+
+    dataset = dataset.map(calculate_token_length_summary)
+
+    #TODO: Append all token lengths to a list and calculate the average token length over all datasets.
+    for data in dataset:
+        for example in dataset[data]:
+            averages.append(example['token_length'])
+
+    mean_token_length = np.mean(averages)
+    print(mean_token_length)
+    std = np.std(averages)
+
+    print(f"Before filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    dataset = dataset.filter(lambda example: example['token_length'] < (mean_token_length + 2 * std))
+    print(f"After filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+
+    return dataset
+
+
 if __name__ == "__main__":
     
     #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
@@ -300,9 +325,8 @@ if __name__ == "__main__":
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     
     args = parser.parse_args()  
-
-    #os.environ["WANDB_PROJECT"] = "thesis_sie"
-    #os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    os.environ["WANDB_PROJECT"] = "thesis_sie"
+    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
@@ -328,7 +352,7 @@ if __name__ == "__main__":
             print("No extractive steps are enabled.")
 
     set_device(abstractive_model, args)
-
+    
     #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
@@ -338,10 +362,13 @@ if __name__ == "__main__":
 
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
+        #TODO: Check if remove outliers needs to be done here. Could also be done once 
+        dataset = remove_outliers_from_dataset(dataset)
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
-    
+
+        
     elif not os.path.exists(dataset_path) and not args.no_extraction:
         if args.verbose:
             print(f"Dataset not found. Pre-processing the dataset now......")
@@ -351,6 +378,8 @@ if __name__ == "__main__":
                     chunk_overlap = 50) 
 
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
+        #TODO: Check if remove outliers needs to be done here. Could also be done once 
+        dataset = remove_outliers_from_dataset(dataset)
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)
@@ -408,6 +437,7 @@ if __name__ == "__main__":
     if args.peft:
         if args.verbose:
             print('Using PEFT!')        
+            
         peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
