@@ -442,6 +442,7 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
+    #Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
     if args.abstractive_model == 'BART':
