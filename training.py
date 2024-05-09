@@ -379,7 +379,6 @@ def preprocess_logits_for_metrics(logits, labels):
 
 if __name__ == "__main__":
     
-    #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
     parser.add_argument('extractive_model', type= str, 
@@ -444,7 +443,7 @@ if __name__ == "__main__":
 
     set_device(abstractive_model, args)
     
-    #Args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
+    # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
     else:
@@ -455,6 +454,7 @@ if __name__ == "__main__":
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
         #TODO: Check if remove outliers needs to be done here. Could also be done once 
         dataset = remove_outliers_from_dataset(dataset)
+        label_str = dataset["test"]["summary"]
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
 
@@ -470,6 +470,7 @@ if __name__ == "__main__":
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         #TODO: Check if remove outliers needs to be done here. Could also be done once 
         dataset = remove_outliers_from_dataset(dataset)
+        label_str = dataset["test"]["summary"]
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)
@@ -532,14 +533,14 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, peft_config)
         abstractive_model.print_trainable_parameters()
     
-    #Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
+    # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
     if args.abstractive_model == 'BART':
         gen_max_length = 1024
     else:
-        #TODO: change this to 1 STD of mean summary word length
-        gen_max_length = 150
+        #TODO: change this to 1 STD of mean summary word length perhaps
+        gen_max_length = 1500
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
@@ -558,7 +559,7 @@ if __name__ == "__main__":
         report_to = "wandb",
         run_name= model_id,
         predict_with_generate= True,
-        eval_accumulation_steps= 32,
+        eval_accumulation_steps= 16,
         generation_max_length= gen_max_length,
         hub_model_id= f"{model_id}",
     )
@@ -596,9 +597,11 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    results = trainer.predict(dataset['test'])
+    #results = trainer.predict(dataset['test'])
 
     # Batched version:
+
+    results = trainer.predict(dataset['test'])
 
     """dataloader = trainer.get_test_dataloader(dataset["test"].select(range(8)))
 
@@ -621,30 +624,25 @@ if __name__ == "__main__":
 
     results = trainer.predict(small_dataset)"""
 
-    #TODO: Maybe we shouldn't use label_ids but use the actual summaries from the dataset instead. This way we can compare the predicted summaries to the actual summaries.
-    # I think that label_ids are being cut off, so if an actual summary is longer than 1024 tokens, it will be cut off. This is not the case with the actual summaries from the dataset.
-
-
-    label_ids = results.label_ids
     pred_ids = results.predictions
 
-    label_ids[label_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
-    label_str = abstractive_tokenizer.batch_decode(label_ids, skip_special_tokens=True)
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
     write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
-    
+
+    del abstractive_model, abstractive_tokenizer
+
     # Calculate ROUGE scores
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
-        
+
     # Calculate BERTScore
-    # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 512
+    # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 510. 
     bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-large-4096")
+    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-base-4096")
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
-    
+
     # Calculate BARTScore
     bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
     bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 4)
