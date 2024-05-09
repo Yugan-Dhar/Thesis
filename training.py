@@ -25,13 +25,16 @@ warnings.filterwarnings('ignore', category=FutureWarning, message='^The default 
 def calculate_token_length(example):   
     return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
 
-def calculate_token_length_summary(example):   
-    return {'token_length': extractive_tokenizer(example['summary'], return_tensors='pt')['input_ids'].shape[1]}
+
+def calculate_word_length_summary(example): 
+
+    return {'word_length': len(example['summary'].split())}
+
 
 def calculate_extractive_steps(example):
 
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
-    #TODO: Adda check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values. Otherwise, if value is -1.4 it will be set to -1. This isn't possible
+    #Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values. Otherwise, if value is -1.4 it will be set to -1. This isn't possible
     if outcome < 0:
         example["amount_of_extractive_steps"] = 0
     else:
@@ -204,12 +207,6 @@ def set_device(abstractive_model, args):
         if args.verbose:
             print(f"Using abstractive model on device: {device}")
 
-    # Currently disabled because evaluation metrics are not supported on MPS
-    """ elif torch.backends.mps.is_available():
-        abstractive_model.to(torch.device('mps'))
-        if args.verbose:
-            print(f"Using the mps backend: {torch.backends.mps.is_available()}")"""
-
 
 def write_actual_summaries_to_file():
     """
@@ -263,23 +260,31 @@ def write_predicted_summaries_to_file(path, summary_list):
 
 
 def remove_outliers_from_dataset(dataset):
+    """
+    Removes outliers from the dataset based on word length of the summaries.
 
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
+    Args:
+        dataset (Dataset): The dataset to remove outliers from.
+
+    Returns:
+        Dataset: The dataset with outliers removed.
+    """
+
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
 
-    dataset = dataset.map(calculate_token_length_summary)
+    dataset = dataset.map(calculate_word_length_summary)
 
-    #TODO: Append all token lengths to a list and calculate the average token length over all datasets.
     for data in dataset:
         for example in dataset[data]:
-            averages.append(example['token_length'])
+            averages.append(example['word_length'])
 
     mean_token_length = np.mean(averages)
-    print(mean_token_length)
     std = np.std(averages)
 
+    print(f"1 STD from mean: {mean_token_length + std}\n2 STD from mean: {mean_token_length + 2 * std}")
     print(f"Before filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-    dataset = dataset.filter(lambda example: example['token_length'] < (mean_token_length + 2 * std))
+    dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
     print(f"After filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     return dataset
@@ -363,7 +368,6 @@ if __name__ == "__main__":
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
         #TODO: Check if remove outliers needs to be done here. Could also be done once 
         dataset = remove_outliers_from_dataset(dataset)
-
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
 
@@ -447,7 +451,7 @@ if __name__ == "__main__":
     if args.abstractive_model == 'BART':
         gen_max_length = 1024
     else:
-        #TODO: 
+        #TODO: change this to 1 STD of mean summary word length
         gen_max_length = 1500
 
     training_args = Seq2SeqTrainingArguments(
