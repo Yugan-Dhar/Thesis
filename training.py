@@ -22,19 +22,163 @@ from string2string.similarity import BARTScore
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 
-def calculate_token_length(example):   
-    return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
+def write_actual_summaries_to_file():
+    """
+    Writes the actual summaries from the 'eur-lex-sum' dataset to a file named 'actual_summaries.txt'.
+    ONLY NEEDS TO BE RUN ONCE TO WRITE THE ACTUAL SUMMARIES TO A FILE.
+
+    This function loads the 'eur-lex-sum' dataset, opens a file in write mode, and writes the actual summaries
+    from the 'test' subset of the dataset to the file. Each summary is preceded by a header indicating its index.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
+    eur_lex_sum = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+    path = os.path.join('results', 'actual_summaries.txt')
+    # Open the file in write mode
+    with open(path, 'w') as f:
+        # Iterate over the dataset
+        for i in range(len(eur_lex_sum['test'])):
+            # Write the summary to the file
+            f.write(f"Summary {i}:\n")
+            f.write(eur_lex_sum['test']['summary'][i] + '\n\n\n\n')
+    f.close()
+
+    print("Summaries written to file.")
+
+
+def set_device(abstractive_model, args):
+    """
+    Sets the device for the abstractive model based on the availability of CUDA.
+
+    Parameters:
+    - abstractive_model: The abstractive model to be set on the device.
+    - args: Command-line arguments containing the device configuration.
+
+    Returns:
+    None
+    """
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+        if args.peft:
+            device = torch.device('cuda:0')
+        abstractive_model.to(device)
+        if args.verbose:
+            print(f"Using abstractive model on device: {device}")
 
 
 def calculate_word_length_summary(example): 
+    """
+    Calculates the word length of the summary in the given example.
 
+    Args:
+        example (dict): A dictionary containing the example data.
+
+    Returns:
+        dict: A dictionary with the word length of the summary.
+
+    """
     return {'word_length': len(example['summary'].split())}
 
 
+def remove_outliers_from_dataset(dataset):
+    """
+    Removes outliers from the dataset based on word length of the summaries.
+
+    Args:
+        dataset (Dataset): The dataset to remove outliers from.
+
+    Returns:
+        Dataset: The dataset with outliers removed.
+    """
+
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+    averages = []
+
+    dataset = dataset.map(calculate_word_length_summary)
+
+    for data in dataset:
+        for example in dataset[data]:
+            averages.append(example['word_length'])
+
+    mean_token_length = np.mean(averages)
+    std = np.std(averages)
+
+    print(f"1 STD from mean: {mean_token_length + std}\n2 STD from mean: {mean_token_length + 2 * std}")
+    print(f"Before filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
+    print(f"After filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+
+    return dataset
+
+
+def add_prefix(batch):
+    """
+    Add the prefix 'summarize: ' to each reference in the batch.
+
+    Args:
+        batch (dict): A dictionary containing the batch data.
+
+    Returns:
+        dict: The updated batch with the prefix added to each reference.
+    """
+
+    batch['reference'] = ['summarize: ' + ref for ref in batch['reference']]
+
+    return batch
+
+
+def calculate_token_length(example):
+    """
+    Calculates the token length of a given example.
+
+    Parameters:
+    example (dict): The example containing the reference text.
+
+    Returns:
+    dict: A dictionary with the token length of the reference text.
+    """
+    return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
+
+
+def get_dependent_compression_ratio(example):
+    """
+    Calculates the dependent compression ratio for a given example.
+
+    Parameters:
+    example (dict): A dictionary containing the example information, including the token length.
+
+    Returns:
+    dict: A dictionary containing the dependent compression ratio.
+    """
+
+    dependent_ratio = (context_length_abstractive_model / example['token_length'])
+
+    # If the dependent ratio is larger than 1, set it to 1 because we cannot compress more than the original text
+    if dependent_ratio > 1:
+        dependent_ratio = 1
+
+    return {'dependent_compression_ratio': dependent_ratio}
+
+
 def calculate_extractive_steps(example):
+    """
+    Calculates the amount of extractive steps based on the given example.
+
+    Args:
+        example (dict): A dictionary containing the example information.
+
+    Returns:
+        dict: The updated example dictionary with the amount of extractive steps calculated.
+    """
 
     outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
-    #Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values. Otherwise, if value is -1.4 it will be set to -1. This isn't possible
+    
+    # Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values.
+    # Otherwise, if value is -1.4 it will be set to -1. This isn't possible.
     if outcome < 0:
         example["amount_of_extractive_steps"] = 0
     else:
@@ -43,18 +187,19 @@ def calculate_extractive_steps(example):
     return example
 
 
-def get_dependent_compression_ratio(example):
-    
-    dependent_ratio = (context_length_abstractive_model / example['token_length'])
-
-    if dependent_ratio > 1:
-        dependent_ratio = 1
-
-    return {'dependent_compression_ratio': dependent_ratio}
-
-
 def get_summarized_chunks(example):
-   
+    """
+    Generate summarized chunks of text based on the given example.
+
+    Args:
+        example (dict): A dictionary containing the example information, including the reference text,
+                        the mode of summarization, the amount of extractive steps, and the compression ratio.
+
+    Returns:
+        dict: A dictionary containing the concatenated summary of the text chunks.
+
+    """
+
     text = example["reference"]
     # In case of fixed compression ratio
     if args.mode == 'fixed':
@@ -98,6 +243,17 @@ def get_summarized_chunks(example):
 
 
 def get_summarized_chunks_batch_version(batch):
+    """
+    Generate summarized chunks from a batch of texts based on the specified mode.
+
+    Args:
+        batch (dict): A dictionary containing the batch data, including the reference texts and other parameters.
+
+    Returns:
+        dict: A dictionary containing the concatenated summaries of the chunks.
+
+    """
+
     texts = batch["reference"]
     concatenated_summaries = []
 
@@ -148,27 +304,51 @@ def get_summarized_chunks_batch_version(batch):
     return {'concatenated_summary': concatenated_summaries}
 
 
-def add_prefix(batch):
-
-    batch['reference'] = ['summarize: ' + ref for ref in batch['reference']]
-
-    return batch
-
-
 def get_feature(batch):
+    """
+    Get the feature encodings for a given batch.
 
-  if args.no_extraction:
+    Args:
+        batch (dict): A dictionary containing the batch data.
+
+    Returns:
+        dict: The feature encodings, including input_ids, attention_mask, and labels.
+    """
+    if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length = context_length_abstractive_model, truncation= True)
-  else:
+                        max_length=context_length_abstractive_model, truncation=True)
+    else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length = context_length_abstractive_model)
+                        max_length=context_length_abstractive_model)
 
-  encodings = {'input_ids': encodings['input_ids'],
-               'attention_mask': encodings['attention_mask'],
-               'labels': encodings['labels']}
+    encodings = {'input_ids': encodings['input_ids'],
+                 'attention_mask': encodings['attention_mask'],
+                 'labels': encodings['labels']}
 
-  return encodings
+    return encodings
+
+
+def write_predicted_summaries_to_file(path, summary_list):
+    """
+    Write a list of summaries to a file.
+
+    Args:
+        path (str): The path to the file where the summaries will be written.
+        summary_list (list): A list of summaries to be written to the file.
+
+    Returns:
+        None
+    """
+
+    file = open(path,'w+')
+    i = 0
+    for summary in summary_list:
+        file.write(f"Summary {i}:\n")
+        file.write(summary+"\n\n\n\n")
+        i+=1
+    file.close()
+    if args.verbose:
+        print(f"Summaries written to {path}")
 
 
 def compute_rouge_during_training(pred):
@@ -195,99 +375,6 @@ def preprocess_logits_for_metrics(logits, labels):
     pred_ids = torch.argmax(logits[0], dim=-1)
 
     return pred_ids, labels
-
-
-def set_device(abstractive_model, args):
-    if torch.cuda.is_available():
-        device = torch.device('cuda')
-        if args.peft:
-            device = torch.device('cuda:0')
-        #abstractive_model= nn.DataParallel(abstractive_model)
-        abstractive_model.to(device)
-        if args.verbose:
-            print(f"Using abstractive model on device: {device}")
-
-
-def write_actual_summaries_to_file():
-    """
-    Writes the actual summaries from the 'eur-lex-sum' dataset to a file named 'actual_summaries.txt'.
-    ONLY NEEDS TO BE RUN ONCE TO WRITE THE ACTUAL SUMMARIES TO A FILE.
-
-    This function loads the 'eur-lex-sum' dataset, opens a file in write mode, and writes the actual summaries
-    from the 'test' subset of the dataset to the file. Each summary is preceded by a header indicating its index.
-
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
-    eur_lex_sum = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
-    path = os.path.join('results', 'actual_summaries.txt')
-    # Open the file in write mode
-    with open(path, 'w') as f:
-        # Iterate over the dataset
-        for i in range(len(eur_lex_sum['test'])):
-            # Write the summary to the file
-            f.write(f"Summary {i}:\n")
-            f.write(eur_lex_sum['test']['summary'][i] + '\n\n\n\n')
-    f.close()
-
-    print("Summaries written to file.")
-
-
-def write_predicted_summaries_to_file(path, summary_list):
-    """
-    Write a list of summaries to a file.
-
-    Args:
-        path (str): The path to the file where the summaries will be written.
-        summary_list (list): A list of summaries to be written to the file.
-
-    Returns:
-        None
-    """
-
-    file = open(path,'w+')
-    i = 0
-    for summary in summary_list:
-        file.write(f"Summary {i}:\n")
-        file.write(summary+"\n\n\n\n")
-        i+=1
-    file.close()
-    if args.verbose:
-        print(f"Summaries written to {path}")
-
-
-def remove_outliers_from_dataset(dataset):
-    """
-    Removes outliers from the dataset based on word length of the summaries.
-
-    Args:
-        dataset (Dataset): The dataset to remove outliers from.
-
-    Returns:
-        Dataset: The dataset with outliers removed.
-    """
-
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
-    averages = []
-
-    dataset = dataset.map(calculate_word_length_summary)
-
-    for data in dataset:
-        for example in dataset[data]:
-            averages.append(example['word_length'])
-
-    mean_token_length = np.mean(averages)
-    std = np.std(averages)
-
-    print(f"1 STD from mean: {mean_token_length + std}\n2 STD from mean: {mean_token_length + 2 * std}")
-    print(f"Before filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-    dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
-    print(f"After filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-
-    return dataset
 
 
 if __name__ == "__main__":
@@ -397,8 +484,8 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
-
+        #dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
+        dataset = dataset.map(get_summarized_chunks)
         dataset.save_to_disk(dataset_path)
 
         if args.verbose:
@@ -452,7 +539,7 @@ if __name__ == "__main__":
         gen_max_length = 1024
     else:
         #TODO: change this to 1 STD of mean summary word length
-        gen_max_length = 1500
+        gen_max_length = 150
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
@@ -509,10 +596,8 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    #results = trainer.predict(dataset['test'])
+    results = trainer.predict(dataset['test'])
 
-    small_dataset = dataset["test"].select(range(2))
-    results = trainer.predict(small_dataset)
     # Batched version:
 
     """dataloader = trainer.get_test_dataloader(dataset["test"].select(range(8)))
