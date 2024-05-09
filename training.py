@@ -183,7 +183,6 @@ def compute_rouge_during_training(pred):
 
     rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
-    
 
     return {**rouge_output}
 
@@ -492,12 +491,12 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.ERROR)
 
     if args.verbose:
-        print(f"Evaluation metrics loaded. Starting training on the abstractive model.")
+        print(f"Starting training on the abstractive model.")
     
     trainer.train()
 
-    #trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-    #trainer.push_to_hub()
+    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    trainer.push_to_hub()
 
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
         
