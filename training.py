@@ -11,7 +11,6 @@ import numpy as np
 import torch.nn as nn
 import wandb
 from huggingface_hub import whoami
-from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
@@ -409,8 +408,6 @@ if __name__ == "__main__":
                         help= "The amount of patience to use for early stopping.")
     parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
                         help= "The metric to use for selection of the best model.")
-    parser.add_argument('-p', '--peft', action= "store_true", default= False, 
-                        help= "Use PEFT for training.")    
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     
@@ -524,14 +521,6 @@ if __name__ == "__main__":
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-
-    if args.peft:
-        if args.verbose:
-            print('Using PEFT!')        
-            
-        peft_config = LoraConfig(task_type = TaskType.SEQ_2_SEQ_LM, inference_mode=False, r=8, lora_alpha=32, lora_dropout=0.1, target_modules =['fc1' 'fc2', 'lm_head'])
-        abstractive_model = get_peft_model(abstractive_model, peft_config)
-        abstractive_model.print_trainable_parameters()
     
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
@@ -539,7 +528,6 @@ if __name__ == "__main__":
     if args.abstractive_model == 'BART':
         gen_max_length = 1024
     else:
-        #TODO: change this to 1 STD of mean summary word length perhaps
         gen_max_length = 1500
 
     training_args = Seq2SeqTrainingArguments(
