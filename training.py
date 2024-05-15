@@ -62,8 +62,7 @@ def set_device(abstractive_model, args):
     """
     if torch.cuda.is_available():
         device = torch.device('cuda')
-        if args.peft:
-            device = torch.device('cuda:0')
+
         abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device}")

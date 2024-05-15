@@ -1,8 +1,6 @@
 import utils.models, utils.tools
 import os
-import torch
 import warnings
-import math
 import argparse
 import logging
 import evaluate
@@ -34,7 +32,13 @@ def get_feature(batch):
 
 if __name__ == "__main__":
     
-    #TODO: Maybe  change this from a argparser to a cfgparser. This way we can load the config file and use the values from there. But Argparser is also needed for certain specifics
+    #This file should be used to make predictions on the test set and evaluate the model.
+    #The model imports a trained model from my huggingface account and uses it to make predictions on the test set.
+    #The predictions are then evaluated using a supplied set of metrics (via the arguments).
+    #This way we don't overwrite old results and can only use cetain metrics.
+
+    #Step 1: parse the arguments
+
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
     parser.add_argument('extractive_model', type= str, 
@@ -70,7 +74,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
 
-    
+    #Step 2: Load the dataset and the models
     abstractive_model = AutoModelForSeq2SeqLM.from_pretrained("MikaSie/BART_no_extraction_V1")
     abstractive_tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large")
     #Needs to be set manually because not all models have same config setup
@@ -88,8 +92,9 @@ if __name__ == "__main__":
 
     #TODO: Change this to a more general model_id
     model_id = 'SNaphetniet'
-    gen_max_length = 1250
 
+
+    #Step 3: Initialize the training arguments and the trainer
     training_args = Seq2SeqTrainingArguments(
             output_dir = os.path.join('results', model_id, 'output'),
             num_train_epochs = args.epochs,
@@ -111,7 +116,7 @@ if __name__ == "__main__":
             generation_max_length= gen_max_length,
             hub_model_id= f"{model_id}",
     )
-        # Define the data collator
+    # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
         # Create the trainer
@@ -125,7 +130,33 @@ if __name__ == "__main__":
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)]
         )
     
-    #TODO: Add note that results will not be pushed to hub and that this will only happen if training + testing is done.
+    #Step 4: Make predictions on the test set using trainer.predict 
+
+
+    results = trainer.predict(dataset["test"])
+
+    pred_ids = results.predictions
+
+    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
+
+    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+
+    #Step 5: Evaluate the predictions using the supplied metrics with the arguments given
+    # We only want to evaluate using the metrics that are supplied in the arguments
+
+    if args.rouge:
+        rouge = evaluate.rouge(pred_str, dataset["test"]["summary"])
+
+    if args.bertscore:
+
+        bert = evaluate.bertscore(pred_str, dataset["test"]["summary"])
+
+    # ETC
+
+
+    #Step 6: Save the results to a json file and update the model card to the hub
+
+    
     new_result =   {
         "Model_ID": model_id,
         "Date_Created": date.today().strftime("%d/%m/%Y"),
