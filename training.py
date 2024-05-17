@@ -359,10 +359,7 @@ def compute_rouge_during_training(pred):
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
-    print(pred_str)
-
     rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
-
 
     return {**rouge_output}
 

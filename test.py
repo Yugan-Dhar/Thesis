@@ -8,7 +8,6 @@ import json
 import numpy as np
 import torch.nn as nn
 import wandb
-from peft import get_peft_model, LoraConfig, TaskType
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
@@ -47,36 +46,28 @@ if __name__ == "__main__":
                         help= "The compression ratio to be used for the extractive model. Is in the form of an integer where 5 is 0.5, 9 is 0.9, etc.")
     parser.add_argument('abstractive_model', type= str,
                         help= "The abstractive model to be used for fine-tuning.")
+    parser.add_argument('mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, 
+                        help= "The ratio mode to use for the extractive summarization stage.")
     
     #Optional arguments
-    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
-                        help= "The ratio mode to use for the extractive summarization stage.")
-    parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
-                        help= "The learning rate to train the abstractive model with.")
-    parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
-                        help= "The amount of epochs to train the abstractive model for.")
     parser.add_argument('-b', '--batch_size', type= int, default= 8, metavar= "",
                         help= "The batch size to train the abstractive model with.")
-    parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
-                        help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
                         help= "Turn verbosity on or off.")
-    parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
-                        help= "The weight decay to train the abstractive model with.")
-    parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
-                        help= "Load the best model at the end of training.")
-    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
-                        help= "The amount of patience to use for early stopping.")
-    parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
-                        help= "The metric to use for selection of the best model.")
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     
     args = parser.parse_args()  
 
     #Step 2: Load the dataset and the models
-    abstractive_model = AutoModelForSeq2SeqLM.from_pretrained("MikaSie/BART_no_extraction_V1")
-    abstractive_tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large")
+    #step2.1 Combine args for the model_id
+
+    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
+    model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+
+    abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
+    abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
+
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
@@ -88,11 +79,17 @@ if __name__ == "__main__":
 
     dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
 
-    #dataset = dataset.map(get_feature)
 
-    #TODO: Change this to a more general model_id
-    model_id = 'SNaphetniet'
+    #Step 3: Preprocess the dataset using the extractive model
 
+    
+    dataset = dataset.map(get_feature)
+
+
+    if args.abstractive_model == 'BART':
+        gen_max_length = 1024
+    else:
+        gen_max_length = 1500
 
     #Step 3: Initialize the training arguments and the trainer
     training_args = Seq2SeqTrainingArguments(
@@ -100,21 +97,11 @@ if __name__ == "__main__":
             num_train_epochs = args.epochs,
             per_device_train_batch_size = args.batch_size,
             per_device_eval_batch_size = args.batch_size,
-            warmup_ratio = args.warmup_ratio,
-            weight_decay = args.weight_decay,
-            logging_dir = os.path.join('results', model_id, 'logs'),
             remove_unused_columns= False,        
-            load_best_model_at_end = args.load_best_model_at_end,
-            metric_for_best_model = args.metric_for_best_model,
-            save_strategy= "epoch",
-            evaluation_strategy = "epoch",
-            label_names=["labels"],
-            report_to = "wandb",
             run_name= model_id,
             predict_with_generate= True,
-            eval_accumulation_steps= 32,
+            eval_accumulation_steps= 16,
             generation_max_length= gen_max_length,
-            hub_model_id= f"{model_id}",
     )
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
@@ -151,8 +138,6 @@ if __name__ == "__main__":
 
         bert = evaluate.bertscore(pred_str, dataset["test"]["summary"])
 
-    # ETC
-
 
     #Step 6: Save the results to a json file and update the model card to the hub
 
@@ -183,6 +168,7 @@ if __name__ == "__main__":
             "Metric_for_best_model": args.metric_for_best_model,
             }
     }
+    #TODO: Change model card instead of creating a new one
     model_card = utils.tools.create_model_card(new_result)
 
     user = whoami()['name']
