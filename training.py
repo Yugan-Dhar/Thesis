@@ -62,7 +62,6 @@ def set_device(abstractive_model, args):
     """
     if torch.cuda.is_available():
         device = torch.device('cuda')
-
         abstractive_model.to(device)
         if args.verbose:
             print(f"Using abstractive model on device: {device}")
@@ -464,7 +463,6 @@ if __name__ == "__main__":
                     chunk_overlap = 50) 
 
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        #TODO: Check if remove outliers needs to be done here. Could also be done once 
         dataset = remove_outliers_from_dataset(dataset)
         label_str = dataset["test"]["summary"]
 
@@ -552,7 +550,7 @@ if __name__ == "__main__":
     )
     
     
-    # Define the data collator
+    # Defin ethe data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
     # Create the trainer
@@ -575,6 +573,7 @@ if __name__ == "__main__":
     trainer.train()
 
     trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
+    
     trainer.push_to_hub()
 
     #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
@@ -584,32 +583,8 @@ if __name__ == "__main__":
         print(f"Training finished and model saved to disk")
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
-    #results = trainer.predict(dataset['test'])
-
-    # Batched version:
 
     results = trainer.predict(dataset['test'])
-
-    """dataloader = trainer.get_test_dataloader(dataset["test"].select(range(8)))
-
-    labels_list = []
-    preds_list = []
-
-    for i, batch in enumerate(dataloader): 
-        print(type(batch))
-        results = trainer.predict(batch)
-        label_ids = results.label_ids
-        pred_ids = results.predictions
-        labels_list.append(label_ids)
-        preds_list.append(pred_ids)
-
-    label_str = abstractive_tokenizer.batch_decode(labels_list, skip_special_tokens=True)
-    pred_str = abstractive_tokenizer.batch_decode(preds_list, skip_special_tokens=True)
-    print(f"Label: {label_str[0]}\nPrediction: {pred_str[0]}\n")
-
-    small_dataset = dataset["test"].select(range(8))
-
-    results = trainer.predict(small_dataset)"""
 
     pred_ids = results.predictions
 
@@ -631,6 +606,7 @@ if __name__ == "__main__":
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
 
     # Calculate BARTScore
+    #Check if max_length can be set to 1500
     bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
     bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 4)
     bart_score = (sum(bart_scores['score']) / len(bart_scores['score']))
