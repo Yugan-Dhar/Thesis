@@ -18,16 +18,27 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausa
 from huggingface_hub import whoami
 
 def get_feature(batch):
-    encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length = context_length_abstractive_model)
+    """
+    Get the feature encodings for a given batch.
+
+    Args:
+        batch (dict): A dictionary containing the batch data.
+
+    Returns:
+        dict: The feature encodings, including input_ids, attention_mask, and labels.
+    """
+    if args.no_extraction:
+        encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
+                        max_length=context_length_abstractive_model, truncation=True)
+    else:
+        encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
+                        max_length=context_length_abstractive_model)
 
     encodings = {'input_ids': encodings['input_ids'],
-               'attention_mask': encodings['attention_mask'],
-               'labels': encodings['labels']}
+                 'attention_mask': encodings['attention_mask'],
+                 'labels': encodings['labels']}
 
     return encodings
-
-
 
 if __name__ == "__main__":
     
@@ -82,7 +93,7 @@ if __name__ == "__main__":
 
     #Step 3: Preprocess the dataset using the extractive model
 
-    
+
     dataset = dataset.map(get_feature)
 
 

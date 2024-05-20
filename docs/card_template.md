@@ -47,7 +47,7 @@ This paper was introduced by the master thesis of Mika Sie at the University Utr
 - **Developed by:** Mika Sie
 - **Funded by:** University Utrecht & Power2X
 - **Language (NLP):** English
-- **Finetuned from model:** PLACEHOLDER_BASE_MODEL_TEXT
+- **Finetuned from model:** PLACEHOLDER_BASE_MODEL
 
 
 ### Model Sources

@@ -1,6 +1,6 @@
 import os
 import json
-from huggingface_hub import ModelCard, ModelCardData
+from huggingface_hub import ModelCard, ModelCardData, metadata_update
 
 def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     """
@@ -28,7 +28,11 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
         while any(entry["Model_ID"] == model_id for entry in previous_results):
             version_counter += 1
             model_id = f"{args.abstractive_model}_no_extraction_V{version_counter}"
-            
+        
+        if args.testing_only:
+            version_counter -= 1
+            model_id = f"{args.abstractive_model}_no_extraction_V{version_counter}"
+
         return model_id, version_counter, previous_results
     
     model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
@@ -39,6 +43,13 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
 
     while any(entry["Model_ID"] == model_id for entry in previous_results):
         version_counter += 1
+        model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
+        if args.mode == "Fixed" or args.mode == "Hybrid":
+            model_id += f"_ratio_{args.compression_ratio}"
+        model_id += f"_V{version_counter}"
+
+    if args.testing_only:
+        version_counter -= 1
         model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
         if args.mode == "Fixed" or args.mode == "Hybrid":
             model_id += f"_ratio_{args.compression_ratio}"
@@ -80,23 +91,24 @@ def create_model_card(results):
     """
     file_path = os.path.join('docs', 'card_template.md')
     content = ''
-
     if os.path.exists(file_path):
         with open('docs/card_template.md', 'r') as f:
             content += f.read()
-
-        content = content.replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
-                           .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model']) \
-                           .replace('PLACEHOLDER_EXTRACTIVE_MODEL', results['Extractive_model']) \
-                           .replace('PLACEHOLDER_RATIO_MODE', results['Ratio_mode']) \
-                           .replace('PLACEHOLDER_ROUGE1', str(results['Evaluation_metrics']['ROUGE-1'])) \
-                           .replace('PLACEHOLDER_ROUGE2', str(results['Evaluation_metrics']['ROUGE-2'])) \
-                           .replace('PLACEHOLDER_ROUGEL', str(results['Evaluation_metrics']['ROUGE-L'])) \
-                           .replace('PLACEHOLDER_BERTSCORE', str(results['Evaluation_metrics']['BertScore'])) \
-                           .replace('PLACEHOLDER_BARTSCORE', str(results['Evaluation_metrics']['BARTScore'])) \
-                           .replace('PLACEHOLDER_BLANC', str(results['Evaluation_metrics']['BLANC'])) \
-                           .replace('PLACEHOLDER_MODEL_ID', results['Model_ID']) \
-                           .replace('PLACEHOLDER_BASE_MODEL', results['Abstractive_model'])
+        print(results)
+        placeholders = {
+            'PLACEHOLDER_MODEL_ID': results['Model_ID'],
+            'PLACEHOLDER_BASE_MODEL': results['Abstractive_model'],
+            'PLACEHOLDER_EXTRACTIVE_MODEL': results['Extractive_model'],
+            'PLACEHOLDER_RATIO_MODE': results['Ratio_mode'],
+            'PLACEHOLDER_ROUGE1': str(results['Evaluation_metrics']['ROUGE-1']),
+            'PLACEHOLDER_ROUGE2': str(results['Evaluation_metrics']['ROUGE-2']),
+            'PLACEHOLDER_ROUGEL': str(results['Evaluation_metrics']['ROUGE-L']),
+            'PLACEHOLDER_BERTSCORE': str(results['Evaluation_metrics']['BertScore']),
+            'PLACEHOLDER_BARTSCORE': str(results['Evaluation_metrics']['BARTScore']),
+            'PLACEHOLDER_BLANC': str(results['Evaluation_metrics']['BLANC'])
+        }
+        for placeholder, value in placeholders.items():
+            content = content.replace(placeholder, value)
         
         card = ModelCard(content)
 
@@ -106,3 +118,6 @@ def create_model_card(results):
         card = ModelCard.from_template(card_data)
 
     return card
+
+
+    

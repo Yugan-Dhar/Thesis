@@ -10,10 +10,10 @@ import json
 import numpy as np
 import torch.nn as nn
 import wandb
-from huggingface_hub import whoami
+from huggingface_hub import whoami, metadata_update
 from blanc import BlancHelp, BlancTune
 from langchain.text_splitter import TokenTextSplitter
-from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback
+from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
@@ -105,9 +105,9 @@ def remove_outliers_from_dataset(dataset):
     std = np.std(averages)
 
     print(f"1 STD from mean: {mean_token_length + std}\n2 STD from mean: {mean_token_length + 2 * std}")
-    print(f"Before filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    print(f"Before filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
     dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
-    print(f"After filter using {args.extractive_model}: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    print(f"After filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     return dataset
 
@@ -383,6 +383,8 @@ if __name__ == "__main__":
                         help= "The abstractive model to be used for fine-tuning.")
     
     #Optional arguments
+    parser.add_argument('-t', '--testing_only', action= "store_true", default= False,
+                        help= "Train the abstractive model. If not set, the model will not be trained and only the evaluation metrics will be calculated.")
     parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
                         help= "The ratio mode to use for the extractive summarization stage.")
     parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
@@ -405,19 +407,32 @@ if __name__ == "__main__":
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
+    parser.add_argument('-w_o_s', '--write_original_summaries', action= "store_true", default= False,
+                        help= "Write the actual summaries to a txt file for reference.")
     
     args = parser.parse_args()  
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
-    abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
+    
+    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    # Set to True if you want to write the actual summaries to a file
-    write_original_summaries = False 
-    if write_original_summaries:
+
+    if args.testing_only:
+        model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+        abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
+        abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
+        print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
+
+    else:
+        model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+        abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
+        print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
+
+
+    if args.write_original_summaries:
         write_actual_summaries_to_file()
-
 
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
@@ -444,9 +459,9 @@ if __name__ == "__main__":
 
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
-        #TODO: Check if remove outliers needs to be done here. Could also be done once 
         dataset = remove_outliers_from_dataset(dataset)
-        label_str = dataset["test"]["summary"]
+        label_str = dataset["test"]["summary"][:2]
+
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
 
@@ -512,10 +527,6 @@ if __name__ == "__main__":
 
     rouge_evaluation_metric = evaluate.load('rouge')
     
-    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
-
-    model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-    
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
@@ -546,7 +557,6 @@ if __name__ == "__main__":
         hub_model_id = f"{model_id}",
     )
     
-    
     # Defin ethe data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -564,24 +574,24 @@ if __name__ == "__main__":
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
 
-    if args.verbose:
-        print(f"Starting training on the abstractive model.")
-    
-    trainer.train()
 
-    trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
     
-    trainer.push_to_hub()
+    if not args.testing_only:
+        if args.verbose:
+            print(f"Starting training on the abstractive model.")
 
-    #TODO: Test.py should be run here to evaluate the model on the test set. This way we can run training with/without testing, and testing without training by just running test.py
+        trainer.train()
+
+        trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
-     
-    if args.verbose:
-        print(f"Training finished and model saved to disk")
+        trainer.push_to_hub()
+             
+        if args.verbose:
+            print(f"Training finished and model saved to disk")        
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
-    results = trainer.predict(dataset['test'])
+    results = trainer.predict(dataset['test'].select(range(2)))
 
     pred_ids = results.predictions
 
@@ -590,6 +600,9 @@ if __name__ == "__main__":
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
 
     write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
+
+    if args.verbose:
+        print("Predictions finished and written to file.")
 
     del abstractive_model, abstractive_tokenizer
 
@@ -603,60 +616,94 @@ if __name__ == "__main__":
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
 
     # Calculate BARTScore
-    #Check if max_length can be set to 1500
+    # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
     bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
-    bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 4)
+    bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 2)
     bart_score = (sum(bart_scores['score']) / len(bart_scores['score']))
 
     # Calculate Blanc scores
-    blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 4)
+    blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 2)
     blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
 
-    new_result =   {
-        "Model_ID": model_id,
-        "Date_Created": date.today().strftime("%d/%m/%Y"),
-        "Abstractive_model": args.abstractive_model,
-        "Extractive_model": args.extractive_model,
-        "Ratio_mode": args.mode,
-        "Version": model_version,
-        "Evaluation_metrics": {
-            "ROUGE-1": rouge_scores['rouge1'],
-            "ROUGE-2": rouge_scores['rouge2'],
-            "ROUGE-L": rouge_scores['rougeL'],
-            "BertScore": bert_score,
-            "BARTScore": bart_score,
-            "BLANC": blanc_score
-        },
-        "Hyperparameters": {
-            "Learning_rate": args.learning_rate,
-            "Epochs": args.epochs,
-            "Batch_size": args.batch_size,
-            "Warmup_ratio": args.warmup_ratio,
-            "Weight_decay": args.weight_decay,
-            "Load_best_model_at_end": args.load_best_model_at_end,
-            "Early_stopping_patience": args.early_stopping_patience,
-            "Metric_for_best_model": args.metric_for_best_model,
+    #TODO: Add prometheus metrics for the evaluation metrics
+
+    if not args.testing_only:
+        new_result =   {
+            "Model_ID": model_id,
+            "Date_Created": date.today().strftime("%d/%m/%Y"),
+            "Abstractive_model": args.abstractive_model,
+            "Extractive_model": args.extractive_model,
+            "Ratio_mode": args.mode,
+            "Version": model_version,
+            "Evaluation_metrics": {
+                "ROUGE-1": rouge_scores['rouge1'],
+                "ROUGE-2": rouge_scores['rouge2'],
+                "ROUGE-L": rouge_scores['rougeL'],
+                "BertScore": bert_score,
+                "BARTScore": bart_score,
+                "BLANC": blanc_score
+            },
+            "Hyperparameters": {
+                "Learning_rate": args.learning_rate,
+                "Epochs": args.epochs,
+                "Batch_size": args.batch_size,
+                "Warmup_ratio": args.warmup_ratio,
+                "Weight_decay": args.weight_decay,
+                "Load_best_model_at_end": args.load_best_model_at_end,
+                "Early_stopping_patience": args.early_stopping_patience,
+                "Metric_for_best_model": args.metric_for_best_model,
+                }
+        }
+
+        if args.mode == 'fxed' or args.mode == 'hybrid' and not args.no_extraction:
+            new_result["Compression_ratio"] = args.compression_ratio / 10
+
+        if args.no_extraction:
+            new_result["Extractive_model"] = "No extractive model"
+            new_result["Ratio_mode"] = "No ratio"
+            new_result['No_extraction'] = True
+
+        previous_results.append(new_result)
+
+        model_card = utils.tools.create_model_card(new_result)
+
+        # Only MikaSie can push to the hub
+        user = whoami()['name']
+        model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
+        
+        # Convert to JSON and write to a file
+        with open(evaluation_results_filepath, 'w') as f:
+            json.dump(previous_results, f, indent=4)
+
+    else:
+        #TODO: Add the evaluation metrics to the json file and push the model card to the hub. This way we can keep the model card up to date with the latest evaluation metrics.
+
+        # We make the assumption that the model_id is already in the list of previous results. If it is not, we will get a KeyError.
+        # But this makes sense because we are testing a model that has already been trained and evaluated. 
+        # If the model hasn't been trained and uploaded to HF , it can't be loaded to begin with.
+        
+        old_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
+
+        old_result["Evaluation_metrics"] = {
+                "ROUGE-1": rouge_scores['rouge1'],
+                "ROUGE-2": rouge_scores['rouge2'],
+                "ROUGE-L": rouge_scores['rougeL'],
+                "BertScore": bert_score,
+                "BARTScore": bart_score,
+                "BLANC": blanc_score
             }
-    }
-    if args.mode == 'fxed' or args.mode == 'hybrid' and not args.no_extraction:
-        new_result["Compression_ratio"] = args.compression_ratio / 10
 
-    if args.no_extraction:
-        new_result["Extractive_model"] = "No extractive model"
-        new_result["Ratio_mode"] = "No ratio"
-        new_result['No_extraction'] = True
+        #TODO: fix this, error is throuwn because of a type error in the model card creation while the variable is a string...
+        model_card = utils.tools.create_model_card(old_result)
 
-    previous_results.append(new_result)
+        # Only MikaSie can push to the hub
+        user = whoami()['name']
+        model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
 
-    model_card = utils.tools.create_model_card(new_result)
-
-    user = whoami()['name']
-    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
+        with open(evaluation_results_filepath, 'w') as f:
+            json.dump(previous_results, f, indent=4)
     
-    # Convert to JSON and write to a file
-    with open(evaluation_results_filepath, 'w') as f:
-        json.dump(previous_results, f, indent=4)
 
     if args.verbose:
         print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
