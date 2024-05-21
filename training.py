@@ -411,6 +411,7 @@ if __name__ == "__main__":
                         help= "Write the actual summaries to a txt file for reference.")
     
     args = parser.parse_args()  
+    #TODO: Change this to a more general approach. This is only for the thesis project.
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
@@ -460,7 +461,7 @@ if __name__ == "__main__":
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
         dataset = remove_outliers_from_dataset(dataset)
-        label_str = dataset["test"]["summary"][:2]
+        label_str = dataset["test"]["summary"]
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
@@ -589,7 +590,7 @@ if __name__ == "__main__":
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
-    results = trainer.predict(dataset['test'].select(range(2)))
+    results = trainer.predict(dataset['test'])
 
     pred_ids = results.predictions
 
