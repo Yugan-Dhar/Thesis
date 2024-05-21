@@ -525,7 +525,6 @@ if __name__ == "__main__":
     if args.verbose:
         print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
 
-    rouge_evaluation_metric = evaluate.load('rouge')
     
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
@@ -575,7 +574,6 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.ERROR)
 
 
-    
     if not args.testing_only:
         if args.verbose:
             print(f"Starting training on the abstractive model.")
@@ -607,6 +605,10 @@ if __name__ == "__main__":
     del abstractive_model, abstractive_tokenizer
 
     # Calculate ROUGE scores
+    if args.verbose:
+        print("Calculating evaluation metrics...")
+    rouge_evaluation_metric = evaluate.load('rouge')
+
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     # Calculate BERTScore
