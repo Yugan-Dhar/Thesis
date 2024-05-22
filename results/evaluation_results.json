@@ -25,5 +25,25 @@
             "BLANC": 0.17636347702399824
         },
         "No_extraction": true
+    },
+
+    {
+        "Model_ID": "RoBERTa_BART_hybrid_V1",
+        "Date_Created": "22/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "hybrid",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Compression_ratio": 0.4
     }
 ]

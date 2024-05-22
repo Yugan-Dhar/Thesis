@@ -606,11 +606,13 @@ if __name__ == "__main__":
                 }
         }
 
+        if args.mode == 'fixed' or args.mode == 'hybrid' and not args.no_extraction:
+            new_result["Compression_ratio"] = args.compression_ratio / 10
+
         previous_results.append(new_result)
 
         with open(evaluation_results_filepath, 'w') as f:
             json.dump(previous_results, f, indent=4)
-
         f.close()
              
         if args.verbose:
@@ -659,7 +661,6 @@ if __name__ == "__main__":
 
     #TODO: Add prometheus metrics for the evaluation metrics
 
-
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
         
     new_result["Evaluation_metrics"] = {
@@ -670,10 +671,11 @@ if __name__ == "__main__":
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
             }
+    with open(evaluation_results_filepath, 'w') as f:
+        json.dump(previous_results, f, indent=4)
+    f.close()
+    
     if not args.testing_only:
-        if args.mode == 'fxed' or args.mode == 'hybrid' and not args.no_extraction:
-            new_result["Compression_ratio"] = args.compression_ratio / 10
-
         if args.no_extraction:
             new_result["Extractive_model"] = "No extractive model"
             new_result["Ratio_mode"] = "No ratio"
@@ -686,8 +688,7 @@ if __name__ == "__main__":
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
         
     # Convert to JSON and write to a file
-    with open(evaluation_results_filepath, 'w') as f:
-        json.dump(previous_results, f, indent=4)
+
     
 
     if args.verbose:
