@@ -417,6 +417,25 @@ if __name__ == "__main__":
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
+    if args.mode == 'fixed' or args.mode == 'hybrid':
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
+    else:
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
+    
+    dataset = load_dataset("arrow", 
+            data_files= {
+            "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
+            "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
+            "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
+        })
+    
+    dataset = dataset.map(calculate_word_length_summary)
+
+    dataset = remove_outliers_from_dataset(dataset)
+    dataset.save_to_disk(dataset_path)
+    if args.verbose:
+        print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
+
 
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
