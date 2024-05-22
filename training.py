@@ -671,10 +671,12 @@ if __name__ == "__main__":
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
             }
+
+     # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)
     f.close()
-    
+
     if not args.testing_only:
         if args.no_extraction:
             new_result["Extractive_model"] = "No extractive model"
@@ -687,9 +689,6 @@ if __name__ == "__main__":
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
         
-    # Convert to JSON and write to a file
-
-    
 
     if args.verbose:
         print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
