@@ -105,7 +105,6 @@ def remove_outliers_from_dataset(dataset):
     mean_token_length = np.mean(averages)
     std = np.std(averages)
 
-    print(f"1 STD from mean: {mean_token_length + std}\n2 STD from mean: {mean_token_length + 2 * std}")
     print(f"Before filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
     dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
     print(f"After filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
@@ -506,8 +505,8 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
-        dataset = remove_outliers_from_dataset(dataset)
-
+        dataset = dataset.map(remove_outliers_from_dataset)
+        dataset.save_to_disk(dataset_path)
         if args.verbose:
             print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
 
