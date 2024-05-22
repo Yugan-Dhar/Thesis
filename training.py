@@ -427,11 +427,14 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
-    
+    print(f"Length of train: {len(dataset['train'])} Length of validation: {len(dataset['validation'])} Length of test: {len(dataset['test'])")
     dataset = dataset.map(calculate_word_length_summary)
 
     dataset = remove_outliers_from_dataset(dataset)
     dataset.save_to_disk(dataset_path)
+
+
+
     if args.verbose:
         print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
 
