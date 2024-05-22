@@ -93,7 +93,7 @@ def remove_outliers_from_dataset(dataset):
         Dataset: The dataset with outliers removed.
     """
 
-    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+    #dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
 
     dataset = dataset.map(calculate_word_length_summary)
@@ -462,7 +462,6 @@ if __name__ == "__main__":
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
         dataset = remove_outliers_from_dataset(dataset)
-        label_str = dataset["test"]["summary"]
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)      
@@ -478,7 +477,6 @@ if __name__ == "__main__":
 
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
         dataset = remove_outliers_from_dataset(dataset)
-        label_str = dataset["test"]["summary"]
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
             dataset = dataset.map(add_prefix, batched= True)
@@ -508,14 +506,14 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
-        
-        label_str = dataset["test"]["summary"]
+        dataset = remove_outliers_from_dataset(dataset)
 
         if args.verbose:
-            print(f"Dataset found and loaded.")
+            print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
+    label_str = dataset["test"]["summary"]
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
