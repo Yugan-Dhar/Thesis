@@ -520,11 +520,6 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
-        dataset = dataset.map(calculate_word_length_summary)
-
-        dataset = remove_outliers_from_dataset(dataset)
-        dataset.save_to_disk(dataset_path)
-        print(f"Length of train: {len(dataset['train'])} Length of validation: {len(dataset['validation'])} Length of test: {len(dataset['test'])}")
 
         if args.verbose:
             print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
@@ -542,7 +537,7 @@ if __name__ == "__main__":
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
     if args.verbose:
-        print("Dataset preprocessed and ready for training the abstractive model, now loading the evaluation metrics.")
+        print("Dataset preprocessed and ready for training the abstractive model.")
 
     
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
@@ -637,6 +632,9 @@ if __name__ == "__main__":
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
+    if args.verbose:
+        print("Starting evaluation on the test dataset...")
+        
     results = trainer.predict(dataset['test'])
 
     pred_ids = results.predictions
