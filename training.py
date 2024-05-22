@@ -95,11 +95,9 @@ def remove_outliers_from_dataset(dataset):
 
     #dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
-
+    print(dataset.column_names)
     for data in dataset:
         for example in dataset[data]:
-            print(example)
-            print(type(example))
             averages.append(example['word_length'])
 
     mean_token_length = np.mean(averages)
@@ -507,6 +505,7 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
+        dataset = dataset.map(calculate_word_length_summary)
 
         dataset = remove_outliers_from_dataset(dataset)
         dataset.save_to_disk(dataset_path)
