@@ -433,11 +433,6 @@ if __name__ == "__main__":
     dataset.save_to_disk(dataset_path)"""
 
 
-
-    if args.verbose:
-        print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
-
-
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
         abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
