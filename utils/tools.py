@@ -49,7 +49,7 @@ def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
         model_id += f"_V{version_counter}"
 
     if args.testing_only:
-        #version_counter -= 1
+        version_counter -= 1
         model_id = f"{args.extractive_model}_{args.abstractive_model}_{args.mode}"
         if args.mode == "Fixed" or args.mode == "Hybrid":
             model_id += f"_ratio_{args.compression_ratio}"
