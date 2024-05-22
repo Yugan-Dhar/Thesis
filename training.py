@@ -99,6 +99,8 @@ def remove_outliers_from_dataset(dataset):
 
     for data in dataset:
         for example in dataset[data]:
+            print(example)
+            print(type(example))
             averages.append(example['word_length'])
 
     mean_token_length = np.mean(averages)
