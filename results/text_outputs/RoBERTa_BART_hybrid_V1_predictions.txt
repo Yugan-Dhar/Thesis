@@ -139,46 +139,6 @@ last update 14.02.2014
 
 
 Summary 3:
-Mutual recognition of imports and exports of agricultural products in the European Union (EU) — rules for the application of the principle of mutual recognition of goods
-MutUAL recognition of imported goods
-SUMMARY OF:
-Regulation (EC) No 764/2008 on mutual recognition
-WHAT IS THE AIM OF THE REGULATION?
-It aims to ensure that goods from one EU country can be freely marketed in another EU country on the basis of a mutual recognition declaration*.
-KEY POINTS
-The regulation applies to imports from non-EU countries and exports from EU countries.
-It does not apply to agricultural products.
-To benefit from the principle, goods must be lawfully marketed in the EU country in which they are produced.
-EU countries must ensure that:
-goods are lawfully marketed and that they comply with the relevant national technical rules;
-they comply with EU law on conformity assessment* and prior authorisation procedures;
-the goods are tested and certified in accordance with the applicable national conformity assessment bodies;
-there is no need to restrict or deny market access to the goods.
-The EU country of destination must inform the economic operator of the goods that are subject to its conformity assessment and the relevant prior authorisations procedure.
-If the goods are not covered by the conformity assessment procedure, the country of origin must make a voluntary declaration on their behalf and on the producer's behalf and under the responsibility of the producer. The declaration must be easily accessible and is in a reliable format.
-In addition, EU countries must provide the producer with a non-judicial problem-solving procedure to deal with any problems arising from the non-compliance with the declaration.
-FROM WHEN DOES THE LEGISTRYINGREDIENTS APPLACE IN THE RECOMMUTILITY
-The European Commission is responsible for the implementation of the regulation.
-KEY TERMS
-* Mutual recognition: the principle whereby goods from the same EU country are treated as if they are the same goods if they have the same technical characteristics.
-MAIN DOCUMENT
-   
-Commission Regulation (EU), Euratom, Euratom and the European Economic and Social Committee of 23 October 2018 on the application, on behalf of the European Parliament and of the Council, of 26 September 2018 of the Union of European Union, of the one part, and the Council of the other part of the Treaty on the Functioning of the EU (OJ L 165, 30.10.2018, pp. 1-8)
-RELATED DOCUMENTS
- 
-Regulations (EU, Eurat) No 1247/2002/EC, Regulation (Euratom) 2018/1725 and Decision No 1248/2018/EU on the harmonisation of the laws, regulations and administrative provisions of the Member States relating to conformity assessment, conformity assessment procedures and the mutual recognition system for agricultural products, and repealing Regulations (EUR) No 45/2001 and Decision (EC), No 1252/2008
-Regulatory (EU)(EU) No 561/2014 on the approximation of the law, regulations, administrative provisions and administrative rules relating to the harmonization of the rules on conformity assessments, conformity examination procedures and procedures, and amending Regulations (EC and Euratom) No 882/2004 and (EU).
-Directive 2014/56/EU amends Directive 2013/33/EU to ensure the harmonised application of Directive 2013 /34/EU as regards conformity assessment rules and procedures in the field of food safety, animal health and animal welfare, and on food safety and animal protection.
-Directives 2014/55/EU and 2014/57/EU amend Regulation (EFTA) No 652/2014 as regards the application by Member States of Directive 2014/54/EU of the United Nations Convention on the Law of the International Trade in Endangered Species of Wild Fauna and Flora and repealing Directives 2004/852/EC and 2006/48/EC.
-Commission Implementing Decision 2014/58/EU sets up the European Commission’s Directorate-General for Agriculture, Food Safety and Animal Health and amends Implementing Regulation (CFSP) No 1099/2014 to ensure uniform conditions for the exchange of information and communication between Member States’ competent authorities on the implementation and functioning of the system of conformity assessment.
-Amending Regulation (FR) No 1182/2014 amends Regulation (EC, Euram) No 1369/2013 to ensure consistency between the EU countries’ conformity assessment systems.
-Implementing Decision 2013/35/EU lays down the conditions for mutual recognition between the Commission and Member States' competent authorities in relation to the application and operation of the Commission's conformity assessment system.
-Delegated Regulation (FSA) No 1/2013 amends Directives 2013/30/EU, 2014/59/EU or 2014/60/EU with regard to the implementation by the Commission of Implementing Directive 2012/13/EU (see summary).
-Regulating (
-
-
-
-Summary 4:
 .
 
 
@@ -221,7 +181,7 @@ last update 14.02.2016
 
 
 
-Summary 5:
+Summary 4:
 Multiannual financial framework for the transport, energy and digital sectors (MFF 2021-2027) (see summary)
 Multiannial financial framework (mFF 2021 - 2027)
 SUMMARY OF:
@@ -257,7 +217,7 @@ last update 04.02.2022
 
 
 
-Summary 6:
+Summary 5:
 Removal of terrorist content on the internet
 Removing terrorist content online
 SUMMARY OF:
@@ -314,7 +274,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 7:
+Summary 6:
 Framework programme for Research and Innovation 2021-2027
 Framework Programme for Research & Innovation 2021 - 2027
 SUMMARY OF:
@@ -369,7 +329,7 @@ last update 04.02.2021(1) The United Kingdom withdraws from the European Economi
 
 
 
-Summary 8:
+Summary 7:
 Programme for the development of the European Space Industry
 Programmes for the Development of the Europe Space Industries
 SUMMARY OF:
@@ -409,7 +369,7 @@ Last updated: 28.02.2023(1) The United Kingdom withdraws from the European Commu
 
 
 
-Summary 9:
+Summary 8:
 European Digital Innovation Hub (EDIH) programme for the period 2021-2027
 European digital innovation Hub (EDIH) Programme for the year 2021 - 2027
 SUMMARY OF:
@@ -461,7 +421,7 @@ last update 14.02.2022
 
 
 
-Summary 10:
+Summary 9:
 European Statistical Programme
 European Statistical Program
 SUMMARY OF:
@@ -505,7 +465,7 @@ last update 14.02.2021
 
 
 
-Summary 11:
+Summary 10:
 EU rules on firearms and essential components and ammunition — confiscation and traceability of firearms and their essential components
 EU rights and obligations
 SUMMARY OF:
@@ -554,7 +514,7 @@ last update 04.11.2016
 
 
 
-Summary 12:
+Summary 11:
 Maritime information exchange system (EMSWe)
 Maritime Information Exchange System (EMSW)
 SUMMARY OF:
@@ -606,7 +566,7 @@ last update 14.02.2020
 
 
 
-Summary 13:
+Summary 12:
 Electronic road tolls (ETS) — rules
 Electronic Road Tolls (EETS)
 SUMMARY OF:
@@ -645,7 +605,7 @@ last update 14.02.2017
 
 
 
-Summary 14:
+Summary 13:
 Deployment of immigration liaison officers for the purposes of return operations of the EU in accordance with Article 49 of Regulation (EU) 2016/679 (see summary)
 Deployment OF IMMIGRATION LIFELINE OFFICERS
 SUMMARY OF:
@@ -694,7 +654,7 @@ last update 04.02.2020
 
 
 
-Summary 15:
+Summary 14:
 Biometric data in identity cards and residence cards for non-EU citizens and their family members who are not nationals of an EU country
 Biometric information in identity card and residence card for non EU citizens
 SUMMARY OF:
@@ -732,54 +692,7 @@ last update 14.02.2021
 
 
 
-Summary 16:
-ECRIS-TCN — criminal record information system
-ECRIS-TNC
-SUMMARY OF:
-Regulation (EU) 2018/1725 on the use of the European Criminal Records Information System for the purposes of criminal proceedings
-WHAT IS THE AIM OF THE REGULATION?
- 
-   
-It aims to ensure that the competent authorities of EU countries have a complete overview of criminal records in order to prevent and combat crime, including organised crime and terrorism.
-KEY POINTS
-Scope
-The regulation applies to criminal records of non-EU nationals who have been convicted in one or more EU countries and who are not citizens of the EU.
-It does not apply to:
-third-country nationals convicted prior to the date of entry into national criminal records;
-non-EU citizens convicted as a third-country national after their conviction was entered into the national criminal record;
-third country nationals convicted before the date on which their criminal record was entered in the national database.
-EU countries may also create records in ECRIS for non-nationals convicted before their conviction.
-Requests for access to data data
-The competent authorities may request access to the data data at the same time, provided those time limits are met, provided that:
-the purpose of the request for access is clearly defined;
-the data transmitted as referred to in Article 5 of the regulation and the national file reference;
-data used for a query; and
-the date and exact time of the operation.
-The data transmitted must be kept for a maximum retention period of 5 years.
-A log must be maintained of all data data transmitted to and from the central system and the communication infrastructure.
-Data protection rights and supervision
-The relevant national authorities must ensure that data protection rights are respected and that the data is processed only for the purpose of reporting and providing statistics, without allowing for individual identification.
-National authorities must also ensure that: the data transmitted by the central authority is stored in a secure central system;
-relevant information is made available to the relevant national supervisory authority without delay.
-If a national authority receives a request to access data from a central system, it must inform the competent national authority of the reason for the request, the nature and duration of the search, and the identifying mark of the official who carried out the search.
-FROM WHEN DOES THE RECOMMENDATION APPLY?
-It has applied since 1 January 2019.
-BACKGROUND
-The aim of this regulation is to ensure the maximum effectiveness of the system.
-For more information, see:
-‘The use of European Criminal Record Information System’ on the European Commission’s website.
-MAIN DOCUMENT
-  Еграциганска гарскиблаков года   баракскога
-Commission Implementing Decision 2014/852/EU of 12 December 2014 on the application of Regulation (EU, Euratom) 2018 /1725 to the use by Member States of the Regulation (EEC) No 552/2014 on the operation of the Electronic Criminal Records Identification System (ECRIST) (OJ L 183, 14.12.2014, pp. 1-8)
-Successive amendments to Regulation (EC) 2018 have been incorporated into the original text. This consolidated version is of documentary value only.
-RELATED DOCUMENTS
- 			
-Commission Delegated Regulation (European Parliament and of the Council of 11 December 2014 laying down detailed rules for the application by the European Union of the ECRIST — TCN and repealing Decision 2002/187/JHA of the Joint Committee on Criminal Justice and Criminal Justice (Joint Committee on the Criminal Justice, Criminal Law and Justice) (JHA/2002/1717).
-Last updated: 28.02.2019
-
-
-
-Summary 17:
+Summary 15:
 Interoperability of EU information systems for security, border and migration management
 Interoperation of EU Information Systems for Security, Border and Migration Management
 SUMMARY OF:
@@ -821,7 +734,7 @@ last update 14.02.2021
 
 
 
-Summary 18:
+Summary 16:
 Renewable energy: financial support for renewable energy projects and renewable energy efficiency
 Renewables: Financial support for renewables
 SUMMARY OF:
@@ -892,7 +805,7 @@ DirectIVE 2011/31(EU)
 
 
 
-Summary 19:
+Summary 17:
 Radio spectrum management — efficient use of radio spectrum and spectrum management rules
 Radio Spectrum management — efficiency use of Radio Spectrum Management rules
 SUMMARY OF:
@@ -954,7 +867,7 @@ Commission Regulation (European Parliament) No 1083/2014 of 25 November 2014 on 
 
 
 
-Summary 20:
+Summary 18:
 Monitoring and reporting of CO2 emissions and fuel consumption from new heavy-duty vehicles
 Monitoring & reporting from new light commercial vehicles
 SUMMARY OF:
@@ -1010,7 +923,7 @@ Last updated: 28.08.2019
 
 
 
-Summary 21:
+Summary 19:
 EU solidarity for natural gas — emergency gas supply
 EU solidarity with regard to natural gas
 SUMMARY OF:
@@ -1053,7 +966,7 @@ last update 14.08.2021
 
 
 
-Summary 22:
+Summary 20:
 Energy labelling requirements for energy-related products and energy-saving appliances
 Energy labels for energy - related products
 SUMMARY OF:
@@ -1096,7 +1009,7 @@ last update 04.02.2016
 
 
 
-Summary 23:
+Summary 21:
 Personal data protection
 Personal data processing
 SUMMEMBER OF:
@@ -1146,7 +1059,7 @@ last update 04.02.2016
 
 
 
-Summary 24:
+Summary 22:
 Harmonised index of consumer prices
 Harmonomically defined price stability
 SUMMARY OF:
@@ -1199,7 +1112,7 @@ Reg
 
 
 
-Summary 25:
+Summary 23:
 Dumping of agricultural products by non-EU countries
 Dumping on agricultural products
 SUMMARY OF:
@@ -1245,7 +1158,7 @@ Successive amendments to Regulation (C) No 1/2014 have been incorporated into th
 
 
 
-Summary 26:
+Summary 24:
 SUMMARY OF:
 Regulation (EU) No 1216/2009 on trade in agricultural subsidies
 WHAT IS THE AIM OF THE REGULATION?
@@ -1285,51 +1198,7 @@ last update 14.02.2016
 
 
 
-Summary 27:
-InvestEU programme for small and medium-sized enterprises (SMEs) and small and mid-cap companies (SMCs)
-InvestEU Programme for SMEs and small mid-caps
-SUMMARY OF:
-Implementing Regulation (EU) 2018/1092 on the InvestEU programme
-WHAT IS THE AIM OF THE REGULATION?
-It establishes a dedicated just transition fund to support the EU’s sustainable growth and jobs policy.
-KEY POINTS
-The InvestEU Programme is designed to help small and micro-enterprises (SMs) and SMEs (micro-cap) to invest in innovative and sustainable sectors.
-It aims to provide working capital and investment to support their technological leadership in innovative, sustainable and innovative sectors including by enhancing their digitisation and innovation capacity, and their global competitiveness, and by providing financing for the acquisition of businesses by employees or participation in the ownership of a business by employees.
-The programme also aims to contribute to the just transition of the territories identified in territorial just transition plans, established in accordance with the Just Transition Fund Regulation.
-To achieve this, the programme is divided into 3 policy windows:
-1.
-SME policy windows
-2.
-Small and medium sized enterprises
-3.
-Medium-sized and small-cap enterprises
-The investment policy windows are designed to support SMEs, and SME companies, in particular through:
-the provision of working capital, investment and risk financing from seed to expansion stages to ensure their technological and innovation capabilities, and the provision of risk financing, and in innovative or sustainable sectors;
-financial support for the development of new technologies;
-investment for the establishment of new businesses;
-projects related to pollution prevention and control
-projects equipped with carbon capture and storage or capture and utilisation installations;
-industrial or research projects that could lead to substantial reductions in greenhouse gas emissions, and any regional ring-fencing*.
-The InvestmentEU Advisory Hub
-The Advisory Board is composed of an Advisory Board, a Steering Board and a fully independent Investment Committee. The Advisory Board and the Investment Committee are appointed for a term of up to 4 years, renewable once and renewable once.
-A delegation from a non-EU country is responsible for managing the fund.
-FROM WHEN DOES THE IMPLEMENTATION APPLY?
-The regulation has applied since 1 January 2019.
-BACKGROUND
-   
-For more information, see:
-‘InvestEU’ on the European Commission's website.
-* KEY TERMS
-* Just Transition Mechanism: a mechanism to help the EU transition to a low-carbon economy and reduce its greenhouse gas (GHG) emissions.
-ACT
-Commission Implementing Decision (EU, Euratom) No 541/2014/EU of 13 December 2014 on the establishment, on behalf of the European Union, of the Invest EU Fund and repealing Regulation (EC) No 912/2010 of the EU Parliament and of the Council as regards the just Transition Fund (OJ L 347, 14.12.2014, pp. 1-8)
-RELATED ACTS
-Regulation (EU), Euratom, EC and Euratom of 3 December 2014 establishing the European Regional Development Fund (ERDF) and repealing Council Regulation (EURO) No 1285/2013 of 12 December 2013 on the EU's just transition mechanism and repealing Decision (Euratom, Euratom) 2016/852 on the same subject.
-last update 14.02.2020
-
-
-
-Summary 28:
+Summary 25:
 Recovery and resilience Facility
 Resilience Facility
 SUMMARY OF:
@@ -1375,7 +1244,7 @@ last update 14.02.2021
 
 
 
-Summary 29:
+Summary 26:
 Technical support for green and digital initiatives
 Transparency, equal treatment and sound financial management of EU countries’ technical support instruments
 Technical support measures
@@ -1429,7 +1298,7 @@ last update 14.02.2022
 
 
 
-Summary 30:
+Summary 27:
 Rail passengers’ rights and obligations on the EU’s railways (recast)
 Rail passengers' rights and responsibilities on the European Union (EU)
 SUMMARY OF:
@@ -1470,7 +1339,7 @@ last update 14.02.2015
 
 
 
-Summary 31:
+Summary 28:
 European Union external assistance for the Western Balkans (IPA 2021-2027) (European External Action Service) — framework for planning and delivering external assistance
 European Union foreign assistance (EAS) 2021 - 2027
 SUMMARY OF:
@@ -1508,7 +1377,7 @@ last update 14.02.2021
 
 
 
-Summary 32:
+Summary 29:
 External Action Guarantee for the EU’s partners in the field of foreign and security policy (EAGS)
 External Action Grant for the European Union's Partners in Foreign and Security Policy
 SUMMARY OF:
@@ -1553,7 +1422,7 @@ Last updated: 27.02.2022
 
 
 
-Summary 33:
+Summary 30:
 Reporting of breaches of EU competition law and the protection of whistleblowers (Directive (EU) 2019/852)
 Reporting of violations of EU law and protection of whistleblowers (DirectIVE (EU))
 SUMMARY OF:
@@ -1597,7 +1466,7 @@ Last updated: 27.12.2013
 
 
 
-Summary 34:
+Summary 31:
 European Integrated Border and Coast Guard Agency (EIB&C)
 European integrated border and coast guard Agency (EUIB & C)
 SUMMARY OF:
@@ -1633,7 +1502,7 @@ last update 14.02.2016
 
 
 
-Summary 35:
+Summary 32:
 Information and communications technology (ICT)
 Information and communication technology
 SUMMARY OF:
@@ -1683,7 +1552,7 @@ last update 14.02.2021
 
 
 
-Summary 36:
+Summary 33:
 European Union’s gross value added (GNI) statistics
 European Union's gross value adds (GNIs)
 SUMMARY OF:
@@ -1726,7 +1595,7 @@ Last updated: 28.06.2010
 
 
 
-Summary 37:
+Summary 34:
 EU type-approval rules for vehicles, systems, components and separate technical units following the withdrawal of the United Kingdom from the EU
 EU type approval rules for certain types of vehicles
 SUMMARY OF:
@@ -1775,7 +1644,7 @@ Report on the interpretation of the Implementing Decision of the Commission and 
 
 
 
-Summary 38:
+Summary 35:
 European Police Office (Europol)
 Europol
 SUMMARY OF:
@@ -1825,7 +1694,7 @@ last update 04.02.2016
 
 
 
-Summary 39:
+Summary 36:
 EU financial assistance to countries affected by COVID-19
 EU financial aid to countries in difficulties or seriously threatened with severe difficulties
 SUMMARY OF:
@@ -1868,7 +1737,7 @@ Last updated: 28.06.2020
 
 
 
-Summary 40:
+Summary 37:
 Early intervention and resolution of failing credit derivatives trading venues
 Early intervention & resolution
 SUMMARY OF:
@@ -1916,7 +1785,7 @@ Last updated: 28.08.2017
 
 
 
-Summary 41:
+Summary 38:
 European Year for Railways
 European Year FOR RAINWAYS
 SUMMARY OF:
@@ -1951,7 +1820,7 @@ last update 04.02.2021
 
 
 
-Summary 42:
+Summary 39:
 European Initiative for the Exchange of Young Officers in the field of cyber security and defence (ESDC) (until 2023)
 European Initiative of the Exchange and Development of Experts in Cyber Security and Defence
 SUMMARY OF:
@@ -2000,7 +1869,7 @@ last update 14.02.2020
 
 
 
-Summary 43:
+Summary 40:
 Reclaiming waste water from urban and agricultural waste
 Recovered waste water
 Recovering wastewater
@@ -2055,7 +1924,7 @@ last update 04.02.2020
 
 
 
-Summary 44:
+Summary 41:
 EU blue card for non-EU nationals who work in another EU country
 EU Blue card for third-country nationals working in another country
 SUMMARY OF:
@@ -2107,7 +1976,7 @@ The
 
 
 
-Summary 45:
+Summary 42:
 European Asylum and Migration Fund (EMF)
 European Asylum & Migration Fund
 SUMMARY OF:
@@ -2153,7 +2022,7 @@ Last updated: 20.07.2020
 
 
 
-Summary 46:
+Summary 43:
 Family leave and flexible working arrangements for parents and carers - Directive 2014/36/EU (parental leave)
 Parental leave and flexibility of working hours
 SUMMARY OF:
@@ -2190,47 +2059,7 @@ last update 04.02.2019
 
 
 
-Summary 47:
-Employment contract and employment relationship — minimum rights for workers
-Employment agreement and employment contract — minimum rules for workers’ rights
-SUMMARY OF:
-Directive (EU) 2017/159 on the minimum rights of workers who have an employment contract or employment relationship
-WHAT IS THE AIM OF THE DIRECTIVE?
-It lays down minimum rights that apply to every worker in the EU who has a contract or an employment relationship with an employer.
-KEY POINTS
-The directive applies to all workers, irrespective of the nature of the employment relationship.
-It does not apply to fixed-term employment relationships, where no guaranteed amount of paid work is predetermined before the employment starts.
-EU countries must ensure that the length of such a probationary period is proportionate to the expected duration of the contract and that any probationary periods are of a reasonable duration.
-The minimum notice period should be at least a calendar week from their first working day.
-In addition, employers must provide workers with information on the legal framework applicable to their employment contract and the nature and duration of their employment relationship, including:
-the expected duration and nature of their work;
-the nature and content of the work, including the expected remuneration;
-a description of the actual performance of the relationship and the conditions under which the contract is to be terminated.
-Employers must also provide training to workers to carry out the work for which they are employed.
-Workers should be protected against loss of income resulting from the late cancellation of an agreed work assignment by means of adequate compensation.
-Where employers are required by EU or national law or collective agreements to provide training, it is important to ensure that such training is provided equally to workers, including to those in non-standard forms of employment.
-FROM WHEN DOES THIS DIRECTIVE APPLY?
-   
-It has applied since 1 January 2018.
-BACKGROUND
-The European Pillar of Social Rights provides that workers have the right to protection against abuse of their rights, including by prohibiting abuse of atypical contracts.
-For more information, see:
-‘Employment contracts and employment relationships’ on the European Commission's website
-KEY TERMS
-* Atypical contract: a contract which is not defined by the law, collective agreement or practice in force in each EU country.
-* Procedure: a contractual relationship between two or more parties where one or more of the parties does not perform the actual work of the other.
-ACT
- 
-  барканска грацка, 25.4.2017, pp. 1-8
-Directives (EU, Euratom and the European Parliament) 2016/13/EU and (EU), 2016/17/EU of the European Central Bank and of the Council of 11 December 2016 on the approximation of the laws, regulations and administrative or statutory acts of the Member States relating to the employment of workers, and repealing Directive 2002/15/EC (OJ L 347, 24.12.2016, p. 1)
-RELATED ACTS
-                    наскиганка  гласта, 27.1.2018, pp.. 1-2
-Regulation (EC) No 596/2014 of the EU Parliament and of Council of 12 December 2014 on the application of the Treaty on European Union to the interpretation and application of certain provisions of Directive 2004/33/EC as regards employment contracts, collective agreements or practice and repealing Directives 2002/14/EC and 2004/35/EC, and amending Council Directives 2004/34/EC with regard to employment contracts and collective agreements, and Directives 2009/13 /EC and 2009/159/EC.
-last update 04.01.2020
-
-
-
-Summary 48:
+Summary 44:
 Criminal sanctions for fraud affecting the EU’s financial interests (Directive 2015/23/EU on fraud and other criminal offences affecting the Union’S financial interests)
 Criminal penalties for fraud*
 SUMMARY OF:
@@ -2276,7 +2105,7 @@ Last updated: 28.08.2015
 
 
 
-Summary 49:
+Summary 45:
 E-payment fees
 E-payments fees
 SUMMARY OF:
@@ -2332,7 +2161,7 @@ Last updated: 27.11.2014
 
 
 
-Summary 50:
+Summary 46:
 European framework to support the transparency and understanding of skills and qualifications acquired in formal, non-formal and informal settings, including through practical experiences, mobility and volunteering (‘Europass’)
 Europass establishes a European framework to help jobseekers and employers to better understand and exchange information on their qualifications and skills.
 ACT
@@ -2375,7 +2204,7 @@ last update 04.02.2016
 
 
 
-Summary 51:
+Summary 47:
 Statistical coverage of inland waterways transport
 SUMMARY OF:
 Regulation (EU) 2019/852 — statistical coverage of the inland waterways of the European Union
@@ -2412,7 +2241,7 @@ last update 14.02.2021
 
 
 
-Summary 52:
+Summary 48:
 European Union statistics on rail transport
 Eurostat statistics on railway transport
 SUMMARY OF:
@@ -2467,39 +2296,7 @@ last update 14.02.2021
 
 
 
-Summary 53:
-Alerts on return of illegally staying third-country nationals (until 2023) (until the end of the Schengen acquis)
-Alerts in the event of non-compliance with return decisions
-WHAT IS THE AIM OF THE REGULATION?
-It aims to increase the effectiveness of the EU system to return illegally staying non-EU nationals.
-KEY POINTS
-It sets out rules for the exchange of information between EU countries’ national competent authorities on the identification and return of third country nationals who are subject to an alert on return.
-It does not affect the rights and obligations of EU citizens who are beneficiaries of the right of free movement under EU law.
-The regulation does not apply to:
-non-EU citizens who have acquired citizenship of an EU country or of any EU country whose nationals have benefited from the right to free movement;
-third country nationals whose nationality is not recognised by the EU country in which they are staying.
-FROM WHEN DOES IT APPLY?
-   
-It has applied since 1 January 2019.
-BACKGROUND
-The European Commission adopted Regulation (EU) 2018/1861 on alerts on return for non-refoulement of third countries staying illegally in the EU.
-For more information, see:
-‘Alert on return’ on the European Commission’s website.
-MAIN DOCUMENT
- 
-Regulation (EC) No 552/2017/852 of the European Parliament and of the Council of 11 December 2017 on alerts to return illegal third countries nationals (recastration) (OJ L 294, 12.12.2017, pp. 1-8)
-RELATED DOCUMENTS
-Council Directive 2008/115/EC of 20 December 2008 on the conditions of entry and exit for third countries to the European Union (see summary)
-Directive 2009/34/JHA of 9 March 2009 laying down the conditions for the entry and departure of persons illegally staying in the territory of a Member State and repealing Directive 2004/54/EC (see consolidated version)
-Council Decision 2008/146/EC on the criteria for the application of Directive 2009/36/EC as regards the conditions under which third countries are allowed to enter and leave the EU (see summaries)
-Implementing Decision 2009/35/EC amending Directive 2009 /34/EC with regard to the conditions relating to the entry of persons who are not nationals of the Member State in which the person is staying
-Council Implementing Decision (EU, Euratom) 2017/856 of 20 November 2017 amending Council Directive 2003/43/EC and Council Implementing Regulation (Euratom) 2016/939 on the requirements for information exchange between Member States’ competent authorities and the European Border and Coast Guard Agency (EBCA) on the information exchange of supplementary information between the Member States and the EBCA on the subject of alerts on returns
-Council Delegated Decision (EURatom) 2019/858 of 20 October 2019 amending Decision 2009 /35/EU on the obligation of Member States' competent authorities to exchange supplementary information with the European External Action Service (EEAS) on third countries' authorities in relation to information exchange with the Commission on third country non-returns
-last update 04.02.2021
-
-
-
-Summary 54:
+Summary 49:
 Visa-free travel for non-EU nationals of non-Schengen countries and their travel documents
 Visa - visa - non-European Union citizens
 SUMMARY OF:
@@ -2537,7 +2334,7 @@ last update 14.02.2020
 
 
 
-Summary 55:
+Summary 50:
 Eurojust — rules for the processing of operational personal data
 Eurojust – rules for processing operational data
 SUMMARY OF:
@@ -2596,7 +2393,7 @@ Last updated: 27.08.2020
 
 
 
-Summary 56:
+Summary 51:
 Combating money laundering by means of criminal law (SUMMARY OF:
 Directive (EU) 2015/849 — criminal offences and sanctions in the area of money laundering
 WHAT IS THE AIM OF THE DIRECTIVE?
@@ -2632,7 +2429,7 @@ last update 04.02.2016
 
 
 
-Summary 57:
+Summary 52:
 Recovery of bluefin tuna
 Recovering bluefin tunas
 SUMMARY OF:
@@ -2684,7 +2481,7 @@ last update 14.02.2016
 
 
 
-Summary 58:
+Summary 53:
 Shipbuilding injurious pricing: protection against sales of ships below their normal value which cause injury to EU industry
 Shipbuilding injurious pricing
 SUMMARY OF:
@@ -2719,7 +2516,7 @@ Last updated: 28.08.2016
 
 
 
-Summary 59:
+Summary 54:
 EU rules on cableway installations and cableway safety
 EU rules for cableway installation and safety
 SUMMARY OF:
@@ -2760,7 +2557,7 @@ last update 14.02.2021
 
 
 
-Summary 60:
+Summary 55:
 Accessibility of products and services for persons with disabilities
 Assessment and enforcement of the EU’s legislation on the accessibility of goods and services intended for the general public and for persons who are blind, visually impaired or partially sighted
 SUMMARY OF:
@@ -2818,7 +2615,7 @@ last update 14.02.2016
 
 
 
-Summary 61:
+Summary 56:
 Controlled trade in minerals from conflict-affected and high-risk areas
 Contcontrolled trade in mineral resources
 SUMMARY OF:
@@ -2854,7 +2651,7 @@ Last updated: 28.02.2019
 
 
 
-Summary 62:
+Summary 57:
 Customs status of goods and their release and disposal
 Customs Status of goods
 SUMMARY OF:
@@ -2889,7 +2686,7 @@ Last updated: 27.08.2014
 
 
 
-Summary 63:
+Summary 58:
 Enforcement of intellectual property rights in the context of customs action against infringements of EU-wide intellectual property (IPR)
 En enforcement of IPR
 SUMMARY OF:
@@ -2934,7 +2731,7 @@ Last updated: 28.08.2019
 
 
 
-Summary 64:
+Summary 59:
 EU customs programme
 EU Customs programme
 SUMMARY OF:
@@ -2981,7 +2778,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 65:
+Summary 60:
 European Social Fund (ESF+) for the period 2021-2027
 European Social Funds (ESFs) for 2021 to 2027
 SUMMARY OF:
@@ -3037,7 +2834,7 @@ last update 04.02.2021
 
 
 
-Summary 66:
+Summary 61:
 EU solidarity programme for the period 2021-2027 (SUMMARY OF:
 Regulation (EU) 2021/817 on the European Union solidarity programme
 WHAT IS THE AIM OF THE REGULATION?
@@ -3083,7 +2880,7 @@ last update 14.02.2022
 
 
 
-Summary 67:
+Summary 62:
 Equal Opportunities Fund
 Equitable OpportunitiesFund
 SUMMARY OF:
@@ -3126,7 +2923,7 @@ last update 14.02.2021
 
 
 
-Summary 68:
+Summary 63:
 Registration of interest representatives in the EU’s interest-related activities register (2014-2020)
 Registration of interests representatives
 SUMMARY OF:
@@ -3171,7 +2968,7 @@ last update 14.02.2020
 
 
 
-Summary 69:
+Summary 64:
 Budgetary discipline and cooperation between the European Parliament and the Council of the European Union (EU) and the European Commission on budgetary matters
 Budgets and budgetary discipline
 SUMMARY OF:
@@ -3214,7 +3011,7 @@ Last updated: 30.04.2020
 
 
 
-Summary 70:
+Summary 65:
 Economic support for COVID-19
 Economic support to COVID -19
 SUMMARY OF:
@@ -3252,7 +3049,7 @@ last update 20.02.2022
 
 
 
-Summary 71:
+Summary 66:
 Stability and growth pact
 Sustainable and corrective parts of the Stability and Growth Pact
 WHAT IS THE AIM OF THE STRATEGY AND GROWTH PACT AND OF THE REGULATION?
@@ -3306,54 +3103,7 @@ Regulate (EU)(EU) 2018/853 of the High Representative of the Union for Foreign
 
 
 
-Summary 72:
-Visa for intended stays of no more than 3 months
-VISA for longer stays
-SUMMARY OF:
-Regulation (EC) No 810/2009 — rules on visas for extended stays
-WHAT IS THE AIM OF THE REGULATION?
-It sets out rules on the granting of visas for an extended stay of more than three months in EU countries.
-KEY POINTS
-The regulation applies to non-EU nationals from non-European Union (EU) countries who are entitled to stay in the EU for a maximum of 3 months.
-Visa applications
-Applicants must present a valid travel document satisfying the following criteria:
-its validity must extend at least 3 months after the intended date of departure from the territory of the EU countries or, in the case of several visits, after the last intended date for departure from another EU country;
-it must contain the following information:
-the applicant’s name, nationality, place of birth, date of birth and place of residence;
-the date and time of entry into the EU country of destination;
-a travel document containing the travel document and a stamp indicating that a visa application is admissible.
-The application must be assessed on the basis of all available information. Applicants must pay a visa fee of EUR 60.
-EU countries may refuse to grant a visa if the applicant presents a non-valid travel document or does not have the necessary documents.
-If an application is refused, the applicant must appear in person for a personal interview.
-An application may be reviewed by a consular official.
-A visa with limited territorial validity is valid for up to 3 months and may be annulled or revoked if it is found to be in breach of the conditions set out in the regulation.
-Applications must be submitted to the nearest consular office of an EU country.
-Consular offices must be staffed by consular staff who are competent to deal with visa applications and who have the authority to grant or refuse a visa.
-In addition, EU countries must ensure that their consulates are equipped with the necessary resources to examine applications and monitor the visa application process.
-FROM WHEN DOES THE RECOMMENDATION APPLY?
-The original regulation has applied since 1 July 2009.
-Amending Regulation (EU, Euratom) No 562/2006 has applied from 1 July 2006.
-BACKGROUND
-The European Commission has adopted a series of measures to modernise and simplify the rules governing the application of the Schengen Convention on the Visa and Visas of the European Union (VIS).
-For more information, see:
-VIS (European Commission).
-KEY TERMS
-* Visas: visas issued by EU countries for the purpose of facilitating the movement of persons within the EU.
-* Travel document: a travel document, such as a passport or visa sticker, which contains the visa number and the name of the country in which the visa is issued.
-MAIN DOCUMENT
- 
-    барска гаркова
-Commission Implementing Decision 2009/810/EC of 20 June 2009 on the application for a visa for an extension of stay of no longer than 3 weeks in the Member States (OJ L 136, 22.6.2009, pp. 1–22)
-RELATED DOCUMENTS
-  г  
-Regulations (EC, Euram) No 652/2008 and (EC), Euratom, Euratimes and Euratom Implementing Regulation (Euratom) of 15 June 2008 on the conditions for the granting and revocation of visas and on the procedures and conditions for issuing visas by Member States and repealing Council Regulation (EC).
-Commission Decision (EUR) 2015/856 of 20 May 2015 on the harmonisation of the rules on visa applications for an extendable stay of less than 3 years in the Community and repealing Decision (EU), Euram and Euram Implementing Regulations (EEC) 2016/852 and (EU/Euram) 2016–2021 on the visa and visa-free travel for persons under 25 years of age and repealing Directive 2004/36/EC.
-Council Decision 2014/858/EU of 25 May 2014 on the simplification of the procedures for the issuing and revocation by Member State of visas, Eurom and Euromigration and amending Council Decision (Euroatom) 2015–2022 on the validity of visas issued for extended stay by the Member State in question.
-last update 14.02.2016
-
-
-
-Summary 73:
+Summary 67:
 Statistics — population and housing data
 Statistics — statistics
 SUMMARY OF:
@@ -3397,7 +3147,7 @@ Last updated: 28.08.2009
 
 
 
-Summary 74:
+Summary 68:
 Rules of procedure for the 9th parliamentary term
 Rules of Procedure for the ninth parliamentary session
 SUMMARY OF:
@@ -3433,7 +3183,7 @@ last update 14.02.2021
 
 
 
-Summary 75:
+Summary 69:
 European Data Protection Supervisor (EDPS) — rules on the processing of personal data by EU institutions, bodies, offices and agencies (GDPR)
 European Data Privacy Supervisor (EDPB)
 SUMMARY OF:
@@ -3473,7 +3223,7 @@ last update 14.02.2021
 
 
 
-Summary 76:
+Summary 70:
 EU’s own resources — recycling of plastic packaging waste
 EU's own resources – recycling of plastics
 SUMMARY OF:
@@ -3507,7 +3257,7 @@ last update 14.02.2020
 
 
 
-Summary 77:
+Summary 71:
 Wet grip tyre labelling
 Wet-grained tyres
 SUMMARY OF:
@@ -3555,7 +3305,7 @@ last update 14.02.2021
 
 
 
-Summary 78:
+Summary 72:
 Integrated Border Management Fund (IBMF) — modern and reliable control equipment at the EU’s external borders (2027-2027)
 IntegratedBorder Management Fund
 SUMMARY OF:
@@ -3594,7 +3344,7 @@ last update 14.02.2021
 
 
 
-Summary 79:
+Summary 73:
 Electricity transmission system operators
 Electricity distribution systems operators
 SUMMARY OF:
@@ -3668,7 +3418,7 @@ last update 04.02.2020
 
 
 
-Summary 80:
+Summary 74:
 European High Performance Computing Joint Undertaking (EPCJoint Undertaking) (until 31 December 2033)
 Europa’s Joint Innovation Fund supports the development and uptake of high-performance computing and quantum computing technologies, systems and applications.
 ACT
@@ -3713,7 +3463,7 @@ Last updated: 28.02.2020(1) The United Kingdom withdraws from the European Commu
 
 
 
-Summary 81:
+Summary 75:
 Climate-neutrality objective for the EU’s 2030-2050 climate policy
 Climate - neutrality goal for the 2030-40 climate policy			
 SUMMARY OF:
@@ -3756,7 +3506,7 @@ last update 04.01.2020
 
 
 
-Summary 82:
+Summary 76:
 EU programme for the period 2021-2027 on preventing, combating and combating diseases
 EU programme on preventing and combatting diseases
 SUMMARY OF:
@@ -3813,7 +3563,7 @@ coordinating and coordinating the activities of the Commission, the European
 
 
 
-Summary 83:
+Summary 77:
 Cultural and media strand of the European Union’s Horizon 2020 programme
 Culture and media sector of the Horizon 2020 Programme
 SUMMARY OF:
@@ -3861,7 +3611,7 @@ last update 14.02.2021
 
 
 
-Summary 84:
+Summary 78:
 European Institute of Innovation and Technology (EIT) for the 7-year period 2021-2027
 European Institute OF Innovation and technology (EBIT) for for the seven-year year 2021-2020
 SUMMARY OF:
@@ -3899,7 +3649,7 @@ last update 14.02.2021
 
 
 
-Summary 85:
+Summary 79:
 Aromatised wine products — protection of the geographical indications of certain aromatised wines and their production methods
 Aromatic wine products – protection of their geographical indications
 SUMMARY OF:
@@ -3943,7 +3693,7 @@ Last updated: 28.02.2014
 
 
 
-Summary 86:
+Summary 80:
 Catch limits for certain species of fish in EU waters in 2020
 Catch limit for certain types of fish
 SUMMARY OF:
@@ -4012,7 +3762,7 @@ Last updated: 28.08.2020
 
 
 
-Summary 87:
+Summary 81:
 EU macro-financial assistance to Ukraine
 EU macro–financial assistance for Ukraine
 SUMMARY OF:
@@ -4045,7 +3795,7 @@ last update 14.02.2016
 
 
 
-Summary 88:
+Summary 82:
 Management, conservation and control measures for Mediterranean swordfish in the context of recreational fishing in the Atlantic
 Management, conserving and controlling measures for certain species of Atlantic swordfish
 SUMMARY OF:
@@ -4092,7 +3842,7 @@ last update 04.11.2016
 
 
 
-Summary 89:
+Summary 83:
 Multiannual financial framework for the period 2014-2022 (MFF) - financial rules for the EU’s financial stability
 Multannual financial system for Europe
 SUMMARY OF:
@@ -4140,7 +3890,7 @@ last update 14.02.2016
 
 
 
-Summary 90:
+Summary 84:
 Sustainable fisheries and the conservation of marine biological resources (EMFAF)
 Sustainable Fisheries and the Conservation of Marine Biological Resources (EMFF)
 The European Union (EU) is providing financial support to the European Maritime and Fisheries Fund (EMF), which is responsible for managing the EU’s seas and oceans.
@@ -4187,7 +3937,7 @@ last update 14.02.2021
 
 
 
-Summary 91:
+Summary 85:
 Convention on the Conservation and Management of Straddling Fish Stocks and Highly Migratory Fish Species (IATTC)
 Convention of the International Tribunal for the Law of the Sea and the Agreement for the Implementation of that Convention
 SUMMARY OF:
@@ -4230,7 +3980,7 @@ last update 14.02.2021
 
 
 
-Summary 92:
+Summary 86:
 Common understanding on delegated and implementing acts and on the implementation of the Lisbon Treaty
 Common agreement on delegated or implementing acts
 SUMMARY OF:
@@ -4269,7 +4019,7 @@ last update 14.02.2020
 
 
 
-Summary 93:
+Summary 87:
 Citizens’ initiatives — registration and verification of statements of support (CITIS)
 Citizens' initiatives — registering and verification OF STATEMENTS OF SUPPORT
 SUMMARY OF:
@@ -4314,7 +4064,7 @@ Last updated: 28.06.2014
 
 
 
-Summary 94:
+Summary 88:
 Pesticides: statistics on the use of pesticides and their use in the EU (2009-2013)
 Pesticide statistics: data on the application of pesticides
 SUMMARY OF:
@@ -4360,7 +4110,7 @@ last update 14.02.2014
 
 
 
-Summary 95:
+Summary 89:
 Authorisation for plant protection products
 Authorisation of plants and plant products
 SUMMARY OF:
@@ -4414,7 +4164,7 @@ Regulations (EU, Euronews) No 2111/2014 and (EURO) No 3113/2014
 
 
 
-Summary 96:
+Summary 90:
 SOLVIT Information Management Interface (MII)
 SOLvIT Information Migrations Interface (IMI)
 The SOLVIT information management interface (IMI) enables the exchange of information between European Union (EU) countries and the European Commission.
@@ -4457,7 +4207,7 @@ last update 14.02.2021
 
 
 
-Summary 97:
+Summary 91:
 Fishing in the Mediterranean and Black Sea: rules to prevent, deter and eliminate illegal, unreported and unregulated fishing (GFCM Agreement)
 Fishing on board, transhipment and landing of fish and shellfish caught in the GFCM agreement area
 SUMMARY OF:
@@ -4503,7 +4253,7 @@ Last updated: 28.08.2015
 
 
 
-Summary 98:
+Summary 92:
 Uniform patent protection within the internal market: unitary patent protection
 Uniform product patent protection — unitary product protection
 SUMMARY OF:
@@ -4549,7 +4299,7 @@ last update 14.02.2016
 
 
 
-Summary 99:
+Summary 93:
 European Observatory on Counterfeiting and Piracy
 European Observatory On Counterfeit andPiracy
 SUMMARY OF:
@@ -4602,7 +4352,7 @@ Last updated: 27.08.2014
 
 
 
-Summary 100:
+Summary 94:
 EU’s trade-related measures to protect its economic interests in the area of trade in services and goods with non-EU countries (trade-restrictive measures in the field of services and/or goods originating in non-European Economic Area (EEA)
 EU‘s trade related measures to support the protection of its economic interest in international trade agreements
 SUMMARY OF:
@@ -4649,7 +4399,7 @@ last update 04.02.2020
 
 
 
-Summary 101:
+Summary 95:
 Bananas — EU-Central America stabilisation mechanism for imports of bananas
 Bananas – EU-Cuba agreement
 SUMMARY OF:
@@ -4695,7 +4445,7 @@ last update 14.02.2016
 
 
 
-Summary 102:
+Summary 96:
 Preservation order
 Preservation Order
 SUMMARY OF:
@@ -4738,7 +4488,7 @@ last update 04.02.2014
 
 
 
-Summary 103:
+Summary 97:
 Border surveillance at sea: protection of fundamental rights and the principle of non-refoulement
 Border surveillance on the sea
 SUMMARY OF:
@@ -4788,7 +4538,7 @@ Commission Delegated Regulation (Euratom) No 552/2014
 
 
 
-Summary 104:
+Summary 98:
 EU actions, emergency and technological assistance for migrants, refugees and migrants’ families
 EU actions and emergency and technical assistance in migration and asylum
 SUMMARY OF:
@@ -4843,7 +4593,7 @@ last update 14.02.2020
 
 
 
-Summary 105:
+Summary 99:
 European return fund
 European returns fund
 SUMMARY OF:
@@ -4893,7 +4643,7 @@ last update 04.02.2016
 
 
 
-Summary 106:
+Summary 100:
 Financial support for police cooperation, preventing and combating crime and crisis management
 Fundamental principles of the European Union’s Internal Security Fund
 SUMMARY OF:
@@ -5043,7 +4793,7 @@ Last updated: 30.11.2015
 
 
 
-Summary 107:
+Summary 101:
 Non-sustainable fishing of fish stocks of common interest by non-European Union (EU) Member States
 Non-Sustainable fishing by countries of the common interest
 SUMMARY OF:
@@ -5090,7 +4840,7 @@ last update 04.02.2015
 
 
 
-Summary 108:
+Summary 102:
 Bilateral investment agreements between EU countries and non-EU countries with a view to investing in the EU’s single market
 Bilateral Investment agreements between the EU and non–EU countries
 SUMMARY OF:
@@ -5130,7 +4880,7 @@ last update 14.02.2016
 
 
 
-Summary 109:
+Summary 103:
 Beneficiaries of the Generalised System of Preferences (GSP) for agricultural and fishery products (GFPs) in the context of the Common Customs Tariff Directive
 Beneficiary of the generalised system of Preferences for agricultural products in accordance with the common customs tariff directive
 SUMMARY OF:
@@ -5187,7 +4937,7 @@ last update 14.02.2016
 
 
 
-Summary 110:
+Summary 104:
 Exports of firearms and ammunition to non-EU countries: customs controls and control measures
 Exports from the customs territory of the European Union
 SUMMARY OF:
@@ -5231,7 +4981,7 @@ last update 04.02.2021
 
 
 
-Summary 111:
+Summary 105:
 European situational picture and common pre-frontier intelligence picture to detect, prevent and combat illegal immigration and cross-border crime at the EU’s external borders
 European situational profile and common intelligence picture (EUROSUR)
 SUMMARY OF:
@@ -5265,7 +5015,7 @@ Last updated: 28.02.2010
 
 
 
-Summary 112:
+Summary 106:
 Eurodac — fingerprint data processing and data protection and liability
 EuroDac — fingerprints — processing, data protection AND liability
 SUMMARY OF:
@@ -5315,7 +5065,7 @@ last update 14.02.2016
 
 
 
-Summary 113:
+Summary 107:
 Protection of designations of origin and traditional specialities in the agricultural and forestry sectors
 Protecting designations and symbols of origin in the agriculture and forestry sector
 SUMMARY OF:
@@ -5367,7 +5117,7 @@ last update 14.02.2016
 
 
 
-Summary 114:
+Summary 108:
 Single-hull oil tankers — accelerated phasing in the application of MARPOL rules
 Single-Hull oil tanker rules — accelerated phase-in
 SUMMARY OF:
@@ -5412,7 +5162,7 @@ last update 14.02.2016
 
 
 
-Summary 115:
+Summary 109:
 European Financial Supervisory Authority
 European Financial Stability Authority
 SUMMARY OF:
@@ -5461,7 +5211,7 @@ last update 14.02.2016
 
 
 
-Summary 116:
+Summary 110:
 Freedom of movement of workers and their families in the European Union
 Freedom of mobility of work
 SUMMARY OF:
@@ -5505,7 +5255,7 @@ last update 14.02.2021
 
 
 
-Summary 117:
+Summary 111:
 EU rules on the placing on the market and the use of certain chemicals
 EU controls on the putting on the sale and use of some chemicals
 SUMMARY OF:
@@ -5544,7 +5294,7 @@ last update 14.02.2021
 
 
 
-Summary 118:
+Summary 112:
 European Union Environment Agency
 European Union Environmental Agency
 SUMMARY OF:
@@ -5584,7 +5334,7 @@ last update 14.02.2016
 
 
 
-Summary 119:
+Summary 113:
 Eco-management and audit scheme (EMAS) for businesses
 Eco - Management and Audit scheme (EASM) for business
 SUMMARY OF:
@@ -5632,7 +5382,7 @@ last update 14.02.2019
 
 
 
-Summary 120:
+Summary 114:
 Spirit drinks
 Spirits
 ACT
@@ -5670,7 +5420,7 @@ Last updated: 28.02.2019
 
 
 
-Summary 121:
+Summary 115:
 Common rules for safeguarding civil aviation against acts of unlawful interference with civil aircraft (common basic standards on aviation security)
 Common rules on safeguarding Civil Aviation Against Acts of Unlawful Interference With Civil Aircraft
 SUMMARY OF:
@@ -5720,7 +5470,7 @@ last update 14.02.2016(1) The United Kingdom withdraws from the EU and becomes a
 
 
 
-Summary 122:
+Summary 116:
 Restrictive measures against the funding of terrorism and human rights violations in the context of the EU’s common foreign and security policy
 Restricting funds and economic resources against the financing of terrorism
 SUMMARY OF:
@@ -5760,7 +5510,7 @@ last update 14.02.2019
 
 
 
-Summary 123:
+Summary 117:
 EU military operation in the Mediterranean (EUNAVFORCE IN THE MIDMARY
 SUMMARY OF:
 Decision (CFSP) 2020/472 on a European Union military operation on the Mediterranean
@@ -5795,7 +5545,7 @@ last update 11.04.2020
 
 
 
-Summary 124:
+Summary 118:
 Facilitating the exchange of information on authentic documents and on known methods of falsification between EU countries’ law enforcement authorities (FADO system)
 Facilitating cooperation on authentic and false documents
 SUMMARY OF:
@@ -5841,7 +5591,7 @@ last update 14.02.2020
 
 
 
-Summary 125:
+Summary 119:
 Non-discrimination and proportionality of the requirements on access to, or the pursuit of, regulated professions
 Non–discrimination and the requirement to respect the principles of non–discrimination
 SUMMARY OF:
@@ -5885,7 +5635,7 @@ last update 14.02.2020
 
 
 
-Summary 126:
+Summary 120:
 Fisheries management of stocks of common interest in the North Sea and the Baltic
 Fishing management of species of common interests in the north sea
 SUMMARY OF:
@@ -5939,7 +5689,7 @@ last update 14.02.2016
 
 
 
-Summary 127:
+Summary 121:
 Convention on the conservation and management of marine resources in the South-East Pacific (SPRFMO)
 Convention of the Parties to the United Nations Convention on the Conservation and Management of Marine Resources in the south-east Pacific
 SUMMARY OF:
@@ -5973,7 +5723,7 @@ last update 04.02.2021
 
 
 
-Summary 128:
+Summary 122:
 Controls on cash entering and leaving the European Union (EUR10,000 and more)
 Countries must impose controls on cash in and out of the EU (Eur10 000 and more).
 SUMMARY OF:
@@ -6022,7 +5772,7 @@ last update 14.02.2015
 
 
 
-Summary 129:
+Summary 123:
 Energy Union — energy security, decarbonisation and energy efficiency (2020-2026)
 Energy Union – energy security and decarbonising
 SUMMARY OF:
@@ -6079,7 +5829,7 @@ WHAT DOES THIS REGULATIONS DO?
 
 
 
-Summary 130:
+Summary 124:
 POPs — EU action to reduce their release and their toxicity (Regulation (EU) 2021/2021)
 POPS — Regulation (EU).
 SUMMARY
@@ -6122,7 +5872,7 @@ last update 16.02.2021
 
 
 
-Summary 131:
+Summary 125:
 Single-use plastic products — reducing their environmental impact
 Single use plastic products— reducing their environment impact
 SUMMARY OF:
@@ -6184,48 +5934,7 @@ Regulations (EU and Euratom), amending Council Directives 2014/17/EU, 2014/24/EU
 
 
 
-Summary 132:
-Agreement between the EU and the EU Atomic Energy Community and the United Kingdom of Great Britain and Northern Ireland on mutual assistance and trade and cooperation in the field of nuclear energy
-Agreement with the EU as regards mutual assistance
-SUMMARY OF:
-Decision 2009/852/EC — conclusion of the Agreement between the European Union and the Eatom Energy Community, of the one part, and its Member States, and the European Atomic Energy Communities, of Northern Ireland
-WHAT IS THE AIM OF THE AGREEMENT AND THE DECISION?
-The agreement aims to strengthen cooperation between the parties in the fields of mutual assistance, trade and economic cooperation.
-The decision concludes the agreement on behalf of the EU.
-KEY POINTS
-The aim of the agreement is to:
-strengthen the EU’s economic and trade relations with the countries involved in the agreement;
-promote the development of a free trade area between the two parties;
-improve the level of protection of intellectual property rights;
-ensure a level playing field for companies operating in the area of trade and investment;
-provide an appropriate framework for cooperation on issues such as trade in services, investment promotion, competition law, intellectual property law, taxation and the environment.
-In addition, the agreement provides for:
-the establishment of a specialised committee on law enforcement and judicial cooperation to ensure mutual assistance;
-the setting of provisional TACs for certain types of cases, such as fraud, corruption and abuse of power;
-a mutual assistance in the fight against organised crime, terrorism and organised crime.
-DATE OF ENERGY AND TRADE AND COVID-19
-The EU-EVID agreement entered into force on 1 July 2009.
-It entered into effect on 1 January 2010.
-BACKGROUND
-The Eatom energy cooperation agreement is one of a number of bilateral agreements signed by the EU with non-EU countries. The other agreements include:
-Agreements on trade in goods, services and capital, including:
-Regulation (EC) No 561/2006 on common rules for access to the international market for coach and bus services, and repealing Directive 96/92/EC (recast) and repealing Regulation (EU) No 1/2/EC on the internal market in electricity and repealing Directives 96/93/EC and 96/96/EC;
-Regulations (EC, Euratom) No 952/2006 and (EU, Euratomic Energy Community) on the mutual assistance of EU countries with regard to the nuclear energy sector and repealing Decision 96/94/EC.
-For more information, see:
-EU-Euratom cooperation (European Commission).
-MAIN DOCUMENTS
- 
-   
-Council Decision 2009/884/EC of 21 December 2009 on the conclusion of an Agreement between The European Union, of its Member State, of one part (OJ L 149, 30.12.2009, pp. 1-10)
-Successive amendments and corrections to Decision (EC), Euratom, have been incorporated into the original text. This consolidated version is of documentary value only.
-RELATED DOCUMENT
-                  
-Report from the Commission to the European Parliament, the Council, the European Economic and Social Committee, the Committee of the Regions and the Committee on Foreign Affairs and Security: Towards the conclusion, on the basis of Article 373 of the Treaty on the Functioning of the European Community and of the Association Agreement with the United States of America, of 1 January 2020, of a mutual assistance agreement between The United Kingdom, of their one part and The United States, of his/her part (COM(2020) 696 final, 15.3.2020)
-last update 14.02.2021
-
-
-
-Summary 133:
+Summary 126:
 EU trade mark registration and certification system (EU-TRADE)
 EU-TEACHING MARKS
 SUMMARY OF:
@@ -6272,7 +5981,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 134:
+Summary 127:
 Access to published works for persons who are blind, visually impaired or otherwise print-disabled
 Assessment of the application of the Marrakesh Treaty to Facilitate Access to Published Works for Persons who are Blind, Visually Impaired, or Otherwise Print Disabled
 SUMMARY OF:
@@ -6316,7 +6025,7 @@ last update 14.02.2022
 
 
 
-Summary 135:
+Summary 128:
 Mutual assistance mechanism for traders in the payment and lending sectors and credit agreements with a Union dimension (MUTUAL ASSISTANCE MECHANISM)
 Mutual Assistance Mechanism
 SUMMARY OF:
@@ -6369,7 +6078,7 @@ last update 04.02.2016
 
 
 
-Summary 136:
+Summary 129:
 In vitro diagnostic medical devices — rules for their manufacture, testing and use
 In vitro diagnostic medical devices— rules for its manufacture, test and operation
 SUMMARY OF:
@@ -6423,69 +6132,7 @@ last update 14.02.2016
 
 
 
-Summary 137:
-Benchmark integrity and reliability requirements
-Benchmark Integrity and relationability requirements
-SUMMARY OF:
-Regulation (EU) No 1095/2010 on benchmarks
-WHAT IS THE AIM OF THE REGULATION?
-It sets out rules for the use of benchmarks to ensure their integrity and independence.
-KEY POINTS
-The regulation applies to:
-investment benchmarks* and non-interest rate benchmarks* that are used in the European Union (EU).
-It does not apply to interest rate benchmarks such as Libor, Euribor or Eurica.
-It applies to benchmarks that are not considered to be critical benchmarks and that are subject to a process to determine whether they should be considered critical benchmarks.
-The European Securities and Markets Authority (ESMA) has the power to impose sanctions on any non-compliance with the regulation’s rules.
-Contributors to a benchmark
-A benchmark is considered a critical benchmark if:
-it is used in more than one EU country;
-it has a significant impact on the financial stability of the economy of the country in which it is published.
-A critical benchmark may not be used if it does not meet certain conditions, such as:
-a minimum level of liquidity;
-a high degree of reliability;
-an absence of conflicts of interest between the contributor and the author of the benchmark;
-the contribution of a non-significant benchmark to a significant benchmark does not exceed a maximum amount of €500,000.
-Critical benchmarks can be determined using a quantitative criterion or a qualitative criterion.
-Non-significant benchmarks
-A significant benchmark is defined as a benchmark that does not have a significant effect on the economic stability of an EU country.
-Administrators
-An administrator must publish, by means that ensure fair and easy access, a benchmark statement for each benchmark or, where applicable, for each family of benchmarks, that may be used in EU countries.
-In addition, an administrator must:
-ensure that a benchmark is published in a language that is easily understood by the general public;
-keep a register of all the contributors and users of a benchmark.
-If an administrator does not publish a benchmark, he or she must inform the competent authority of the EU country where the benchmark was published or disseminated, as well as publish a corrective statement about any past contributions to or figures of that benchmark, in accordance with the rules of the European Commission.
-Monitoring
-An EU country may decide to prohibit a benchmark from being used in another EU country if it considers that it is not consistent with the requirements of the regulation or that it has not complied with its obligations under the relevant legislation.
-FROM WHEN DOES THE RECOMMENDATION APPLY?
-   
-It has applied since 30 June 2016.
-BACKGROUND
- 
-For more information, see:
-Key terms used in benchmarks (European Commission).
-KEY TERMS
-* Critical benchmark: a benchmark which is considered to have significant effects on economic stability and the financial health of an economy.
-* Significant benchmark: an important benchmark that is used to determine the value of assets and liabilities of a company.
-REFERENCES
-Act
-Entry into force
-Deadline for transposition in the Member States
-Official Journal
-Directive 2014/33/EU
-30.6.2014
--
-OJ L 127 of 30.6, 2014, pp. 1-8
-Amending act(s)
-Entry INTO FORCE
-Deadlines for transposing in the Members States
-Directives 2014/34/EU and 2014/36/EU have applied since 1 April 2014.
-Amendments to Directive 2014/35/EU (Directive 2013/13/EU) have been incorporated into the basic text.
-Directions 2014/37/EU, 2014/38/EU or 2014/40/EU had to be incorporated into national law by 1 April 2016. Directive 2013/23/EU was adopted by the European Parliament and by the Council by 31 December 2013.
-Last updated: 30.08.2014
-
-
-
-Summary 138:
+Summary 130:
 Ecodesign requirements for energy-related appliances and fittings — rules for their sale and putting into service in the EU and non-EU countries
 Ecodesigned requirements for electricity-efficient appliances and fitting
 SUMMARY OF:
@@ -6534,7 +6181,7 @@ last update 14.02.2016
 
 
 
-Summary 139:
+Summary 131:
 Cash-in-transit (CIT) transport of euro cash in CIT vehicles
 Cash cash-in–transit
 SUMMARY OF:
@@ -6584,7 +6231,7 @@ last update 15.02.2021
 
 
 
-Summary 140:
+Summary 132:
 Foods — labelling and labelling of meat and poultry
 Foods— labelling
 SUMMARY OF:
@@ -6633,7 +6280,7 @@ last update 04.02.2016
 
 
 
-Summary 141:
+Summary 133:
 Euro coins — circulation and 2-euro commemorative coins (2011-2013)
 Euro coins – circulation and two-coin commemorative coin sets
 SUMMARY OF:
@@ -6668,7 +6315,7 @@ last update 14.02.2016
 
 
 
-Summary 142:
+Summary 134:
 The European Social Fund (ESF) and its specific objectives
 The European social fund (ESSF)
 SUMMARY OF:
@@ -6720,7 +6367,7 @@ last update 14.02.2016
 
 
 
-Summary 143:
+Summary 135:
 European statistics
 European statistics	SUMMARY OF:
 Regulation (EU) No 182/2011 on the production and dissemination of European statistics
@@ -6765,7 +6412,7 @@ last update 04.02.2016
 
 
 
-Summary 144:
+Summary 136:
 Quantitative chemical analysis of certain textile fibre mixtures and labelling of certain fibrous fibres
 Quantitative chemistry of certain textiles
 SUMMARY OF:
@@ -6799,7 +6446,7 @@ last update 14.11.2021
 
 
 
-Summary 145:
+Summary 137:
 European Maritime and Fisheries Fund (EMFF)
 European Maritime & Fisheries Fund
 SUMMARY OF:
@@ -6843,7 +6490,7 @@ last update 04.02.2021
 
 
 
-Summary 146:
+Summary 138:
 Insurance-based investment products for retail investors — key investor information
 Insurance - investment products — key information information
 SUMMARY OF:
@@ -6908,7 +6555,7 @@ Amendments to
 
 
 
-Summary 147:
+Summary 139:
 Single Resolution Fund for financial institutions and groups
 SUMMARY OF:
 Regulation (EU) No 575/2013 — rules for the Single Resolution Fund
@@ -6956,7 +6603,7 @@ last update 04.02.2021
 
 
 
-Summary 148:
+Summary 140:
 Noise-related operating restrictions at European Union airports
 Noise - related measures
 SUMMARY OF:
@@ -6993,7 +6640,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 149:
+Summary 141:
 Cross-border insolvency proceedings: common rules for creditors and practitioners
 Cross-Border insolvencies: Common rules for creditor and practitioner
 SUMMARY OF:
@@ -7039,7 +6686,7 @@ Directives 2014/34/EU of the ECJ of 3 December 2014 on the enforcement of judgme
 
 
 
-Summary 150:
+Summary 142:
 Athens Convention relating to the carriage of passengers and their luggage by sea
 Athens convention relating to passenger and their Luggage by Sea
 SUMMARY OF:
@@ -7086,7 +6733,7 @@ last update 14.02.2016
 
 
 
-Summary 151:
+Summary 143:
 Rail freight market: management of rail freight traffic
 Rail freight markets: managing rail freight transport
 SUMMARY OF:
@@ -7147,7 +6794,7 @@ last update 17.02.2021
 
 
 
-Summary 152:
+Summary 144:
 Road transport operators — professional qualification
 Road transportation operators — Professional qualification
 SUMMARY OF:
@@ -7187,7 +6834,7 @@ last update 04.02.2021
 
 
 
-Summary 153:
+Summary 145:
 Social security insurance for EU residents moving within the EU
 Social security Insurance for EU nationals moving within EU
 SUMMARY OF:
@@ -7231,7 +6878,7 @@ last update 14.02.2021
 
 
 
-Summary 154:
+Summary 146:
 Public health and health and safety at work — statistical information and statistics
 Public health & health and safethe safety of workers
 SUMMARY OF:
@@ -7279,7 +6926,7 @@ Last updated: 30.04.2010
 
 
 
-Summary 155:
+Summary 147:
 Quality of job vacancy statistics in the European Union (EU) — quarterly production of statistics on job vacancies and seasonal adjusted job vacancies
 Quality of employment data in the EU
 SUMMARY OF:
@@ -7316,7 +6963,7 @@ last update 14.02.2016
 
 
 
-Summary 156:
+Summary 148:
 Hybrid fuel: type-approval requirements for hydrogen-powered vehicles
 Hybrid fuels: type ofapproval required for hydrogen containers
 SUMMARY OF:
@@ -7371,7 +7018,7 @@ last update 14.02.2021
 
 
 
-Summary 157:
+Summary 149:
 Ensuring competition in the EU’s natural gas transmission market (Regulation (EC) No 713/2009 on conditions for access to the internal market in natural gas (ENTSO for Gas)
 Establishing competition through liquid wholesale markets for gas
 SUMMARY OF:
@@ -7420,7 +7067,7 @@ last update 14.02.2016
 
 
 
-Summary 158:
+Summary 150:
 Agreements between EU countries and non-EU countries on civil law
 Agreements with non-European neighbours
 SUMMARY OF:
@@ -7468,7 +7115,7 @@ last update 14.02.2015
 
 
 
-Summary 159:
+Summary 151:
 Statistics on migration and asylum — collection and analysis of EU statistics
 Statistics on migrants and asylum
 SUMMARY OF:
@@ -7509,7 +7156,7 @@ last update 04.02.2021
 
 
 
-Summary 160:
+Summary 152:
 EU statutory audit rules
 EU statutory auditor rules
 SUMMARY OF:
@@ -7556,7 +7203,7 @@ last update 14.02.2021
 
 
 
-Summary 161:
+Summary 153:
 Conservation of marine biological resources and fisheries targeting them (Common fisheries policy)
 Conserving marine biological resource and fisheries targets them (common fisheries policy).
 SUMMARY OF:
@@ -7601,7 +7248,7 @@ last update 14.02.2016
 
 
 
-Summary 162:
+Summary 154:
 Common organisation of markets in fishery and aquaculture products
 Common organisation on markets in fisheries
 SUMMARY OF:
@@ -7638,7 +7285,7 @@ last update 14.02.2021
 
 
 
-Summary 163:
+Summary 155:
 Securities settlement systems (CSDs) — rules for cross-border services
 SUMMARY OF:
 Regulation (EU) No 1095/2010 on securities settlement systems
@@ -7684,7 +7331,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 164:
+Summary 156:
 Cohesion Fund
 Cohesion fund
 SUMMARY OF:
@@ -7718,7 +7365,7 @@ last update 14.02.2016
 
 
 
-Summary 165:
+Summary 157:
 European Regional Development Fund (ERDF) — financial support for regions with severe and permanent natural or demographic handicaps (until 2023)
 European Region Development Fund
 SUMMARY OF:
@@ -7752,7 +7399,7 @@ Last updated: 28.04.2005
 
 
 
-Summary 166:
+Summary 158:
 European territorial cooperation — 2014-2020
 European territorial development
 SUMMARY OF:
@@ -7795,7 +7442,7 @@ last update 14.02.2016
 
 
 
-Summary 167:
+Summary 159:
 Trans-European energy infrastructure — streamlining and improving permit granting processes for projects of common interest (Regulation (EU) No 347/2013)
 Trans-Eastern Europe energy infrastructures: streamlining, improving and simplifying the permit granting process
 SUMMARY OF:
@@ -7837,7 +7484,7 @@ last update 14.02.2021
 
 
 
-Summary 168:
+Summary 160:
 Alternative dispute resolution (ADR) for online sales and service contracts
 Alternative Dispute Resolution (ODR)*
 SUMMARY OF:
@@ -7873,7 +7520,7 @@ last update 14.02.2016
 
 
 
-Summary 169:
+Summary 161:
 The EU’s Common Agricultural Policy (CAP) for agriculture
 The EU's Common Agriculture Policy for farming
 SUMMARY OF:
@@ -7930,54 +7577,7 @@ Last updated: 28.08.2014
 
 
 
-Summary 170:
-Cooperation measures for agriculture, food production, forestry, rural development and sustainable rural development
-Cooperation Measures for Agriculture, Food Production, Forestry, Rural Development and Sustainable Rural Development
-SUMMARY OF:
-Regulation (EU) No 1303/2013 — co-operation measures between the European Commission, the European Agricultural Fund and the European Rural Development Fund
-WHAT IS THE AIM OF THE REGULATION?
-It sets out the conditions for granting aid under the Co-operation Measures (CMS) and Rural Development (RDP) measures.
-It also sets out how the measures are implemented.
-KEY POINTS
-CMS
-The regulation applies to:
-agricultural, forestry and rural development programmes;
-climate change mitigation and adaptation and biodiversity.
-Rural development programmes
-The aim of these programmes is to support the development of small and medium-sized enterprises (SMEs) and women in rural areas by:
-fostering innovation in agriculture and forestry;
-encouraging and facilitating research and development;
-providing financial support for rural development projects;
-supporting the implementation of rural development strategies;
-promoting the sustainable management of land and water resources;
-improving and facilitating management of their holding.
-Crop, animal, and plant insurance
-The CMS and RDP provide financial support to farmers who lose more than 70% of their income due to natural disasters, adverse climatic events and catastrophic events.
-The beneficiaries are:
-farmers who lose at least 70 % of the income they make during the year in which they become eligible to receive the aid;
-agri-food producers who lose 70 % or more of their incomes during the period in which the aid is provided;
-small and medium sized enterprises which lose more money than they make from the loss of their production;
-fisheries and aquaculture producers whose losses are less than 70 %.
-FROM WHEN DOES THE REGULE APPLY?
-   
-It has applied since 1 January 2014.
-BACKGROUND
-The European Commission has adopted a number of measures to modernise and modernise the EU’s common agricultural policy.
-For more information, see:
-‘Co-operation’ on the Commission's website.
-MAIN DOCUMENT
- 
-  барска  гарка
-Commission Implementing Regulation (EU, Euratom) No 1383/2013 of 12 December 2013 laying down the conditions of application for Co-operative Measures (OJ L 183, 14.12.2013, pp. 1-8)
-Successive amendments to Regulation (Euratom) no 1383 have been incorporated into the original text. This consolidated version is of documentary value only.
-RELATED DOCUMENTS
-                    зарга   γαρθηδη
-Communication from the Commission to the European Parliament and the Council on the re-examination of the Common Agricultural Policy (CAP) (COM(2014) 696 final of 1 January 2015)
-last update 14.02.2016
-
-
-
-Summary 171:
+Summary 162:
 Smaller Aegean islands — EU support for their economic development and local agricultural production
 Smaller and medium-sized European Union (SME) countries
 SUMMARY OF:
@@ -8021,7 +7621,7 @@ last update 14.02.2021
 
 
 
-Summary 172:
+Summary 163:
 Statistics on the carriage of goods by road, including the structure and content of the results to be disseminated.
 SUMMARY OF:
 Regulation (EEC) No 552/97 on the collection of statistical data on the transport of goods (recast)
@@ -8063,7 +7663,7 @@ last update 14.02.2021
 
 
 
-Summary 173:
+Summary 164:
 Service of judicial and extrajudicial documents in civil and commercial matters in the European Union (EU)
 Service of legal documents in Civil and Commercial Matters
 SUMMARY OF:
@@ -8103,7 +7703,7 @@ last update 14.02.2016
 
 
 
-Summary 174:
+Summary 165:
 Medicines for human use — advanced therapy medicinal products
 Medicinal products for human uses — advanced therapies
 SUMMARY OF:
@@ -8156,7 +7756,7 @@ last update 14.02.2020
 
 
 
-Summary 175:
+Summary 166:
 Emissions from motor vehicles — type approval and type-approval requirements for certain types of vehicles
 Exhaustive list of types of motor vehicles and their trailers in the European Union (EU).
 SUMMARY OF:
@@ -8205,7 +7805,7 @@ last update 14.02.2021
 
 
 
-Summary 176:
+Summary 167:
 Scientific assessment of substances on the EU’s list of foodstuffs (Safeguard of human life and health)
 Scientific Assessment of substanceson the EU's list of foods
 SUMMARY OF:
@@ -8251,7 +7851,7 @@ last update 14.02.2016
 
 
 
-Summary 177:
+Summary 168:
 Rules on accreditation, market surveillance, controls of products from non-EU countries and the CE marking (until 1 January 2020)
 Rules on accredited and market surveillance bodies
 SUMMARY OF:
@@ -8292,7 +7892,7 @@ last update 04.01.2020
 
 
 
-Summary 178:
+Summary 169:
 EU-Norway agreement on extradition of suspects arrested on the territory of another EU country (SUMMARY OF:
 Agreement between the European Union and the Kingdom of Norway and the Republic of Iceland on extradition
 WHAT IS THE AIM OF THE AGREEMENT AND OF THE DECISION?
@@ -8339,7 +7939,7 @@ Directive 2014/948/EU of 22 December 2014 amending Decision 2014/11/EU on the ap
 
 
 
-Summary 179:
+Summary 170:
 Compensation and assistance for passengers in the event of major disruption to a rail passenger service
 Compensation & assistance in the case of major disruptions to a railway passenger service	SUMMARY OF:
 Regulation (EC) No 552/2004 on compensation and assistance to passengers in connection with major disruption of rail passenger services
@@ -8382,7 +7982,7 @@ last update 04.02.2021
 
 
 
-Summary 180:
+Summary 171:
 Production of specific statistics on education, training and lifelong learning (2009-2010)
 Performance of specific EU statistics
 The production of specific European statistics
@@ -8427,7 +8027,7 @@ Last updated: 28.08.2017
 
 
 
-Summary 181:
+Summary 172:
 EU energy statistics — energy data
 EU energy data — energy statistics
 SUMMARY OF:
@@ -8473,7 +8073,7 @@ Last updated: 28.02.2021
 
 
 
-Summary 182:
+Summary 173:
 Passengers’ rights when travelling by road, rail and air
 Passengers' rights when traveling by road or air
 SUMMARY OF:
@@ -8526,7 +8126,7 @@ The European Commission adopts a proposal for a regulation to be adopted by the 
 
 
 
-Summary 183:
+Summary 174:
 Aquaculture statistics
 Aquatic statistics
 SUMMARY OF:
@@ -8567,7 +8167,7 @@ last update 04.02.2016
 
 
 
-Summary 184:
+Summary 175:
 Convention on the rational conservation and management of fishery resources in the area covered by the International Convention on the Lawful Conservation and Management of Fishery Resources (ICC-19)
 CONVENTION ON THE LAWLAW
 SUMMARY OF:
@@ -8613,7 +8213,7 @@ last update 14.02.2016
 
 
 
-Summary 185:
+Summary 176:
 Ecodesign requirements for energy-related products — EU Ecolabel (2009) — summary
 EcodesIGNOSIGN requirements for Energy-Related Products — EUEcolabel
 SUMMARY OF:
@@ -8675,7 +8275,7 @@ last update 14.02.2015
 
 
 
-Summary 186:
+Summary 177:
 Protection of medicinal products protected by patents
 Protection from patent abuse
 SUMMARY OF:
@@ -8726,7 +8326,7 @@ last update 14.02.2021
 
 
 
-Summary 187:
+Summary 178:
 Convention on jurisdiction of courts in civil and commercial matters in the EU and the EU’s eastern neighbourly countries
 Convention of the Court of Justice of the European Economic Community on jurisdiction
 SUMMARY OF:
