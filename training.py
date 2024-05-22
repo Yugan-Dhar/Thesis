@@ -95,6 +95,7 @@ def remove_outliers_from_dataset(dataset):
 
     #dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
+    print(dataset.column_names)
 
     for data in dataset:
         for example in dataset[data]:
