@@ -586,6 +586,32 @@ if __name__ == "__main__":
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
         trainer.push_to_hub()
+        
+        new_result =   {
+            "Model_ID": model_id,
+            "Date_Created": date.today().strftime("%d/%m/%Y"),
+            "Abstractive_model": args.abstractive_model,
+            "Extractive_model": args.extractive_model,
+            "Ratio_mode": args.mode,
+            "Version": model_version,
+            "Hyperparameters": {
+                "Learning_rate": args.learning_rate,
+                "Epochs": args.epochs,
+                "Batch_size": args.batch_size,
+                "Warmup_ratio": args.warmup_ratio,
+                "Weight_decay": args.weight_decay,
+                "Load_best_model_at_end": args.load_best_model_at_end,
+                "Early_stopping_patience": args.early_stopping_patience,
+                "Metric_for_best_model": args.metric_for_best_model,
+                }
+        }
+
+        previous_results.append(new_result)
+
+        with open(evaluation_results_filepath, 'w') as f:
+            json.dump(previous_results, f, indent=4)
+
+        f.close()
              
         if args.verbose:
             print(f"Training finished. Model saved to disk and pushed to Huggingface.")        
@@ -633,34 +659,18 @@ if __name__ == "__main__":
 
     #TODO: Add prometheus metrics for the evaluation metrics
 
-    if not args.testing_only:
-        new_result =   {
-            "Model_ID": model_id,
-            "Date_Created": date.today().strftime("%d/%m/%Y"),
-            "Abstractive_model": args.abstractive_model,
-            "Extractive_model": args.extractive_model,
-            "Ratio_mode": args.mode,
-            "Version": model_version,
-            "Evaluation_metrics": {
+
+    new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
+        
+    new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
                 "ROUGE-L": rouge_scores['rougeL'],
                 "BertScore": bert_score,
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
-            },
-            "Hyperparameters": {
-                "Learning_rate": args.learning_rate,
-                "Epochs": args.epochs,
-                "Batch_size": args.batch_size,
-                "Warmup_ratio": args.warmup_ratio,
-                "Weight_decay": args.weight_decay,
-                "Load_best_model_at_end": args.load_best_model_at_end,
-                "Early_stopping_patience": args.early_stopping_patience,
-                "Metric_for_best_model": args.metric_for_best_model,
-                }
-        }
-
+            }
+    if not args.testing_only:
         if args.mode == 'fxed' or args.mode == 'hybrid' and not args.no_extraction:
             new_result["Compression_ratio"] = args.compression_ratio / 10
 
@@ -669,45 +679,15 @@ if __name__ == "__main__":
             new_result["Ratio_mode"] = "No ratio"
             new_result['No_extraction'] = True
 
-        previous_results.append(new_result)
+    model_card = utils.tools.create_model_card(new_result)
 
-        model_card = utils.tools.create_model_card(new_result)
-
-        # Only MikaSie can push to the hub
-        user = whoami()['name']
-        model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
+    # Only MikaSie can push to the hub
+    user = whoami()['name']
+    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
         
-        # Convert to JSON and write to a file
-        with open(evaluation_results_filepath, 'w') as f:
-            json.dump(previous_results, f, indent=4)
-
-    else:
-        #TODO: Add the evaluation metrics to the json file and push the model card to the hub. This way we can keep the model card up to date with the latest evaluation metrics.
-
-        # We make the assumption that the model_id is already in the list of previous results. If it is not, we will get a KeyError.
-        # But this makes sense because we are testing a model that has already been trained and evaluated. 
-        # If the model hasn't been trained and uploaded to HF , it can't be loaded to begin with.
-        
-        old_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
-
-        old_result["Evaluation_metrics"] = {
-                "ROUGE-1": rouge_scores['rouge1'],
-                "ROUGE-2": rouge_scores['rouge2'],
-                "ROUGE-L": rouge_scores['rougeL'],
-                "BertScore": bert_score,
-                "BARTScore": bart_score,
-                "BLANC": blanc_score
-            }
-
-        #TODO: fix this, error is throuwn because of a type error in the model card creation while the variable is a string...
-        model_card = utils.tools.create_model_card(old_result)
-
-        # Only MikaSie can push to the hub
-        user = whoami()['name']
-        model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
-
-        with open(evaluation_results_filepath, 'w') as f:
-            json.dump(previous_results, f, indent=4)
+    # Convert to JSON and write to a file
+    with open(evaluation_results_filepath, 'w') as f:
+        json.dump(previous_results, f, indent=4)
     
 
     if args.verbose:
