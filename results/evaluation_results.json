@@ -1,2 +1,29 @@
 [
+    {
+        "Model_ID": "BART_no_extraction_V1",
+        "Date_Created": "22/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
+        "Version": 1,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.47646418031382287,
+            "ROUGE-2": 0.20808035529031413,
+            "ROUGE-L": 0.2270626935683912,
+            "BertScore": 0.8714265097452941,
+            "BARTScore": -3.4523361168760163,
+            "BLANC": 0.17636347702399824
+        },
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "No_extraction": true
+    }
 ]
