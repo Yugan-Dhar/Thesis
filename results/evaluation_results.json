@@ -26,7 +26,6 @@
         },
         "No_extraction": true
     },
-
     {
         "Model_ID": "RoBERTa_BART_hybrid_V1",
         "Date_Created": "22/05/2024",
@@ -44,6 +43,14 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "Compression_ratio": 0.4
+        "Compression_ratio": 0.4,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.4464864789298892,
+            "ROUGE-2": 0.1814730353527318,
+            "ROUGE-L": 0.21768740530349745,
+            "BertScore": 0.8698839022460596,
+            "BARTScore": -3.6403319515995474,
+            "BLANC": 0.14607111000829542
+        }
     }
 ]
