@@ -36,15 +36,16 @@ def write_actual_summaries_to_file():
         None
     """
     eur_lex_sum = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+
     path = os.path.join('results', 'actual_summaries.txt')
-    # Open the file in write mode
+
     with open(path, 'w') as f:
-        # Iterate over the dataset
         for i in range(len(eur_lex_sum['test'])):
-            # Write the summary to the file
             f.write(f"Summary {i}:\n")
             f.write(eur_lex_sum['test']['summary'][i] + '\n\n\n\n')
     f.close()
+
+
 
     print("Summaries written to file.")
 
@@ -407,7 +408,7 @@ if __name__ == "__main__":
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
-    parser.add_argument('-w_o_s', '--write_original_summaries', action= "store_true", default= False,
+    parser.add_argument('-wos', '--write_original_summaries', action= "store_true", default= False,
                         help= "Write the actual summaries to a txt file for reference.")
     
     args = parser.parse_args()  
@@ -507,11 +508,11 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
+        label_str = dataset["test"]["summary"]
 
         if args.verbose:
             print(f"Dataset found and loaded.")
 
-    
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
 
@@ -587,7 +588,7 @@ if __name__ == "__main__":
         trainer.push_to_hub()
              
         if args.verbose:
-            print(f"Training finished and model saved to disk")        
+            print(f"Training finished. Model saved to disk and pushed to Huggingface.")        
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
