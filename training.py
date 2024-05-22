@@ -508,6 +508,7 @@ if __name__ == "__main__":
             "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
+        
         label_str = dataset["test"]["summary"]
 
         if args.verbose:
