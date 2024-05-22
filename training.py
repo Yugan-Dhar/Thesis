@@ -95,7 +95,6 @@ def remove_outliers_from_dataset(dataset):
 
     #dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
-    print(dataset.column_names)
     for data in dataset:
         for example in dataset[data]:
             averages.append(example['word_length'])
@@ -418,9 +417,9 @@ if __name__ == "__main__":
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     if args.mode == 'fixed' or args.mode == 'hybrid':
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{1024}")
     else:
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
+        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{1024}")
     
     dataset = load_dataset("arrow", 
             data_files= {
