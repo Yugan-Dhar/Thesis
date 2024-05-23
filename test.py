@@ -1,13 +1,48 @@
 import sys
+import argparse
 
 def main():
-    ex_model = sys.argv[1]
-    num = sys.argv[2]  # The fixed number 4
-    ab_model = sys.argv[3]
-    mode = sys.argv[5]  # sys.argv[4] is '-m'
+    
+    parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
-    print(f"EX_MODEL: {ex_model}, NUM: {num}, AB_MODEL: {ab_model}, MODE: {mode}")
+    parser.add_argument('extractive_model', type= str, 
+                        help= "The extractive model to be used for pre-processing the dataset.")
+    parser.add_argument('compression_ratio', type= int, default= 4, choices= range(1, 10),
+                        help= "The compression ratio to be used for the extractive model. Is in the form of an integer where 5 is 0.5, 9 is 0.9, etc.")
+    parser.add_argument('abstractive_model', type= str,
+                        help= "The abstractive model to be used for fine-tuning.")
+    
+    #Optional arguments
+    parser.add_argument('-t', '--testing_only', action= "store_true", default= False,
+                        help= "Train the abstractive model. If not set, the model will not be trained and only the evaluation metrics will be calculated.")
+    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
+                        help= "The ratio mode to use for the extractive summarization stage.")
+    parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
+                        help= "The learning rate to train the abstractive model with.")
+    parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
+                        help= "The amount of epochs to train the abstractive model for.")
+    parser.add_argument('-b', '--batch_size', type= int, default= 8, metavar= "",
+                        help= "The batch size to train the abstractive model with.")
+    parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
+                        help= "The warmup ratio to train the abstractive model for.")
+    parser.add_argument('-v', '--verbose', action= "store_false", default= True,
+                        help= "Turn verbosity on or off.")
+    parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
+                        help= "The weight decay to train the abstractive model with.")
+    parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
+                        help= "Load the best model at the end of training.")
+    parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
+                        help= "The amount of patience to use for early stopping.")
+    parser.add_argument('-mfm', '--metric_for_best_model', type= str, default= "eval_loss", metavar= "",
+                        help= "The metric to use for selection of the best model.")
+    parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
+                        help= "Finetune a model on the whole dataset without any extractive steps.")                
+    parser.add_argument('-wos', '--write_original_summaries', action= "store_true", default= False,
+                        help= "Write the actual summaries to a txt file for reference.")
+    
+    args = parser.parse_args()  
+
+    print(f"EX_MODEL: {args.extractive_model}, NUM: {args.compression_ratio}, AB_MODEL: {args.abstractive_model}, MODE: {args.mode}")
 
 if __name__ == "__main__":
     main()
-    print("Hello World!")
