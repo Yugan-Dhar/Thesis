@@ -521,8 +521,10 @@ if __name__ == "__main__":
             "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
         })
         
+        
         if args.verbose:
-            print(f"Dataset already exists. Loading the dataset from {dataset_path}.")
+            print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")
+            print(f"Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
@@ -565,7 +567,7 @@ if __name__ == "__main__":
         label_names=["labels"],
         report_to = "wandb",
         run_name = model_id,
-        predict_with_generate = True,
+        predict_with_generate = True, 
         eval_accumulation_steps = 16,
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
