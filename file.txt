@@ -1,1 +1,1 @@
-EX_MODEL: EX_MODEL_5, NUM: 4, AB_MODEL: AB_model_5, MODE: hybrid
+EX_MODEL: EX_MODEL_6, NUM: 4, AB_MODEL: AB_model_6, MODE: hybrid
