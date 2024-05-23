@@ -18,6 +18,8 @@ docs/card_template.md
 !results/text_outputs/*
 
 run_from_personal.sh
+vastai.sh
+
 wandb
 
 slurm_outputs

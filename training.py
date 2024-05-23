@@ -410,7 +410,7 @@ if __name__ == "__main__":
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.
     os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    os.environ["WANDB_LOG_MODEL"] = "end"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     
