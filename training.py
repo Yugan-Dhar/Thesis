@@ -429,10 +429,10 @@ if __name__ == "__main__":
         })
     
     print(f"Length train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-    """dataset = dataset.map(calculate_word_length_summary)
+    dataset = dataset.map(calculate_word_length_summary)
 
     dataset = remove_outliers_from_dataset(dataset)
-    dataset.save_to_disk(dataset_path)"""
+    dataset.save_to_disk(dataset_path)
 
 
     if args.testing_only:
