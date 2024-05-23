@@ -566,6 +566,7 @@ if __name__ == "__main__":
         evaluation_strategy = "epoch",
         label_names=["labels"],
         report_to = "wandb",
+        logging_strategy = "epoch",
         run_name = model_id,
         predict_with_generate = True, 
         eval_accumulation_steps = 16,
