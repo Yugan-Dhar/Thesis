@@ -43,6 +43,12 @@ def main():
     args = parser.parse_args()  
 
     print(f"EX_MODEL: {args.extractive_model}, NUM: {args.compression_ratio}, AB_MODEL: {args.abstractive_model}, MODE: {args.mode}")
+    # Open txt file in append mode
+    with open('file.txt', 'w+') as file:
+        # Write the arguments to the file
+        file.write(f"EX_MODEL: {args.extractive_model}, NUM: {args.compression_ratio}, AB_MODEL: {args.abstractive_model}, MODE: {args.mode}\n")
+
+
 
 if __name__ == "__main__":
     main()
