@@ -416,26 +416,6 @@ if __name__ == "__main__":
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
-    if args.mode == 'fixed' or args.mode == 'hybrid':
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{1024}")
-    else:
-        dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{1024}")
-    
-    dataset = load_dataset("arrow", 
-            data_files= {
-            "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
-            "validation": os.path.join(dataset_path, "validation", "data-00000-of-00001.arrow"),
-            "test": os.path.join(dataset_path, "test", "data-00000-of-00001.arrow")
-        })
-    
-    print(f"Length train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-    dataset = dataset.map(calculate_word_length_summary)
-
-    dataset = remove_outliers_from_dataset(dataset)
-    dataset.save_to_disk(dataset_path)
-
-    print(f"Length train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
-
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
         abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
@@ -527,7 +507,9 @@ if __name__ == "__main__":
         
         if args.verbose:
             print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")
-            print(f"Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+
+    if args.verbose:
+        print(f"Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
