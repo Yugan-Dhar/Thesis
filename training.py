@@ -406,6 +406,8 @@ if __name__ == "__main__":
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
     parser.add_argument('-wos', '--write_original_summaries', action= "store_true", default= False,
                         help= "Write the actual summaries to a txt file for reference.")
+    parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
+                        help= "Only preprocess the dataset and exit the program.")
     
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.
@@ -494,6 +496,10 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"\nDataset pre-processed and saved to {dataset_path}")
+
+        if args.preprocessing_only:
+            print("Preprocessing finished. Exiting program.")
+            exit()
 
     else:      
         
