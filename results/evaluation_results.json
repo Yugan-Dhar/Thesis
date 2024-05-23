@@ -79,5 +79,31 @@
             "BARTScore": -3.5692927664218668,
             "BLANC": 0.13223304287163443
         }
+    },
+    {
+        "Model_ID": "RoBERTa_BART_dependent_V1",
+        "Date_Created": "23/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.4872938786410348,
+            "ROUGE-2": 0.1973809482262459,
+            "ROUGE-L": 0.22468059214646052,
+            "BertScore": 0.872067945296538,
+            "BARTScore": -3.617846772657426,
+            "BLANC": 0.15405324646189078
+        }
     }
 ]
