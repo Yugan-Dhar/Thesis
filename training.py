@@ -62,6 +62,11 @@ def set_device(abstractive_model, args):
     None
     """
     if torch.cuda.is_available():
+        if args.gpu_index == 0:
+            device = torch.device('cuda')
+        else:
+            device = torch.device(f'cuda:{args.gpu_index}')
+
         device = torch.device('cuda')
         abstractive_model.to(device)
         if args.verbose:
@@ -408,6 +413,8 @@ if __name__ == "__main__":
                         help= "Write the actual summaries to a txt file for reference.")
     parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
                         help= "Only preprocess the dataset and exit the program.")
+    parser.add_argument('-g', '--gpu_index', type= int, default= 0, metavar= "",
+                        help= "The index of the GPU to use for pre_processing.")
     
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.

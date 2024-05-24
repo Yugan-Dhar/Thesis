@@ -47,7 +47,7 @@ modes=(${modes[@]})
 
 # Run the testing.py script with different parameters
 for i in ${!ex_models[@]}; do
-    python3 training.py ${ex_models[$i]} 4 ${ab_models[$i]} -m ${modes[$i]} -po
+    python3 training.py ${ex_models[$i]} 4 ${ab_models[$i]} -m ${modes[$i]} -po -gpu 1
     
     # Add and commit results to git repository after each run
     echo "Done with ${ex_models[$i]}, ${ab_models[$i]}, ${modes[$i]}"
