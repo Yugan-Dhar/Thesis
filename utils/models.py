@@ -74,7 +74,7 @@ def initialize_abstractive_model(model_init):
         model = PegasusXForConditionalGeneration.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
-    elif model_init == 'meta-llama/Meta-Llama-3-8B':
+    elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
         model = AutoModelForCausalLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
@@ -105,7 +105,8 @@ def select_abstractive_model(model_name):
     'Pegasus': 'google/pegasus-large',
     #Maybe change this to the base version
     'PegasusX': 'google/pegasus-x-base',
-    'LLama3': 'meta-llama/Meta-Llama-3-8B'}
+    'LLama3': 'meta-llama/Meta-Llama-3-8B',
+    'Mixtral': 'mistralai/Mixtral-8x7B-v0.1'}
 
     if model_name in models:
         return initialize_abstractive_model(models[model_name])
