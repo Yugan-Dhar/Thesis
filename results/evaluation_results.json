@@ -132,5 +132,31 @@
             "BARTScore": -3.32670807305661,
             "BLANC": 0.16999137929721678
         }
+    },
+    {
+        "Model_ID": "LegalBERT_BART_dependent_V1",
+        "Date_Created": "26/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "LegalBERT",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.46186028797617396,
+            "ROUGE-2": 0.1853815707493763,
+            "ROUGE-L": 0.2173901152407911,
+            "BertScore": 0.8712636069212546,
+            "BARTScore": -3.48031720236027,
+            "BLANC": 0.14629949060495825
+        }
     }
 ]
