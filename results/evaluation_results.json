@@ -212,5 +212,58 @@
             "BARTScore": -3.565346535357683,
             "BLANC": 0.14228194404852756
         }
+    },
+    {
+        "Model_ID": "LexLM_BART_fixed_V1",
+        "Date_Created": "27/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "LexLM",
+        "Ratio_mode": "fixed",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Compression_ratio": 0.4,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.457139723518014,
+            "ROUGE-2": 0.17447459794189696,
+            "ROUGE-L": 0.21230244227673456,
+            "BertScore": 0.869225628882147,
+            "BARTScore": -3.6541461971219027,
+            "BLANC": 0.13500546547216608
+        }
+    },
+    {
+        "Model_ID": "LexLM_BART_dependent_V1",
+        "Date_Created": "27/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "LexLM",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.4858562130697507,
+            "ROUGE-2": 0.1953716574830835,
+            "ROUGE-L": 0.22268177745332296,
+            "BertScore": 0.8713496963405076,
+            "BARTScore": -3.568149432123706,
+            "BLANC": 0.15431256468799454
+        }
     }
 ]
