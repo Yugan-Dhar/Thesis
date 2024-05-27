@@ -203,6 +203,14 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "Compression_ratio": 0.4
+        "Compression_ratio": 0.4,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.44691280129794786,
+            "ROUGE-2": 0.1774386577381308,
+            "ROUGE-L": 0.21368587545058315,
+            "BertScore": 0.8664783139468571,
+            "BARTScore": -3.565346535357683,
+            "BLANC": 0.14228194404852756
+        }
     }
 ]
