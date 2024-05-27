@@ -319,5 +319,31 @@
             "BARTScore": -3.6026945367205743,
             "BLANC": 0.12578539274033482
         }
+    },
+    {
+        "Model_ID": "LexLM_Longformer_BART_dependent_V1",
+        "Date_Created": "27/05/2024",
+        "Abstractive_model": "BART",
+        "Extractive_model": "LexLM_Longformer",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.4751032464709644,
+            "ROUGE-2": 0.1852326490069065,
+            "ROUGE-L": 0.21642993342050565,
+            "BertScore": 0.8688659298353355,
+            "BARTScore": -3.5204392025590607,
+            "BLANC": 0.14192878569727263
+        }
     }
 ]
