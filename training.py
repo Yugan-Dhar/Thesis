@@ -531,7 +531,7 @@ if __name__ == "__main__":
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
     if args.verbose:
-        print("Dataset preprocessed and ready for training the abstractive model.")
+        print("Dataset preprocessed and ready for the next step.")
 
     
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
