@@ -677,7 +677,7 @@ if __name__ == "__main__":
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
                 "ROUGE-L": rouge_scores['rougeL'],
-                "BertScore": bert_score,
+                "BERTScore": bert_score,
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
             }
