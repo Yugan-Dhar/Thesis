@@ -16,6 +16,7 @@ docs/card_template.md
 !results/evaluation_results.json
 !results/text_outputs/
 !results/text_outputs/*
+!results/graphs.ipynb
 
 run_from_personal.sh
 vastai.sh
