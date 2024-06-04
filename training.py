@@ -444,6 +444,7 @@ if __name__ == "__main__":
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
+        print(f"Context length for abstractive model: {context_length_abstractive_model}")
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
