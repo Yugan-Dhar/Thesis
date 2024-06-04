@@ -447,7 +447,7 @@ if __name__ == "__main__":
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
-    #set_device(abstractive_model, args)
+    set_device(abstractive_model, args)
     
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':

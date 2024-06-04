@@ -103,7 +103,6 @@ def select_abstractive_model(model_name):
     'T5': 't5-large',
     'LongT5': 'google/long-t5-tglobal-large', 
     'Pegasus': 'google/pegasus-large',
-    #Maybe change this to the base version
     'PegasusX': 'google/pegasus-x-base',
     'LLama3': 'meta-llama/Meta-Llama-3-8B',
     'Mixtral': 'mistralai/Mixtral-8x7B-v0.1'}
