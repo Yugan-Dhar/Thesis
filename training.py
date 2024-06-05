@@ -59,14 +59,16 @@ def set_device(abstractive_model, args):
     - args: Command-line arguments containing the device configuration.
 
     Returns:
-    None
+    - num_gpu: The number of GPUs available for training.
     """
     if torch.cuda.is_available():
+        num_gpu = torch.cuda.device_count()
         device = torch.device('cuda')
         abstractive_model.to(device)
         if args.verbose:
-            print(f"Using abstractive model on device: {device}")
+            print(f"Using abstractive model on {num_gpu} devices")
 
+    return num_gpu  
 
 def calculate_word_length_summary(example): 
     """
@@ -388,7 +390,7 @@ if __name__ == "__main__":
                         help= "The learning rate to train the abstractive model with.")
     parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
-    parser.add_argument('-b', '--batch_size', type= int, default= 8, metavar= "",
+    parser.add_argument('-b', '--batch_size', type= int, default= 16, metavar= "",
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
@@ -448,7 +450,7 @@ if __name__ == "__main__":
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
-    set_device(abstractive_model, args)
+    num_gpu = set_device(abstractive_model, args)
     
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
@@ -546,8 +548,8 @@ if __name__ == "__main__":
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.epochs,
-        per_device_train_batch_size = args.batch_size,
-        per_device_eval_batch_size = args.batch_size,
+        per_device_train_batch_size = args.batch_size // num_gpu,
+        per_device_eval_batch_size = args.batch_size // num_gpu,
         warmup_ratio = args.warmup_ratio,
         weight_decay = args.weight_decay,
         logging_dir = os.path.join('results', model_id, 'logs'),
