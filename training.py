@@ -386,12 +386,12 @@ if __name__ == "__main__":
                         help= "Train the abstractive model. If not set, the model will not be trained and only the evaluation metrics will be calculated.")
     parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
                         help= "The ratio mode to use for the extractive summarization stage.")
-    parser.add_argument('-lr', '--learning_rate', type= float, default= 5e-5, metavar= "",
-                        help= "The learning rate to train the abstractive model with.")
-    parser.add_argument('-e', '--epochs', type= int, default= 40, metavar= "",
+    parser.add_argument('-nte', '--num_train_epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
     parser.add_argument('-b', '--batch_size', type= int, default= 16, metavar= "",
                         help= "The batch size to train the abstractive model with.")
+    parser.add_argument('-gas', '--gradient_accumulation_steps', type= int, default= 1, metavar= "",
+                        help= "The amount of gradient accumulation steps to train the abstractive model with.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
@@ -547,9 +547,10 @@ if __name__ == "__main__":
 
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
-        num_train_epochs = args.epochs,
+        num_train_epochs = args.num_train_epochs,
         per_device_train_batch_size = args.batch_size // num_gpu,
         per_device_eval_batch_size = args.batch_size // num_gpu,
+        gradient_accumulation_steps = args.gradient_accumulation_steps,
         warmup_ratio = args.warmup_ratio,
         weight_decay = args.weight_decay,
         logging_dir = os.path.join('results', model_id, 'logs'),
@@ -605,8 +606,8 @@ if __name__ == "__main__":
             "Ratio_mode": args.mode,
             "Version": model_version,
             "Hyperparameters": {
-                "Learning_rate": args.learning_rate,
-                "Epochs": args.epochs,
+                "Learning_rate": 5e-5,
+                "Epochs": args.num_train_epochs,
                 "Batch_size": args.batch_size,
                 "Warmup_ratio": args.warmup_ratio,
                 "Weight_decay": args.weight_decay,
@@ -693,7 +694,7 @@ if __name__ == "__main__":
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)
     f.close()
-    
+
     model_card = utils.tools.create_model_card(new_result)
 
     # Only MikaSie can push to the hub
