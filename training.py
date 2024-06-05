@@ -608,7 +608,7 @@ if __name__ == "__main__":
             "Hyperparameters": {
                 "Learning_rate": 5e-5,
                 "Epochs": args.num_train_epochs,
-                "Batch_size": args.batch_size,
+                "Batch_size": args.batch_size * args.gradient_accumulation_steps,
                 "Warmup_ratio": args.warmup_ratio,
                 "Weight_decay": args.weight_decay,
                 "Load_best_model_at_end": args.load_best_model_at_end,
