@@ -452,5 +452,31 @@
             "BARTScore": -3.589553962206707,
             "BLANC": 0.14600221790156337
         }
+    },
+    {
+        "Model_ID": "T5_no_extraction_V1",
+        "Date_Created": "05/06/2024",
+        "Abstractive_model": "T5",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.3033175377014679,
+            "ROUGE-2": 0.1240611664538099,
+            "ROUGE-L": 0.1994150614076662,
+            "BERTScore": 0.8442945966507469,
+            "BARTScore": -1.512467493558063,
+            "BLANC": 0.1426287498004355
+        }
     }
 ]
