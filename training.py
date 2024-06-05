@@ -672,8 +672,6 @@ if __name__ == "__main__":
     blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
 
-    #TODO: Add prometheus metrics for the evaluation metrics
-
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
         
     new_result["Evaluation_metrics"] = {
@@ -685,17 +683,17 @@ if __name__ == "__main__":
                 "BLANC": blanc_score
             }
 
-     # Convert to JSON and write to a file
-    with open(evaluation_results_filepath, 'w') as f:
-        json.dump(previous_results, f, indent=4)
-    f.close()
-
     if not args.testing_only:
         if args.no_extraction:
             new_result["Extractive_model"] = "No extractive model"
             new_result["Ratio_mode"] = "No ratio"
             new_result['No_extraction'] = True
 
+         # Convert to JSON and write to a file
+    with open(evaluation_results_filepath, 'w') as f:
+        json.dump(previous_results, f, indent=4)
+    f.close()
+    
     model_card = utils.tools.create_model_card(new_result)
 
     # Only MikaSie can push to the hub

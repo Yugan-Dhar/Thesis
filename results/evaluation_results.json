@@ -457,8 +457,8 @@
         "Model_ID": "T5_no_extraction_V1",
         "Date_Created": "05/06/2024",
         "Abstractive_model": "T5",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "dependent",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
         "Version": 1,
         "Hyperparameters": {
             "Learning_rate": 5e-05,

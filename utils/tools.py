@@ -103,7 +103,7 @@ def create_model_card(results):
             'PLACEHOLDER_ROUGE1': str(results['Evaluation_metrics']['ROUGE-1']),
             'PLACEHOLDER_ROUGE2': str(results['Evaluation_metrics']['ROUGE-2']),
             'PLACEHOLDER_ROUGEL': str(results['Evaluation_metrics']['ROUGE-L']),
-            'PLACEHOLDER_BERTSCORE': str(results['Evaluation_metrics']['BertScore']),
+            'PLACEHOLDER_BERTSCORE': str(results['Evaluation_metrics']['BERTScore']),
             'PLACEHOLDER_BARTSCORE': str(results['Evaluation_metrics']['BARTScore']),
             'PLACEHOLDER_BLANC': str(results['Evaluation_metrics']['BLANC'])
         }
