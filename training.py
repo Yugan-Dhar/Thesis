@@ -427,7 +427,7 @@ if __name__ == "__main__":
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "end"
 
-    #extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
+    extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
