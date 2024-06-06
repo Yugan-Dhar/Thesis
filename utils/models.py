@@ -81,7 +81,7 @@ def initialize_abstractive_model(model_init):
     else:
         model = AutoModelForSeq2SeqLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
-    model.gradient_checkpointing_enable()
+    model.config.use_cache = False
 
     return model, tokenizer
 
