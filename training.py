@@ -564,11 +564,12 @@ if __name__ == "__main__":
         report_to = "wandb",
         logging_strategy = "epoch",
         run_name = model_id,
-        #predict_with_generate = True, 
+        predict_with_generate = True, 
         eval_accumulation_steps = 8,
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
-        gradient_checkpointing= True,
+        #gradient_checkpointing= True,
+        fp16= True,
     )
     
     # Defin ethe data collator
