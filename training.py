@@ -21,7 +21,7 @@ from string2string.similarity import BARTScore
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 
-def write_actual_summaries_to_file():
+def write_actual_summaries_and_references_to_file(dataset):
     """
     Writes the actual summaries from the 'eur-lex-sum' dataset to a file named 'actual_summaries.txt'.
     ONLY NEEDS TO BE RUN ONCE TO WRITE THE ACTUAL SUMMARIES TO A FILE.
@@ -35,19 +35,16 @@ def write_actual_summaries_to_file():
     Returns:
         None
     """
-    eur_lex_sum = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
 
     path = os.path.join('results', 'actual_summaries.txt')
 
     with open(path, 'w') as f:
-        for i in range(len(eur_lex_sum['test'])):
+        for i in range(len(dataset['test'])):
             f.write(f"Summary {i}:\n")
-            f.write(eur_lex_sum['test']['summary'][i] + '\n\n\n\n')
+            f.write(dataset['test']['summary'][i] + '\n\n\n\n')
     f.close()
 
-
-
-    print("Summaries written to file.")
+    print("References and summaries and  written to file.")
 
 
 def set_device(abstractive_model, args):
@@ -412,7 +409,7 @@ if __name__ == "__main__":
                         help= "The metric to use for selection of the best model.")
     parser.add_argument('-ne', '--no_extraction', action= "store_true", default= False,
                         help= "Finetune a model on the whole dataset without any extractive steps.")                
-    parser.add_argument('-wos', '--write_original_summaries', action= "store_true", default= False,
+    parser.add_argument('-wr', '--write_actual_summaries_and_references_to_file', action= "store_true", default= False,
                         help= "Write the actual summaries to a txt file for reference.")
     parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
                         help= "Only preprocess the dataset and exit the program.")
@@ -437,10 +434,6 @@ if __name__ == "__main__":
         abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
         print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
 
-
-    if args.write_original_summaries:
-        write_actual_summaries_to_file()
-
     #Needs to be set manually because not all models have same config setup
     if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
@@ -456,7 +449,7 @@ if __name__ == "__main__":
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
-    num_gpu = set_device(abstractive_model, args)
+    #num_gpu = set_device(abstractive_model, args)
     
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
@@ -527,6 +520,8 @@ if __name__ == "__main__":
     if args.verbose:
         print(f"Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
+    if args.write_actual_summaries_and_references_to_file:
+        write_actual_summaries_and_references_to_file(dataset)
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     label_str = dataset["test"]["summary"]
