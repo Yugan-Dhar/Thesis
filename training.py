@@ -544,7 +544,13 @@ if __name__ == "__main__":
     if args.verbose:
         print("Dataset preprocessed and ready for the next step.")
 
-    
+    from peft import LoraConfig
+    Lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    lora_dropout=0.05,
+    bias='none'
+    )
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
@@ -579,6 +585,7 @@ if __name__ == "__main__":
         gradient_checkpointing= args.gradient_checkpointing,
         fp16= args.fp16,
         bf16= args.bf16,
+        peft_config = Lora_config
     )
     
     # Defin ethe data collator
