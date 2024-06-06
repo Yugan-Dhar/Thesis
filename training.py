@@ -392,6 +392,10 @@ if __name__ == "__main__":
                         help= "The batch size to train the abstractive model with.")
     parser.add_argument('-gas', '--gradient_accumulation_steps', type= int, default= 1, metavar= "",
                         help= "The amount of gradient accumulation steps to train the abstractive model with.")
+    parser.add_argument('-gc', '--gradient_checkpointing', action= "store_true", default= False,
+                        help= "Use gradient checkpointing to train the abstractive model.")
+    parser.add_argument('-fp16', '--fp16', action= "store_true", default= False,
+                        help= "Use mixed precision training to train the abstractive model.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
@@ -568,8 +572,8 @@ if __name__ == "__main__":
         eval_accumulation_steps = 8,
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
-        #gradient_checkpointing= True,
-        #fp16= True,
+        gradient_checkpointing= args.gradient_checkpointing,
+        fp16= args.fp16,
     )
     
     # Defin ethe data collator
