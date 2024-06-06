@@ -478,5 +478,24 @@
             "BARTScore": -1.512467493558063,
             "BLANC": 0.1426287498004355
         }
+    },
+    {
+        "Model_ID": "Pegasus_no_extraction_V1",
+        "Date_Created": "05/06/2024",
+        "Abstractive_model": "Pegasus",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "fixed",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 8,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "Compression_ratio": 0.4
     }
 ]
