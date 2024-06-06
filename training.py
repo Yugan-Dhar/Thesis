@@ -21,7 +21,7 @@ from string2string.similarity import BARTScore
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
 
-def write_actual_summaries_and_references_to_file(dataset):
+def write_actual_summaries_and_references_to_file():
     """
     Writes the actual summaries from the 'eur-lex-sum' dataset to a file named 'actual_summaries.txt'.
     ONLY NEEDS TO BE RUN ONCE TO WRITE THE ACTUAL SUMMARIES TO A FILE.
@@ -35,7 +35,8 @@ def write_actual_summaries_and_references_to_file(dataset):
     Returns:
         None
     """
-
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
+    
     path = os.path.join('results', 'actual_summaries.txt')
 
     with open(path, 'w') as f:
@@ -43,6 +44,13 @@ def write_actual_summaries_and_references_to_file(dataset):
             f.write(f"Summary {i}:\n")
             f.write(dataset['test']['summary'][i] + '\n\n\n\n')
     f.close()
+
+    path = os.path.join('results', 'references.txt')
+
+    with open(path, 'w') as f:
+        for i in range(len(dataset['test'])):
+            f.write(f"Reference {i}:\n")
+            f.write(dataset['test']['reference'][i] + '\n\n\n\n')
 
     print("References and summaries and  written to file.")
 
@@ -442,6 +450,8 @@ if __name__ == "__main__":
     else:
         context_length_abstractive_model = abstractive_model.config.max_position_embeddings
 
+    if args.write_actual_summaries_and_references_to_file:
+        write_actual_summaries_and_references_to_file()
 
     if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
@@ -517,11 +527,7 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")
 
-    if args.verbose:
-        print(f"Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
-    if args.write_actual_summaries_and_references_to_file:
-        write_actual_summaries_and_references_to_file(dataset)
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     label_str = dataset["test"]["summary"]
