@@ -540,7 +540,7 @@ if __name__ == "__main__":
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
-    if args.abstractive_model == 'BART':
+    if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
         gen_max_length = 1024
     else:
         gen_max_length = 1500
