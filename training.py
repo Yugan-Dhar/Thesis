@@ -569,7 +569,7 @@ if __name__ == "__main__":
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
         #gradient_checkpointing= True,
-        fp16= True,
+        #fp16= True,
     )
     
     # Defin ethe data collator
