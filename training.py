@@ -585,7 +585,6 @@ if __name__ == "__main__":
         gradient_checkpointing= args.gradient_checkpointing,
         fp16= args.fp16,
         bf16= args.bf16,
-        peft_config = Lora_config
     )
     
     # Defin ethe data collator
@@ -600,6 +599,7 @@ if __name__ == "__main__":
         eval_dataset = dataset["validation"],
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+        peft_config = Lora_config,
     )
 
     if not args.verbose:
