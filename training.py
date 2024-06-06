@@ -396,6 +396,8 @@ if __name__ == "__main__":
                         help= "Use gradient checkpointing to train the abstractive model.")
     parser.add_argument('-fp16', '--fp16', action= "store_true", default= False,
                         help= "Use mixed precision training to train the abstractive model.")
+    parser.add_argument('-bf16', '--bf16', action= "store_true", default= False,
+                        help= "Use bfloat16 precision training to train the abstractive model.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
@@ -574,6 +576,7 @@ if __name__ == "__main__":
         hub_model_id = f"{model_id}",
         gradient_checkpointing= args.gradient_checkpointing,
         fp16= args.fp16,
+        bf16= args.bf16,
     )
     
     # Defin ethe data collator
