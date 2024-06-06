@@ -568,6 +568,7 @@ if __name__ == "__main__":
         eval_accumulation_steps = 8,
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
+        gradient_checkpointing= True,
     )
     
     # Defin ethe data collator
