@@ -459,7 +459,7 @@ if __name__ == "__main__":
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
-    #num_gpu = set_device(abstractive_model, args)
+    num_gpu = set_device(abstractive_model, args)
     
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
@@ -527,7 +527,8 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")
 
-
+    if args.verbose:
+        print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     label_str = dataset["test"]["summary"]
