@@ -461,6 +461,7 @@ if __name__ == "__main__":
 
     #num_gpu = set_device(abstractive_model, args)
     num_gpu = torch.cuda.device_count()
+
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
     if args.mode == 'fixed' or args.mode == 'hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
@@ -503,7 +504,6 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
-        #dataset = dataset.map(get_summarized_chunks_batch_version, batched = True, batch_size = 8)
         dataset = dataset.map(get_summarized_chunks)
         dataset.save_to_disk(dataset_path)
 
@@ -544,13 +544,6 @@ if __name__ == "__main__":
     if args.verbose:
         print("Dataset preprocessed and ready for the next step.")
 
-    from peft import LoraConfig
-    Lora_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
-    lora_dropout=0.05,
-    bias='none'
-    )
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
@@ -599,7 +592,6 @@ if __name__ == "__main__":
         eval_dataset = dataset["validation"],
         data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-        peft_config = Lora_config,
     )
 
     if not args.verbose:
