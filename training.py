@@ -561,11 +561,14 @@ if __name__ == "__main__":
     else:
         gen_max_length = 1500
 
+    adjusted_size = num_gpu * 2
+    eval_batch_size = args.batch_size // adjusted_size
+    
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.num_train_epochs,
         per_device_train_batch_size = args.batch_size // num_gpu,
-        per_device_eval_batch_size = args.batch_size // num_gpu,
+        per_device_eval_batch_size = args.batch_size // eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
         gradient_accumulation_steps = args.gradient_accumulation_steps,
         warmup_ratio = args.warmup_ratio,
         weight_decay = args.weight_decay,
@@ -653,6 +656,8 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting evaluation on the test dataset...")
         
+    #TODO: predict per quarter of the dataset to avoid memory issues
+
     results = trainer.predict(dataset['test'])
 
     pred_ids = results.predictions
