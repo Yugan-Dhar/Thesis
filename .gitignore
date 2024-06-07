@@ -18,9 +18,9 @@ docs/card_template.md
 !results/text_outputs/*
 !results/graphs.ipynb
 
-run_from_personal.sh
-vastai.sh
-vastai_ne.sh
+scripts/*
+!scripts/preprocessing.sh
+
 wandb
 
 slurm_outputs
