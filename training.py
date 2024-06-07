@@ -529,6 +529,15 @@ if __name__ == "__main__":
 
     if args.verbose:
         print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+
+    # This extra check is implemented to ensure that the same dataset is used every time! Sometimes, this went wrong.
+    if (len(dataset['train']) == 1129 and len(dataset['validation']) == 187 and len(dataset['test']) == 188):
+        print("Dataset is being adjusted to the correct size.....")
+        dataset = dataset.map(calculate_word_length_summary)
+        dataset = remove_outliers_from_dataset(dataset)
+        print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+
+
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     label_str = dataset["test"]["summary"]
