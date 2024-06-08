@@ -389,7 +389,7 @@ if __name__ == "__main__":
     #Optional arguments
     parser.add_argument('-t', '--testing_only', action= "store_true", default= False,
                         help= "Train the abstractive model. If not set, the model will not be trained and only the evaluation metrics will be calculated.")
-    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'fixed',
+    parser.add_argument('-m', '--mode', choices= ['fixed', 'dependent', 'hybrid'], type= str, default= 'dependent',
                         help= "The ratio mode to use for the extractive summarization stage.")
     parser.add_argument('-nte', '--num_train_epochs', type= int, default= 40, metavar= "",
                         help= "The amount of epochs to train the abstractive model for.")
