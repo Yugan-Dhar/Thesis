@@ -568,7 +568,7 @@ if __name__ == "__main__":
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.num_train_epochs,
         per_device_train_batch_size = args.batch_size // num_gpu,
-        per_device_eval_batch_size = args.batch_size // eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+        per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
         gradient_accumulation_steps = args.gradient_accumulation_steps,
         warmup_ratio = args.warmup_ratio,
         weight_decay = args.weight_decay,
@@ -656,7 +656,6 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting evaluation on the test dataset...")
         
-    #TODO: predict per quarter of the dataset to avoid memory issues
 
     results = trainer.predict(dataset['test'])
 
@@ -676,6 +675,7 @@ if __name__ == "__main__":
     # Calculate ROUGE scores
     if args.verbose:
         print("Calculating evaluation metrics...")
+        
     rouge_evaluation_metric = evaluate.load('rouge')
 
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
