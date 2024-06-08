@@ -563,6 +563,8 @@ if __name__ == "__main__":
 
     adjusted_size = num_gpu * 2
     eval_batch_size = args.batch_size // adjusted_size
+    if eval_batch_size < 1:
+        eval_batch_size = 1
     
     training_args = Seq2SeqTrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
