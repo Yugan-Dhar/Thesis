@@ -496,7 +496,15 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "Compression_ratio": 0.4
+        "Compression_ratio": 0.4,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.33051797286301976,
+            "ROUGE-2": 0.12929367687407428,
+            "ROUGE-L": 0.2259807122596748,
+            "BERTScore": 0.8499303866365102,
+            "BARTScore": -1.2253783558334053,
+            "BLANC": 0.1592147123625792
+        }
     },
     {
         "Model_ID": "PegasusX_no_extraction_V1",
@@ -516,5 +524,23 @@
             "Metric_for_best_model": "eval_loss"
         },
         "Compression_ratio": 0.4
+    },
+    {
+        "Model_ID": "RoBERTa_PegasusX_dependent_V1",
+        "Date_Created": "08/06/2024",
+        "Abstractive_model": "PegasusX",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "dependent",
+        "Version": 1,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        }
     }
 ]
