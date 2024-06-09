@@ -688,7 +688,7 @@ if __name__ == "__main__":
     # Calculate BERTScore
     # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 510. 
     bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-base-4096")
+    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-base-4096", batch_size = 2)
     bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
 
     # Calculate BARTScore
