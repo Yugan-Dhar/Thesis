@@ -17,7 +17,6 @@ from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTraining
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
-from accelerate import Accelerator, DistributedDataParallelKwargs
 
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
@@ -401,6 +400,8 @@ if __name__ == "__main__":
                         help= "The amount of gradient accumulation steps to train the abstractive model with.")
     parser.add_argument('-gc', '--gradient_checkpointing', action= "store_true", default= False,
                         help= "Use gradient checkpointing to train the abstractive model.")
+    parser.add_argument('-ddpup', '--ddp_find_unused_parameters', action= "store_true", default= False,
+                        help= "Fix DDP error to train the abstractive model.")
     parser.add_argument('-fp16', '--fp16', action= "store_true", default= False,
                         help= "Use mixed precision training to train the abstractive model.")
     parser.add_argument('-bf16', '--bf16', action= "store_true", default= False,
@@ -426,7 +427,6 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.
-    accelerator = Accelerator(kwargs_handlers=[DistributedDataParallelKwargs(find_unused_parameters=True)])
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "end"
 
@@ -595,6 +595,7 @@ if __name__ == "__main__":
         gradient_checkpointing= args.gradient_checkpointing,
         fp16= args.fp16,
         bf16= args.bf16,
+        ddp_find_unused_parameters = args.ddp_find_unused_parameters
     )
     
     # Defin ethe data collator
