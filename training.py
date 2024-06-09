@@ -10,14 +10,14 @@ import json
 import numpy as np
 import torch.nn as nn
 import wandb
-from huggingface_hub import whoami, metadata_update
-from blanc import BlancHelp, BlancTune
+from huggingface_hub import whoami
+from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
-
+from peft import LoraConfig, get_peft_model
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -600,6 +600,22 @@ if __name__ == "__main__":
         training_args.gradient_checkpointing_kwargs= {'use_reentrant':False},
 
 
+    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+        if args.abstractive_model == 'LLama3':
+            target_modules = ["q_proj","k_proj","v_proj","o_proj"],
+        else:
+            target_modules =[]
+        lora_config = LoraConfig(
+            r=32,
+            lora_alpha=32,
+            lora_dropout=0.1,
+            target_modules = target_modules,
+            task_type = 'SEQ_2_SEQ_LM',
+            bias= 'none',
+        )
+
+        abstractive_model = get_peft_model(args.abstractive_model, config = lora_config)
+        
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
