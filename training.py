@@ -593,9 +593,10 @@ if __name__ == "__main__":
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
         gradient_checkpointing= args.gradient_checkpointing,
+        gradient_checkpointing_kwargs={'use_reentrant':True},
         fp16= args.fp16,
         bf16= args.bf16,
-        ddp_find_unused_parameters = args.ddp_find_unused_parameters
+        ddp_find_unused_parameters = args.ddp_find_unused_parameters,
     )
     """if args.abstractive_model == 'LongT5':
         abstractive_model._set_gradient_checkpointing(gradient_checkpointing_kwargs={"use_reentrant": False})"""
