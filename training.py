@@ -661,14 +661,12 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting evaluation on the test dataset...")
         
-    print(f"Lenght of the test dataset: {len(dataset['test'])}\nLength of Label_str: {len(label_str)}")
     results = trainer.predict(dataset['test'])
     pred_ids = results.predictions
 
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
     pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-    print(f"Length of results: {pred_str}")
 
     write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
 
