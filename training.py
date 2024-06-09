@@ -676,12 +676,11 @@ if __name__ == "__main__":
 
     del abstractive_model, abstractive_tokenizer
 
-    # Calculate ROUGE scores
     if args.verbose:
         print("Calculating evaluation metrics...")
         
+    # Calculate ROUGE scores
     rouge_evaluation_metric = evaluate.load('rouge')
-
     rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
     # Calculate BERTScore
