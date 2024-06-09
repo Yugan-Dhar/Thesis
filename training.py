@@ -400,8 +400,6 @@ if __name__ == "__main__":
                         help= "The amount of gradient accumulation steps to train the abstractive model with.")
     parser.add_argument('-gc', '--gradient_checkpointing', action= "store_true", default= False,
                         help= "Use gradient checkpointing to train the abstractive model.")
-    parser.add_argument('-ddpup', '--ddp_find_unused_parameters', action= "store_true", default= False,
-                        help= "Fix DDP error to train the abstractive model.")
     parser.add_argument('-fp16', '--fp16', action= "store_true", default= False,
                         help= "Use mixed precision training to train the abstractive model.")
     parser.add_argument('-bf16', '--bf16', action= "store_true", default= False,
@@ -593,13 +591,15 @@ if __name__ == "__main__":
         generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
         gradient_checkpointing= args.gradient_checkpointing,
-        gradient_checkpointing_kwargs={'use_reentrant':True},
         fp16= args.fp16,
         bf16= args.bf16,
-        ddp_find_unused_parameters = args.ddp_find_unused_parameters,
     )
-    """if args.abstractive_model == 'LongT5':
-        abstractive_model._set_gradient_checkpointing(gradient_checkpointing_kwargs={"use_reentrant": False})"""
+
+    if args.abstractive_model == 'LongT5':
+        training_args.ddp_find_unused_parameters = True,
+        training_args.gradient_checkpointing_kwargs= {'use_reentrant':False},
+
+
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
