@@ -598,7 +598,7 @@ if __name__ == "__main__":
         ddp_find_unused_parameters = args.ddp_find_unused_parameters
     )
     if args.abstractive_model == 'LongT5':
-        abstractive_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant":False})
+        abstractive_model.enable_gradient_checkpointing(gradient_checkpointing_kwargs={"use_reentrant": False})
     # Defin ethe data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
