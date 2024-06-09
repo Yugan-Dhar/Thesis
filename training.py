@@ -661,7 +661,7 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting evaluation on the test dataset...")
         
-
+    print(f"Lenght of the test dataset: {len(dataset['test'])}\n Length of Label_str: {len(label_str)}")
     results = trainer.predict(dataset['test'])
 
     pred_ids = results.predictions
