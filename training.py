@@ -17,6 +17,8 @@ from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTraining
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
+from accelerate import DistributedDataParallelKwargs
+
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -424,6 +426,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.
+    accelerator = Accelerator(kwargs_handlers=[DistributedDataParallelKwargs(find_unused_parameters=True)])
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "end"
 
