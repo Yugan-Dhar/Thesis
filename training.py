@@ -661,10 +661,10 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting evaluation on the test dataset...")
         
-    print(f"Lenght of the test dataset: {len(dataset['test'])}\n Length of Label_str: {len(label_str)}")
+    print(f"Lenght of the test dataset: {len(dataset['test'])}\nLength of Label_str: {len(label_str)}")
     results = trainer.predict(dataset['test'])
-
     pred_ids = results.predictions
+    print(f"Length of results: {pred_ids}")
 
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
