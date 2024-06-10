@@ -375,6 +375,20 @@ def preprocess_logits_for_metrics(logits, labels):
 
     return pred_ids, labels
 
+def print_trainable_parameters(model):
+    """
+    Prints the number of trainable parameters in the model.
+    """
+    trainable_params = 0
+    all_param = 0
+    for _, param in model.named_parameters():
+        all_param += param.numel()
+        if param.requires_grad:
+            trainable_params += param.numel()
+    print(
+        f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param:.2f}"
+    )
+
 
 if __name__ == "__main__":
     
@@ -581,7 +595,7 @@ if __name__ == "__main__":
         metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
         save_total_limit= 2,
-        evaluation_strategy = "epoch",
+        eval_strategy = "epoch",
         label_names=["labels"],
         report_to = "wandb",
         logging_strategy = "epoch",
@@ -596,17 +610,19 @@ if __name__ == "__main__":
     )
 
     if args.abstractive_model == 'LongT5':
+        # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
         training_args.ddp_find_unused_parameters = True
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
 
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-        if args.abstractive_model == 'LLama3':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj"],
-        else:
-            target_modules =[]
+        print_trainable_parameters(abstractive_model)
+        print("LLama3 or Mixtral model detected. Using LORA for training..")
+
+        target_modules = ["q_proj","k_proj","v_proj","o_proj"]
+
         lora_config = LoraConfig(
-            r=32,
+            r=8,
             lora_alpha=32,
             lora_dropout=0.1,
             target_modules = target_modules,
@@ -614,8 +630,9 @@ if __name__ == "__main__":
             bias= 'none',
         )
 
-        abstractive_model = get_peft_model(args.abstractive_model, config = lora_config)
-        
+        abstractive_model = get_peft_model(abstractive_model, lora_config)
+
+    print_trainable_parameters(abstractive_model)
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
