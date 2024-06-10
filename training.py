@@ -684,10 +684,15 @@ if __name__ == "__main__":
                 "Metric_for_best_model": args.metric_for_best_model,
                 }
         }
-
+    
         if args.mode == 'fixed' or args.mode == 'hybrid' and not args.no_extraction:
             new_result["Compression_ratio"] = args.compression_ratio / 10
 
+        if args.no_extraction:
+            new_result["Extractive_model"] = "No extractive model"
+            new_result["Ratio_mode"] = "No ratio"
+            new_result['No_extraction'] = True
+            
         previous_results.append(new_result)
 
         with open(evaluation_results_filepath, 'w') as f:
@@ -750,12 +755,6 @@ if __name__ == "__main__":
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
             }
-
-    if not args.testing_only:
-        if args.no_extraction:
-            new_result["Extractive_model"] = "No extractive model"
-            new_result["Ratio_mode"] = "No ratio"
-            new_result['No_extraction'] = True
 
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
