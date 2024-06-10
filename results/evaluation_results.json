@@ -629,6 +629,14 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.285413506829906,
+            "ROUGE-2": 0.09686080794078275,
+            "ROUGE-L": 0.19544237067860404,
+            "BERTScore": 0.8443534633966797,
+            "BARTScore": -1.4326720211092987,
+            "BLANC": 0.14930464682496358
         }
     }
 ]
