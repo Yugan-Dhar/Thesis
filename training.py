@@ -624,7 +624,7 @@ if __name__ == "__main__":
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
         #Just attention matrices
-        #target_modules = ["q_proj","k_proj","v_proj","o_proj"]
+        target_modules = ["q_proj","k_proj","v_proj","o_proj"]
 
         #Attention matrices and MLP:
         #target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
@@ -633,11 +633,11 @@ if __name__ == "__main__":
         #NOTE: we can also keep one list with all the modules for LLama3 and mixtral combined as the LoraConfig does a RegEx search.
         # So, we can just use the same list for both models. But might be better to keep them separate for clarity and future changes.
 
-        if args.abstractive_model == 'LLama3':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
+        """if args.abstractive_model == 'LLama3':
+            target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj", "lm_head"]
 
         elif args.abstractive_model == 'Mixtral':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]
+            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
 
         lora_config = LoraConfig(
             r=32,
