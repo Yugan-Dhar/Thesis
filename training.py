@@ -17,7 +17,7 @@ from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTraining
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, get_peft_model, AutoPeftModelForCausalLM
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -448,7 +448,12 @@ if __name__ == "__main__":
 
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-        abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
+     
+        if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+            abstractive_model = AutoPeftModelForCausalLM(f"MikaSie/{model_id}")
+        else:
+            abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
+
         abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
         print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
 
