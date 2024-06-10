@@ -674,6 +674,7 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Starting training on the abstractive model.")
 
+        print(dataset["train"].column_names)
         trainer.train()
 
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
