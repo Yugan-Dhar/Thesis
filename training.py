@@ -623,8 +623,15 @@ if __name__ == "__main__":
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
-
+        #Just attention matrices
         target_modules = ["q_proj","k_proj","v_proj","o_proj"]
+
+        #Attention matrices and MLP:
+        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
+
+        #Attention matrices, MLP and lm_head:
+        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj","lm_head"]
+
         lora_config = LoraConfig(
             r=32,
             lora_alpha=64,
@@ -638,6 +645,7 @@ if __name__ == "__main__":
         abstractive_model = get_peft_model(abstractive_model, lora_config)
 
     print_trainable_parameters(abstractive_model)
+    exit()
     # Define the data collator
     data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
 
@@ -692,7 +700,7 @@ if __name__ == "__main__":
             new_result["Extractive_model"] = "No extractive model"
             new_result["Ratio_mode"] = "No ratio"
             new_result['No_extraction'] = True
-            
+
         previous_results.append(new_result)
 
         with open(evaluation_results_filepath, 'w') as f:
