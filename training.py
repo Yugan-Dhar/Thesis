@@ -625,8 +625,6 @@ if __name__ == "__main__":
         print("LLama3 or Mixtral model detected. Using LORA for training..")
 
         target_modules = ["q_proj","k_proj","v_proj","o_proj"]
-        if args.abstractive_model == 'Mixtral':
-            target_modules += ['w1', 'w2', 'w3']
         lora_config = LoraConfig(
             r=8,
             lora_alpha=32,
