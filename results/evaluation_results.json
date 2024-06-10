@@ -611,6 +611,14 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.32612502542360977,
+            "ROUGE-2": 0.13094879491685651,
+            "ROUGE-L": 0.2191658435771108,
+            "BERTScore": 0.8496733237911203,
+            "BARTScore": -1.6461917861213897,
+            "BLANC": 0.17446891570320744
         }
     },
     {
@@ -629,14 +637,6 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
-        },
-        "Evaluation_metrics": {
-            "ROUGE-1": 0.285413506829906,
-            "ROUGE-2": 0.09686080794078275,
-            "ROUGE-L": 0.19544237067860404,
-            "BERTScore": 0.8443534633966797,
-            "BARTScore": -1.4326720211092987,
-            "BLANC": 0.14930464682496358
         }
     }
 ]
