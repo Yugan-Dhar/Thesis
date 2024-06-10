@@ -598,7 +598,7 @@ if __name__ == "__main__":
     if args.abstractive_model == 'LongT5':
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
         training_args.ddp_find_unused_parameters = True,
-        training_args.gradient_checkpointing_kwargs= {'use_reentrant':False}
+        training_args.gradient_checkpointing_kwargs= {'use_reentrant': True}
 
 
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
