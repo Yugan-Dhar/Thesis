@@ -77,9 +77,6 @@ def initialize_abstractive_model(model_init):
     elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
         model = AutoModelForCausalLM.from_pretrained(model_init, device_map="auto")
         tokenizer = AutoTokenizer.from_pretrained(model_init)
-        if model_init == 'meta-llama/Meta-Llama-3-8B':
-            tokenizer.pad_token_id = tokenizer.eos_token_id
-            tokenizer.pad_token = tokenizer.eos_token
 
     else:
         model = AutoModelForSeq2SeqLM.from_pretrained(model_init)
