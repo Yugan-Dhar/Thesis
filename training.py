@@ -626,12 +626,13 @@ if __name__ == "__main__":
 
         target_modules = ["q_proj","k_proj","v_proj","o_proj"]
         lora_config = LoraConfig(
-            r=8,
-            lora_alpha=32,
+            r=32,
+            lora_alpha=64,
             lora_dropout=0.1,
             target_modules = target_modules,
             task_type = 'SEQ_2_SEQ_LM',
             bias= 'none',
+            
         )
 
         abstractive_model = get_peft_model(abstractive_model, lora_config)
