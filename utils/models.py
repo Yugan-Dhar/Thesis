@@ -75,7 +75,7 @@ def initialize_abstractive_model(model_init):
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
     elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
-        model = AutoModelForCausalLM.from_pretrained(model_init, low_cpu_mem_usage=True, torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(model_init, device_map="auto")
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
     else:
