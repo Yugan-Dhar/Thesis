@@ -494,7 +494,7 @@ if __name__ == "__main__":
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
 
-        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5':
             dataset = dataset.map(add_prefix, batched= True)      
 
         
