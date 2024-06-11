@@ -526,7 +526,15 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "Compression_ratio": 0.4
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.3672820828233486,
+            "ROUGE-2": 0.162208955572325,
+            "ROUGE-L": 0.23037265980422228,
+            "BERTScore": 0.8523048302314801,
+            "BARTScore": -1.9238864003613008,
+            "BLANC": 0.16658733385871044
+        },
+        "No_extraction": true
     },
     {
         "Model_ID": "RoBERTa_PegasusX_dependent_V1",
@@ -544,6 +552,14 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.3052140216849777,
+            "ROUGE-2": 0.11618939846882545,
+            "ROUGE-L": 0.1959728543078375,
+            "BERTScore": 0.8413452389519974,
+            "BARTScore": -1.8736879965446516,
+            "BLANC": 0.1326111638980123
         }
     },
     {
@@ -641,6 +657,14 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.285413506829906,
+            "ROUGE-2": 0.09686080794078275,
+            "ROUGE-L": 0.09686080794078275,
+            "BERTScore": 0.8443534633966797,
+            "BARTScore": -1.4326720211092987,
+            "BLANC": 0.14930464682496358
         }
     }
 ]
