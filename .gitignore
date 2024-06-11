@@ -21,6 +21,7 @@ docs/card_template.md
 
 scripts/*
 !scripts/preprocessing.sh
+!scripts/nltk.py
 
 wandb
 
