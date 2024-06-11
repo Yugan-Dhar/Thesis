@@ -620,7 +620,7 @@ if __name__ == "__main__":
         training_args.ddp_find_unused_parameters = True
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
 
-    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral' or args.abstractive_model == 'BART':
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
         #Just attention matrices
