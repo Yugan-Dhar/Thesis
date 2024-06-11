@@ -600,7 +600,7 @@ if __name__ == "__main__":
         metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
         save_total_limit= 2,
-        evaluation_strategy = "epoch",
+        eval_strategy = "epoch",
         label_names=["labels"],
         report_to = "wandb",
         logging_strategy = "epoch",
@@ -620,7 +620,7 @@ if __name__ == "__main__":
         training_args.ddp_find_unused_parameters = True
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
 
-    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral' or args.abstractive_model == 'BART':
+    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
         #Just attention matrices
@@ -640,11 +640,11 @@ if __name__ == "__main__":
             target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]
 
         lora_config = LoraConfig(
-            r=32,
-            lora_alpha=64,
+            r=2,
+            lora_alpha=4,
             lora_dropout=0.1,
             target_modules = target_modules,
-            task_type = 'SEQ_2_SEQ_LM',
+            task_type = 'CAUSAL_LM', #BEWARE OF TASK_TYPE, IF IT IS A SEQ2SEQ MODEL, IT WILL NOT WORK
             bias= 'none',
             
         )
@@ -668,7 +668,6 @@ if __name__ == "__main__":
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
-
 
     if not args.testing_only:
         if args.verbose:
