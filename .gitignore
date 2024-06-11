@@ -8,6 +8,7 @@ __pycache__/
 datasets
 logs
 .ipynb_checkpoints
+.ipynb_checkpoints/*
 # Ignore everything in the results directory
 results/*
 docs/card_template.md
