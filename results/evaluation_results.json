@@ -110,8 +110,8 @@
         "Model_ID": "BART_no_extraction_V2",
         "Date_Created": "24/05/2024",
         "Abstractive_model": "BART",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "fixed",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
         "Version": 2,
         "Hyperparameters": {
             "Learning_rate": 5e-05,
@@ -131,7 +131,8 @@
             "BERTScore": 0.8702187434921052,
             "BARTScore": -3.32670807305661,
             "BLANC": 0.16999137929721678
-        }
+        },
+        "No_extraction": true
     },
     {
         "Model_ID": "LegalBERT_BART_dependent_V1",
@@ -477,14 +478,15 @@
             "BERTScore": 0.8442945966507469,
             "BARTScore": -1.512467493558063,
             "BLANC": 0.1426287498004355
-        }
+        },
+        "No_extraction": true
     },
     {
         "Model_ID": "Pegasus_no_extraction_V1",
         "Date_Created": "05/06/2024",
         "Abstractive_model": "Pegasus",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "fixed",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
         "Version": 1,
         "Hyperparameters": {
             "Learning_rate": 5e-05,
@@ -504,14 +506,15 @@
             "BERTScore": 0.8499303866365102,
             "BARTScore": -1.2253783558334053,
             "BLANC": 0.1592147123625792
-        }
+        },
+        "No_extraction": true
     },
     {
         "Model_ID": "PegasusX_no_extraction_V1",
         "Date_Created": "08/06/2024",
         "Abstractive_model": "PegasusX",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "fixed",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
         "Version": 1,
         "Hyperparameters": {
             "Learning_rate": 5e-05,
@@ -599,8 +602,8 @@
         "Model_ID": "LongT5_no_extraction_V1",
         "Date_Created": "10/06/2024",
         "Abstractive_model": "LongT5",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "dependent",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
         "Version": 1,
         "Hyperparameters": {
             "Learning_rate": 5e-05,
@@ -619,7 +622,8 @@
             "BERTScore": 0.8496733237911203,
             "BARTScore": -1.6461917861213897,
             "BLANC": 0.17446891570320744
-        }
+        },
+        "No_extraction": true
     },
     {
         "Model_ID": "RoBERTa_LongT5_dependent_V1",
