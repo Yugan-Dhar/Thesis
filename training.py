@@ -600,7 +600,7 @@ if __name__ == "__main__":
         metric_for_best_model = args.metric_for_best_model,
         save_strategy= "epoch",
         save_total_limit= 2,
-        eval_strategy = "epoch",
+        evaluation_strategy = "epoch",
         label_names=["labels"],
         report_to = "wandb",
         logging_strategy = "epoch",
