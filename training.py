@@ -640,8 +640,8 @@ if __name__ == "__main__":
             target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
 
         lora_config = LoraConfig(
-            r=2,
-            lora_alpha=4,
+            r= 16,
+            lora_alpha=32,
             lora_dropout=0.1,
             target_modules = target_modules,
             task_type = 'CAUSAL_LM', #BEWARE OF TASK_TYPE, IF IT IS A SEQ2SEQ MODEL, IT WILL NOT WORK
