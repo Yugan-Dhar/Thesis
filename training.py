@@ -751,6 +751,7 @@ if __name__ == "__main__":
     # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
     bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
     bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 2)
+    #TODO: Also calculate the BARTscore the other way around. Then calculate F1 score between the two scores and take the average. The current method is only the precision score.
     bart_score = (sum(bart_scores['score']) / len(bart_scores['score']))
 
     # Calculate Blanc scores
