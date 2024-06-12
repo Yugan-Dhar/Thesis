@@ -755,7 +755,7 @@ if __name__ == "__main__":
 
     # Calculate Blanc scores
     blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 2)
-    blanc_scores = blanc_help.eval_pairs(label_str, pred_str)
+    blanc_scores = blanc_help.eval_pairs(docs = label_str, summaries = pred_str)
     blanc_score = sum(blanc_scores) / len(blanc_scores)
 
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
