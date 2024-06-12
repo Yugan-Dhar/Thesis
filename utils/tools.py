@@ -78,6 +78,39 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
     return final_ratio
 
 
+def calculate_bart_f1(bart_score_precision , bart_score_recall):
+    """
+    Calculate the F1 score using the precision and recall scores.
+
+    Args:
+        bart_score_precision (float): The precision score.
+        bart_score_recall (float): The recall score.
+
+    Returns:
+        float: The F1 score.
+    """
+    precision_scores = bart_score_precision['score']
+    recall_scores = bart_score_recall['score']
+
+    f1_scores = []
+    for precision, recall in zip(precision_scores, recall_scores):
+        f1 = 2 * ((precision * recall) / (precision + recall))
+        f1_scores.append(f1)
+        print(f"F1 score: {f1}")
+        print(f"Precision score: {precision}, Recall score: {recall}")
+
+    f1_score = sum(f1_scores) / len(f1_scores)
+
+    print(f"Final F1 score: {f1_score}")
+
+    precision_scores = sum(precision_scores) / len(precision_scores)
+
+    print(f"Final precision score: {precision_scores}")
+    recall_scores = sum(recall_scores) / len(recall_scores)
+    print(f"Final recall score: {recall_scores}")
+    return f1_score
+
+
 def create_model_card(results):
     """
     Creates a model card based on the provided results. If a template is not found, a default model card is generated, so it is recommended to have a template in the 'docs' directory.

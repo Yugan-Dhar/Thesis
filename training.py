@@ -718,7 +718,7 @@ if __name__ == "__main__":
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
     if args.verbose:
-        print("Starting evaluation on the test dataset...")
+        print("Starting with predictions on the test dataset...")
         
     results = trainer.predict(dataset['test'])
     pred_ids = results.predictions
