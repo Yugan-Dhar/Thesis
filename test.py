@@ -489,7 +489,6 @@ if __name__ == "__main__":
     else:
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
 
-
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
         dataset = dataset.map(calculate_word_length_summary)
@@ -497,46 +496,8 @@ if __name__ == "__main__":
 
         if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5':
             dataset = dataset.map(add_prefix, batched= True)      
-
         
-    elif not os.path.exists(dataset_path) and not args.no_extraction:
-            
-        if args.verbose:
-            print(f"Dataset not found. Pre-processing the dataset now......")
-        text_splitter = TokenTextSplitter.from_huggingface_tokenizer(
-                    tokenizer = extractive_tokenizer, 
-                    chunk_size = extractive_tokenizer.model_max_length - 50,
-                    chunk_overlap = 50) 
-
-        dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)
-        dataset = dataset.map(calculate_word_length_summary)
-        dataset = remove_outliers_from_dataset(dataset)
-
-        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
-            dataset = dataset.map(add_prefix, batched= True)
-
-        dataset = dataset.map(calculate_token_length)
-
-        if args.mode == 'dependent':
-            dataset = dataset.map(get_dependent_compression_ratio)
-        else:  
-            dataset = dataset.map(calculate_extractive_steps)
-
-        if args.verbose:
-            print("Starting on extractive summaries")
-
-        dataset = dataset.map(get_summarized_chunks)
-        dataset.save_to_disk(dataset_path)
-
-        if args.verbose:
-            print(f"\nDataset pre-processed and saved to {dataset_path}")
-
-        if args.preprocessing_only:
-            print("Preprocessing finished. Exiting program.")
-            exit()
-
-    else:      
-        
+    else:
         dataset = load_dataset("arrow", 
             data_files= {
             "train": os.path.join(dataset_path, "train", "data-00000-of-00001.arrow"),
@@ -558,9 +519,7 @@ if __name__ == "__main__":
         dataset = remove_outliers_from_dataset(dataset)
         print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
-
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     label_str = dataset["test"]["summary"]
 
     # Remove the columns from all datasets
@@ -577,161 +536,6 @@ if __name__ == "__main__":
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
-    if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
-        gen_max_length = 1024
-    else:
-        gen_max_length = 1500
-
-    adjusted_size = num_gpu * 2
-    eval_batch_size = args.batch_size // adjusted_size
-    if eval_batch_size < 1:
-        eval_batch_size = 1
-    
-    training_args = Seq2SeqTrainingArguments(
-        output_dir = os.path.join('results', model_id, 'output'),
-        num_train_epochs = args.num_train_epochs,
-        per_device_train_batch_size = args.batch_size // num_gpu,
-        per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-        gradient_accumulation_steps = args.gradient_accumulation_steps,
-        warmup_ratio = args.warmup_ratio,
-        weight_decay = args.weight_decay,
-        logging_dir = os.path.join('results', model_id, 'logs'),
-        remove_unused_columns = False,        
-        load_best_model_at_end = args.load_best_model_at_end,
-        metric_for_best_model = args.metric_for_best_model,
-        save_strategy= "epoch",
-        save_total_limit= 2,
-        evaluation_strategy = "epoch",
-        label_names=["labels"],
-        report_to = "wandb",
-        logging_strategy = "epoch",
-        run_name = model_id,
-        predict_with_generate = True, 
-        eval_accumulation_steps = 1,
-        generation_max_length = gen_max_length,
-        hub_model_id = f"{model_id}",
-        gradient_checkpointing= args.gradient_checkpointing,
-        fp16= args.fp16,
-        bf16= args.bf16,
-    )
-
-    if args.abstractive_model == 'LongT5':
-        # Changes are made because of the LongT5 model, it can't work with the default settings..
-        print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
-        training_args.ddp_find_unused_parameters = True
-        training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
-
-    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-        print_trainable_parameters(abstractive_model)
-        print("LLama3 or Mixtral model detected. Using LORA for training..")
-        #Just attention matrices
-        target_modules = ["q_proj"]
-
-        #Attention matrices and MLP:
-        #target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
-
-        #Attention matrices, MLP and lm_head:
-        #NOTE: we can also keep one list with all the modules for LLama3 and mixtral combined as the LoraConfig does a RegEx search.
-        # So, we can just use the same list for both models. But might be better to keep them separate for clarity and future changes.
-
-        """if args.abstractive_model == 'LLama3':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj", "lm_head"]
-
-        elif args.abstractive_model == 'Mixtral':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
-
-        lora_config = LoraConfig(
-            r= 16,
-            lora_alpha=32,
-            lora_dropout=0.1,
-            target_modules = target_modules,
-            task_type = 'CAUSAL_LM', #BEWARE OF TASK_TYPE, IF IT IS A SEQ2SEQ MODEL, IT WILL NOT WORK
-            bias= 'none',
-            
-        )
-
-        abstractive_model = get_peft_model(abstractive_model, lora_config)
-        print_trainable_parameters(abstractive_model)
-        
-    # Define the data collator
-    data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
-
-    # Create the trainer
-    trainer = Seq2SeqTrainer(
-        model = abstractive_model,
-        tokenizer = abstractive_tokenizer,
-        args = training_args,
-        train_dataset = dataset["train"],
-        eval_dataset = dataset["validation"],
-        data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-    )
-
-    if not args.verbose:
-        logging.basicConfig(level=logging.ERROR)
-
-    if not args.testing_only:
-        if args.verbose:
-            print(f"Starting training on the abstractive model.")
-
-        trainer.train()
-
-        trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
-        
-        trainer.push_to_hub()
-        
-        new_result =   {
-            "Model_ID": model_id,
-            "Date_Created": date.today().strftime("%d/%m/%Y"),
-            "Abstractive_model": args.abstractive_model,
-            "Extractive_model": args.extractive_model,
-            "Ratio_mode": args.mode,
-            "Version": model_version,
-            "Hyperparameters": {
-                "Learning_rate": 5e-5,
-                "Epochs": args.num_train_epochs,
-                "Batch_size": args.batch_size * args.gradient_accumulation_steps,
-                "Warmup_ratio": args.warmup_ratio,
-                "Weight_decay": args.weight_decay,
-                "Load_best_model_at_end": args.load_best_model_at_end,
-                "Early_stopping_patience": args.early_stopping_patience,
-                "Metric_for_best_model": args.metric_for_best_model,
-                }
-        }
-    
-        if args.mode == 'fixed' or args.mode == 'hybrid' and not args.no_extraction:
-            new_result["Compression_ratio"] = args.compression_ratio / 10
-
-        if args.no_extraction:
-            new_result["Extractive_model"] = "No extractive model"
-            new_result["Ratio_mode"] = "No ratio"
-            new_result['No_extraction'] = True
-
-        previous_results.append(new_result)
-
-        with open(evaluation_results_filepath, 'w') as f:
-            json.dump(previous_results, f, indent=4)
-        f.close()
-             
-        if args.verbose:
-            print(f"Training finished. Model saved to disk and pushed to Huggingface.")        
-
-    #5) Evaluate the abstractive summarization model on the pre-processed dataset
-
-    if args.verbose:
-        print("Starting evaluation on the test dataset...")
-        
-    #results = trainer.predict(dataset['test'])
-    #pred_ids = results.predictions
-
-    #pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
-
-    #pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-
-    #write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
-
-    #if args.verbose:
-    #    print("Predictions finished and written to file.")
 
     del abstractive_model, abstractive_tokenizer
 
