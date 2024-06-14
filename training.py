@@ -13,7 +13,7 @@ import wandb
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
-from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
@@ -559,7 +559,7 @@ if __name__ == "__main__":
     if eval_batch_size < 1:
         eval_batch_size = 1
     
-    training_args = Seq2SeqTrainingArguments(
+    training_args = TrainingArguments(
         output_dir = os.path.join('results', model_id, 'output'),
         num_train_epochs = args.num_train_epochs,
         per_device_train_batch_size = args.batch_size // num_gpu,
@@ -578,9 +578,9 @@ if __name__ == "__main__":
         report_to = "wandb",
         logging_strategy = "epoch",
         run_name = model_id,
-        predict_with_generate = True, 
+        #predict_with_generate = True, 
         eval_accumulation_steps = 1,
-        generation_max_length = gen_max_length,
+        #generation_max_length = gen_max_length,
         hub_model_id = f"{model_id}",
         gradient_checkpointing= args.gradient_checkpointing,
         fp16= args.fp16,
@@ -613,29 +613,29 @@ if __name__ == "__main__":
             target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
 
         lora_config = LoraConfig(
-            r= 16,
+            r= 2,
             lora_alpha=32,
             lora_dropout=0.1,
             target_modules = target_modules,
-            task_type = 'CAUSAL_LM', #BEWARE OF TASK_TYPE, IF IT IS A SEQ2SEQ MODEL, IT WILL NOT WORK
+            task_type= 'CAUSAL_LM',
             bias= 'none',
-            
+
         )
 
         abstractive_model = get_peft_model(abstractive_model, lora_config)
         print_trainable_parameters(abstractive_model)
         
     # Define the data collator
-    data_collator = DataCollatorForSeq2Seq(abstractive_tokenizer, model = abstractive_model)
+    data_collator = DataCollatorForLanguageModeling(abstractive_tokenizer, mlm=False)
 
     # Create the trainer
-    trainer = Seq2SeqTrainer(
+    trainer = Trainer(
         model = abstractive_model,
         tokenizer = abstractive_tokenizer,
         args = training_args,
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
-        data_collator = data_collator,
+        #data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
     )
 
