@@ -99,7 +99,7 @@ def calculate_rouge_score(predictions, references):
     return rouge_scores
 
 
-def calculate_bert_score(predictions, references):
+def calculate_bert_score(predictions, references, batch_size=2):
     """
     Calculates the BERT score for a given set of predictions and references.
 
@@ -112,14 +112,16 @@ def calculate_bert_score(predictions, references):
 
     """
     bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references=references, predictions=predictions, model_type="allenai/longformer-base-4096", batch_size=2)
+    bert_scores = bert_score_evaluation_metric.compute(references=references, predictions=predictions, model_type="allenai/longformer-base-4096", batch_size=batch_size)
     
     final_bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
+
+    del bert_score_evaluation_metric
 
     return final_bert_score
 
 
-def calculate_bart_score(predictions, references):
+def calculate_bart_score(predictions, references, batch_size=2):
     """
     Calculate the F1 score using the precision and recall scores.
 
@@ -132,8 +134,8 @@ def calculate_bart_score(predictions, references):
     """
     # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
     bart_score_evaluation_metric = BARTScore(model_name_or_path='facebook/bart-large-cnn', device='cuda')
-    bart_score_precision = bart_score_evaluation_metric.compute(source_sentences=references, target_sentences=predictions, batch_size=2)
-    bart_score_recall = bart_score_evaluation_metric.compute(source_sentences=predictions, target_sentences=references, batch_size=2)
+    bart_score_precision = bart_score_evaluation_metric.compute(source_sentences=references, target_sentences=predictions, batch_size=batch_size)
+    bart_score_recall = bart_score_evaluation_metric.compute(source_sentences=predictions, target_sentences=references, batch_size=batch_size)
 
     precision_scores = bart_score_precision['score']
     recall_scores = bart_score_recall['score']
@@ -144,18 +146,13 @@ def calculate_bart_score(predictions, references):
         f1_scores.append(f1)
 
     f1_score = sum(f1_scores) / len(f1_scores)
-
-    print(f"Final F1 score: {f1_score}")
-
-    precision_scores = sum(precision_scores) / len(precision_scores)
-
-    print(f"Final precision score: {precision_scores}")
-    recall_scores = sum(recall_scores) / len(recall_scores)
-    print(f"Final recall score: {recall_scores}")
+    
+    del bart_score_evaluation_metric
+    
     return f1_score
 
 
-def calculate_blanc_score(predictions, references):
+def calculate_blanc_score(predictions, references, batch_size=2):
     """
     Calculates the BLANC score for a given set of predictions and references.
 
@@ -167,10 +164,12 @@ def calculate_blanc_score(predictions, references):
         float: The calculated BLANC score.
 
     """
-    blanc_help = BlancHelp(device='cuda', inference_batch_size=2)
+    blanc_help = BlancHelp(device='cuda', inference_batch_size=batch_size)
     blanc_scores = blanc_help.eval_pairs(docs=references, summaries=predictions)
 
     blanc_score = sum(blanc_scores) / len(blanc_scores)
+
+    del blanc_help
 
     return blanc_score
 

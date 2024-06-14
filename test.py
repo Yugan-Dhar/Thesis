@@ -512,7 +512,6 @@ if __name__ == "__main__":
         print("Dataset is being adjusted to the correct size.....")
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
-        print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     label_str = dataset["test"]["summary"]
@@ -554,20 +553,14 @@ if __name__ == "__main__":
     
     # Calculate ROUGE scores
 
-    rouge_scores = calculate_rouge_score(predcitions = pred_str, references = label_str)
-
-    bert_score = calculate_bert_score(predictions = pred_str, references = label_str)
-
-    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str)
-
-    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str)
+    #rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    #bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
+    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
+    #blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
     
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     
-    print(f"ROUGE scores: {rouge_scores}\nBERTScore: {bert_score}\nBARTScore: {bart_score}\nBLANC: {blanc_score}")
-    """new_result["Evaluation_metrics"] = {
-                "BARTScore": bart_score
-            }
+    new_result["Evaluation_metrics"]["BARTScore"] = bart_score
 
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
@@ -582,4 +575,4 @@ if __name__ == "__main__":
         
 
     if args.verbose:
-        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")"""
+        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
