@@ -355,28 +355,6 @@ def write_predicted_summaries_to_file(path, summary_list):
         print(f"Summaries written to {path}")
 
 
-def compute_rouge_during_training(pred):
-
-    labels_ids = pred.label_ids
-    pred_ids = pred.predictions
-
-    labels_ids[labels_ids == -100] = abstractive_tokenizer.pad_token_id
-    label_str = abstractive_tokenizer.batch_decode(labels_ids, skip_special_tokens=True)
-    
-    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
-    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-
-    rouge_output = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
-
-    return {**rouge_output}
-
-
-def preprocess_logits_for_metrics(logits, labels):
-
-    pred_ids = torch.argmax(logits[0], dim=-1)
-
-    return pred_ids, labels
-
 def print_trainable_parameters(model):
     """
     Prints the number of trainable parameters in the model.
