@@ -19,6 +19,7 @@ from datetime import date
 from string2string.similarity import BARTScore
 from peft import LoraConfig, get_peft_model, AutoPeftModelForCausalLM
 from utils.tools import *
+from utils.models import select_abstractive_model, select_extractive_model
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -229,7 +230,7 @@ def get_summarized_chunks(example):
         for i in range(example["amount_of_extractive_steps"]):
 
             if i == example["amount_of_extractive_steps"] - 1:
-                ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
+                ratio = calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 
             # If the ratio is larger than 1, skip iteration as summarization is not needed!
             if ratio > 1:
@@ -288,7 +289,7 @@ def get_summarized_chunks_batch_version(batch):
             for x in range(batch["amount_of_extractive_steps"][i]):
 
                 if x == batch["amount_of_extractive_steps"][i] - 1:
-                    ratio = utils.tools.calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
+                    ratio = calculate_hybrid_final_step_ratio(text, context_length_abstractive_model, extractive_tokenizer)
                 # If the ratio is larger than 1, skip iteration as summarization is not needed!
                 
                 if ratio > 1:
@@ -443,12 +444,12 @@ if __name__ == "__main__":
     os.environ["WANDB_PROJECT"] = "thesis_sie"
     os.environ["WANDB_LOG_MODEL"] = "end"
 
-    extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
+    extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
 
     if args.testing_only:
-        model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+        model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
      
         if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
             abstractive_model = AutoPeftModelForCausalLM(f"MikaSie/{model_id}")
@@ -459,8 +460,8 @@ if __name__ == "__main__":
         print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
 
     else:
-        model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-        abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
+        model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+        abstractive_model, abstractive_tokenizer = select_abstractive_model(args.abstractive_model)
         print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
 
     #Needs to be set manually because not all models have same config setup
@@ -559,15 +560,10 @@ if __name__ == "__main__":
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
+    
     label_str = dataset["test"]["summary"]
 
-    # Remove the columns from all datasets
-    columns_to_keep = ["input_ids", "attention_mask", "labels"]
-    all_datasets = ["train", "validation", "test"]
-    for dataset_name in all_datasets:
-        all_columns = dataset[dataset_name].column_names
-        columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
-        dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
+    dataset = remove_unused_columns(dataset)
     
     if args.verbose:
         print("Dataset preprocessed and ready for the next step.")
@@ -736,27 +732,10 @@ if __name__ == "__main__":
     if args.verbose:
         print("Calculating evaluation metrics...")
         
-    # Calculate ROUGE scores
-    rouge_evaluation_metric = evaluate.load('rouge')
-    rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
-
-    # Calculate BERTScore
-    # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 510. 
-    bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-base-4096", batch_size = 2)
-    bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
-
-    # Calculate BARTScore
-    # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
-    bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
-    bart_scores = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 2)
-    #TODO: Also calculate the BARTscore the other way around. Then calculate F1 score between the two scores and take the average. The current method is only the precision score.
-    bart_score = (sum(bart_scores['score']) / len(bart_scores['score']))
-
-    # Calculate Blanc scores
-    blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 2)
-    blanc_scores = blanc_help.eval_pairs(docs = label_str, summaries = pred_str)
-    blanc_score = sum(blanc_scores) / len(blanc_scores)
+    rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
+    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
+    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
 
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
         
@@ -774,12 +753,10 @@ if __name__ == "__main__":
         json.dump(previous_results, f, indent=4)
     f.close()
 
-    model_card = utils.tools.create_model_card(new_result)
+    model_card = create_model_card(new_result)
 
-    # Only MikaSie can push to the hub
     user = whoami()['name']
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
         
-
     if args.verbose:
         print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")

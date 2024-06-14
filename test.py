@@ -551,12 +551,10 @@ if __name__ == "__main__":
 
     pred_str = [summary.strip() for summary in summaries]
     
-    # Calculate ROUGE scores
-
-    #rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
-    #bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
+    rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
-    #blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
+    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
     
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     

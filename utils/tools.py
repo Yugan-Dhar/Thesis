@@ -81,6 +81,25 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
     return final_ratio
 
 
+def remove_unused_columns(dataset):
+    """
+    Removes unused columns from the dataset.
+
+    Args:
+        dataset (Dataset): The dataset to remove unused columns from.
+
+    Returns:
+        Dataset: The dataset with unused columns removed.
+    """
+    columns_to_keep = ["input_ids", "attention_mask", "labels"]
+    all_datasets = ["train", "validation", "test"]
+    for dataset_name in all_datasets:
+        all_columns = dataset[dataset_name].column_names
+        columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
+        dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
+    return dataset
+
+
 def calculate_rouge_score(predictions, references):
     """
     Calculates the ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores for a given set of predictions and references.
