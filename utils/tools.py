@@ -1,6 +1,9 @@
 import os
 import json
+import evaluate
+from string2string.similarity import BARTScore
 from huggingface_hub import ModelCard, ModelCardData, metadata_update
+from blanc import BlancHelp
 
 def get_id_and_version_and_prev_results(evaluation_results_filepath, args):
     """
@@ -78,17 +81,60 @@ def calculate_hybrid_final_step_ratio(intermediate_summary, abstractive_model_to
     return final_ratio
 
 
-def calculate_bart_f1(bart_score_precision , bart_score_recall):
+def calculate_rouge_score(predictions, references):
+    """
+    Calculates the ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores for a given set of predictions and references.
+
+    Args:
+        predictions (list): A list of predicted texts.
+        references (list): A list of reference texts.
+
+    Returns:
+        dict: A dictionary containing the ROUGE scores for rouge1, rouge2, and rougeL.
+
+    """
+    rouge_evaluation_metric = evaluate.load('rouge')
+    rouge_scores = rouge_evaluation_metric.compute(predictions=predictions, references=references, rouge_types=["rouge1", "rouge2", "rougeL"])
+
+    return rouge_scores
+
+
+def calculate_bert_score(predictions, references):
+    """
+    Calculates the BERT score for a given set of predictions and references.
+
+    Args:
+        predictions (list): A list of predicted sentences.
+        references (list): A list of reference sentences.
+
+    Returns:
+        float: The final BERT score.
+
+    """
+    bert_score_evaluation_metric = evaluate.load('bertscore')
+    bert_scores = bert_score_evaluation_metric.compute(references=references, predictions=predictions, model_type="allenai/longformer-base-4096", batch_size=2)
+    
+    final_bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
+
+    return final_bert_score
+
+
+def calculate_bart_score(predictions, references):
     """
     Calculate the F1 score using the precision and recall scores.
 
     Args:
-        bart_score_precision (float): The precision score.
-        bart_score_recall (float): The recall score.
+        predictions (list): A list of predicted sentences.
+        references (list): A list of reference sentences.
 
     Returns:
         float: The F1 score.
     """
+    # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
+    bart_score_evaluation_metric = BARTScore(model_name_or_path='facebook/bart-large-cnn', device='cuda')
+    bart_score_precision = bart_score_evaluation_metric.compute(source_sentences=references, target_sentences=predictions, batch_size=2)
+    bart_score_recall = bart_score_evaluation_metric.compute(source_sentences=predictions, target_sentences=references, batch_size=2)
+
     precision_scores = bart_score_precision['score']
     recall_scores = bart_score_recall['score']
 
@@ -96,8 +142,6 @@ def calculate_bart_f1(bart_score_precision , bart_score_recall):
     for precision, recall in zip(precision_scores, recall_scores):
         f1 = 2 * ((precision * recall) / (precision + recall))
         f1_scores.append(f1)
-        print(f"F1 score: {f1}")
-        print(f"Precision score: {precision}, Recall score: {recall}")
 
     f1_score = sum(f1_scores) / len(f1_scores)
 
@@ -109,6 +153,26 @@ def calculate_bart_f1(bart_score_precision , bart_score_recall):
     recall_scores = sum(recall_scores) / len(recall_scores)
     print(f"Final recall score: {recall_scores}")
     return f1_score
+
+
+def calculate_blanc_score(predictions, references):
+    """
+    Calculates the BLANC score for a given set of predictions and references.
+
+    Args:
+        predictions (list): A list of predicted summaries.
+        references (list): A list of reference summaries.
+
+    Returns:
+        float: The calculated BLANC score.
+
+    """
+    blanc_help = BlancHelp(device='cuda', inference_batch_size=2)
+    blanc_scores = blanc_help.eval_pairs(docs=references, summaries=predictions)
+
+    blanc_score = sum(blanc_scores) / len(blanc_scores)
+
+    return blanc_score
 
 
 def create_model_card(results):

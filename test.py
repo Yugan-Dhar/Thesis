@@ -5,20 +5,17 @@ import warnings
 import math
 import argparse
 import logging
-import evaluate
 import json
 import numpy as np
 import torch.nn as nn
 import wandb
 from huggingface_hub import whoami
-from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM
 from datasets import load_dataset
 from datetime import date
-from string2string.similarity import BARTScore
 from peft import LoraConfig, get_peft_model, AutoPeftModelForCausalLM
-from utils.tools import calculate_bart_f1
+from utils.tools import *
 
 warnings.filterwarnings('ignore', category=FutureWarning, message='^The default value of `n_init` will change from 10 to \'auto\' in 1.4')
 
@@ -440,8 +437,6 @@ if __name__ == "__main__":
     
     args = parser.parse_args()  
     #TODO: Change this to a more general approach. This is only for the thesis project.
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "end"
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     
@@ -558,35 +553,20 @@ if __name__ == "__main__":
     pred_str = [summary.strip() for summary in summaries]
     
     # Calculate ROUGE scores
-    """rouge_evaluation_metric = evaluate.load('rouge')
-    rouge_scores = rouge_evaluation_metric.compute(predictions = pred_str, references = label_str, rouge_types = ["rouge1", "rouge2", "rougeL"])
 
-    # Calculate BERTScore
-    # Check different model_types! microsoft/deberta-xlarge-mnli is the highest correlated but context length of 510. 
-    bert_score_evaluation_metric = evaluate.load('bertscore')
-    bert_scores = bert_score_evaluation_metric.compute(references = label_str, predictions = pred_str, model_type = "allenai/longformer-base-4096", batch_size = 2)
-    bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])"""
+    rouge_scores = calculate_rouge_score(predcitions = pred_str, references = label_str)
 
-    # Calculate BARTScore
-    # Beware, BARTScore is memory intensive and it can't handle texts longer than 1024 tokens.
-    bart_score_evaluation_metric = BARTScore(model_name_or_path = 'facebook/bart-large-cnn', device = 'cuda')
-    bart_score_precision = bart_score_evaluation_metric.compute(source_sentences = label_str, target_sentences = pred_str, batch_size = 2)
-    bart_score_recall = bart_score_evaluation_metric.compute(source_sentences = pred_str, target_sentences = label_str, batch_size = 2)
+    bert_score = calculate_bert_score(predictions = pred_str, references = label_str)
+
+    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str)
+
+    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str)
     
-    bart_score_f1 = calculate_bart_f1(bart_score_precision, bart_score_recall)
-
-    #TODO: Also calculate the BARTscore the other way around. Then calculate F1 score between the two scores and take the average. The current method is only the precision score.
-
-    # Calculate Blanc scores
-    """blanc_help = BlancHelp(device = 'cuda', inference_batch_size = 2)
-    blanc_scores = blanc_help.eval_pairs(docs = label_str, summaries = pred_str)
-    blanc_score = sum(blanc_scores) / len(blanc_scores)"""
-
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     
-
+    print(f"ROUGE scores: {rouge_scores}\nBERTScore: {bert_score}\nBARTScore: {bart_score}\nBLANC: {blanc_score}")
     """new_result["Evaluation_metrics"] = {
-                "BARTScore": bart_score_f1
+                "BARTScore": bart_score
             }
 
          # Convert to JSON and write to a file
