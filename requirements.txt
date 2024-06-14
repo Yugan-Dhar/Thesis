@@ -10,7 +10,8 @@ async-timeout==4.0.3
 attrs==23.1.0
 bert-extractive-summarizer==0.10.1
 bert-score==0.3.13
-blanc==0.3.4
+bitsandbytes==0.43.1
+blanc @ git+https://github.com/MikaSie/blanc
 blis==0.7.11
 catalogue==2.0.10
 certifi==2023.11.17
