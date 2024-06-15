@@ -112,9 +112,9 @@ def remove_outliers_from_dataset(dataset):
     mean_token_length = np.mean(averages)
     std = np.std(averages)
 
-    print(f"Before filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    print(f"Before outlier removal: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
     dataset = dataset.filter(lambda example: example['word_length'] < (mean_token_length + 2 * std))
-    print(f"After filter: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
+    print(f"After outlier removal: {len(dataset['train'])+len(dataset['validation'])+len(dataset['test'])}. Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
 
     return dataset
 
@@ -587,7 +587,7 @@ if __name__ == "__main__":
         bf16= args.bf16,
     )
 
-    if args.abstractive_model == 'LongT5':
+    if args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
         # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
         training_args.ddp_find_unused_parameters = True
@@ -613,7 +613,7 @@ if __name__ == "__main__":
             target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
 
         lora_config = LoraConfig(
-            r= 2,
+            r= 16,
             lora_alpha=32,
             lora_dropout=0.1,
             target_modules = target_modules,
@@ -635,7 +635,7 @@ if __name__ == "__main__":
         args = training_args,
         train_dataset = dataset["train"],
         eval_dataset = dataset["validation"],
-        #data_collator = data_collator,
+        data_collator = data_collator,
         callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
     )
 

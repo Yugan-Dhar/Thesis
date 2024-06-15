@@ -67,21 +67,20 @@ def initialize_abstractive_model(model_init):
     #Beware if you use AutoModelForSeq2SeqLM or AutoModelForCausalLM. AutoModelForCausalLM is used for decoder only models while AutoModelForSeq2SeqLM is used for encoder-decoder models.
 
     if model_init == 'google/pegasus-large':
-        model = PegasusForConditionalGeneration.from_pretrained(model_init, trust_remote_code=True)
+        model = PegasusForConditionalGeneration.from_pretrained(model_init)
         tokenizer = PegasusTokenizerFast.from_pretrained(model_init)
 
     elif model_init == 'google/pegasus-x-large':
-        model = PegasusXForConditionalGeneration.from_pretrained(model_init, trust_remote_code=True)
+        model = PegasusXForConditionalGeneration.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
     elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
-        model = AutoModelForCausalLM.from_pretrained(model_init, device_map="auto", torch_dtype=torch.float16, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained(model_init, device_map="auto")
         tokenizer = AutoTokenizer.from_pretrained(model_init)
         tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.padding_side = "right"
 
     else:
-        model = AutoModelForSeq2SeqLM.from_pretrained(model_init, trust_remote_code=True)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
     
     return model, tokenizer
