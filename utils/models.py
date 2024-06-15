@@ -1,7 +1,8 @@
 import torch
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from summarizer import Summarizer 
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PegasusForConditionalGeneration, PegasusTokenizerFast, PegasusXForConditionalGeneration
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PegasusForConditionalGeneration, PegasusTokenizerFast, PegasusXForConditionalGeneration, BitsAndBytesConfig
+from peft import prepare_model_for_kbit_training
 
 def initialize_extractive_model(model_init):
     """
@@ -75,7 +76,24 @@ def initialize_abstractive_model(model_init):
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
     elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
-        model = AutoModelForCausalLM.from_pretrained(model_init, device_map="auto")
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
+
+        device_map = {"":0}
+        device_map = 'auto'
+
+        model = AutoModelForCausalLM.from_pretrained(
+            model_init, 
+            #quantization_config=quantization_config,
+            #torch_dtype=torch.float16,
+            device_map=device_map)
+
+        #model=prepare_model_for_kbit_training(model)
+        
         tokenizer = AutoTokenizer.from_pretrained(model_init)
         tokenizer.pad_token = tokenizer.eos_token
 

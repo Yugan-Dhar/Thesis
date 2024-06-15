@@ -14,6 +14,7 @@ from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling
+from trl import SFTTrainer
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
@@ -320,7 +321,7 @@ def get_feature(batch):
     """
     if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length=context_length_abstractive_model, truncation=True)
+                        max_length=context_length_abstractive_model, truncation=True, padding ='max_length')
     else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
                         max_length=context_length_abstractive_model)
@@ -371,6 +372,8 @@ def print_trainable_parameters(model):
 
 
 if __name__ == "__main__":
+    
+    torch.cuda.empty_cache()
     
     parser = argparse.ArgumentParser(description = "Train an abstractive model on the EUR-Lex dataset which is pre-processed with an extractive model at a certain extractive compression ratio.")
 
@@ -559,41 +562,33 @@ if __name__ == "__main__":
     if eval_batch_size < 1:
         eval_batch_size = 1
     
-    training_args = TrainingArguments(
-        output_dir = os.path.join('results', model_id, 'output'),
-        num_train_epochs = args.num_train_epochs,
-        per_device_train_batch_size = args.batch_size // num_gpu,
-        per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-        gradient_accumulation_steps = args.gradient_accumulation_steps,
-        warmup_ratio = args.warmup_ratio,
-        weight_decay = args.weight_decay,
-        logging_dir = os.path.join('results', model_id, 'logs'),
-        remove_unused_columns = False,        
-        load_best_model_at_end = args.load_best_model_at_end,
-        metric_for_best_model = args.metric_for_best_model,
-        save_strategy= "epoch",
-        save_total_limit= 2,
-        evaluation_strategy = "epoch",
-        label_names=["labels"],
-        report_to = "wandb",
-        logging_strategy = "epoch",
-        run_name = model_id,
-        #predict_with_generate = True, 
-        eval_accumulation_steps = 1,
-        #generation_max_length = gen_max_length,
-        hub_model_id = f"{model_id}",
-        gradient_checkpointing= args.gradient_checkpointing,
-        fp16= args.fp16,
-        bf16= args.bf16,
-    )
-
-    if args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
-        # Changes are made because of the LongT5 model, it can't work with the default settings..
-        print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
-        training_args.ddp_find_unused_parameters = True
-        training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
-
+    #TODO: If model is LLama3 or Mixtral, we just TrainingArguments, otherwise we use Seq2SeqTrainingArguments
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+        training_args = TrainingArguments(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            load_best_model_at_end = args.load_best_model_at_end,
+            metric_for_best_model = args.metric_for_best_model,
+            save_strategy= "epoch",
+            save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            label_names=["labels"],
+            report_to = "wandb",
+            logging_strategy = "epoch",
+            run_name = model_id,
+            eval_accumulation_steps = 1,
+            hub_model_id = f"{model_id}",
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
         #Just attention matrices
@@ -613,8 +608,8 @@ if __name__ == "__main__":
             target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]"""
 
         lora_config = LoraConfig(
-            r= 16,
-            lora_alpha=32,
+            r= 8,
+            lora_alpha=16,
             lora_dropout=0.1,
             target_modules = target_modules,
             task_type= 'CAUSAL_LM',
@@ -624,20 +619,71 @@ if __name__ == "__main__":
 
         abstractive_model = get_peft_model(abstractive_model, lora_config)
         print_trainable_parameters(abstractive_model)
-        
-    # Define the data collator
-    data_collator = DataCollatorForLanguageModeling(abstractive_tokenizer, mlm=False)
+    
+    
+        # Define the data collator
+        data_collator = DataCollatorForLanguageModeling(abstractive_tokenizer, mlm=False)
 
+    else:
+        training_args = Seq2SeqTrainingArguments(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            load_best_model_at_end = args.load_best_model_at_end,
+            metric_for_best_model = args.metric_for_best_model,
+            save_strategy= "epoch",
+            save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            label_names=["labels"],
+            report_to = "wandb",
+            logging_strategy = "epoch",
+            run_name = model_id,
+            predict_with_generate = True, 
+            eval_accumulation_steps = 1,
+            generation_max_length = gen_max_length,
+            hub_model_id = f"{model_id}",
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
+        
+        data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
+
+    if args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+        # Changes are made because of the LongT5 model, it can't work with the default settings..
+        print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
+        training_args.ddp_find_unused_parameters = True
+        training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
+
+    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+        trainer = SFTTrainer(
+            model = abstractive_model,
+            tokenizer = abstractive_tokenizer,
+            args = training_args,
+            train_dataset = dataset["train"],
+            eval_dataset = dataset["validation"],
+            data_collator = data_collator,
+            callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+            peft_config = lora_config
+            )
+   
+    else:
     # Create the trainer
-    trainer = Trainer(
-        model = abstractive_model,
-        tokenizer = abstractive_tokenizer,
-        args = training_args,
-        train_dataset = dataset["train"],
-        eval_dataset = dataset["validation"],
-        data_collator = data_collator,
-        callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-    )
+        trainer = Seq2SeqTrainer(
+            model = abstractive_model,
+            tokenizer = abstractive_tokenizer,
+            args = training_args,
+            train_dataset = dataset["train"],
+            eval_dataset = dataset["validation"],
+            data_collator = data_collator,
+            callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+            )
 
     if not args.verbose:
         logging.basicConfig(level=logging.ERROR)
