@@ -83,23 +83,24 @@ def initialize_abstractive_model(model_init):
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_use_double_quant=True,
             bnb_4bit_quant_storage=torch.bfloat16,
-        )
-
-        
-        #device_map = {"":0}
-        #device_map = 'sequential'
-        device_map = 'auto'
-        device_map={'':torch.cuda.current_device()}
-
-        model = AutoModelForCausalLM.from_pretrained(
-            model_init, 
-            #device_map=device_map,
-            quantization_config=quantization_config,
-            torch_dtype=torch.bfloat16,
-            low_cpu_mem_usage=True,
             )
 
-        #model=prepare_model_for_kbit_training(model)
+        """quantization_config = BitsAndBytesConfig(
+            load_in_8bit=True,
+        )
+"""
+        device_map = {"":0}
+        #device_map = 'sequential'
+        #
+        device_map = 'auto'
+        device_map={"": PartialState().process_index}
+        model = AutoModelForCausalLM.from_pretrained(
+            model_init, 
+            device_map=device_map,
+            #max_memory = {0: "30GiB", 1: "30GiB", 2: "30GiB", 3:"30GiB", "cpu": "30GiB"},
+            quantization_config=quantization_config,
+            torch_dtype=torch.bfloat16,
+            )
         
         tokenizer = AutoTokenizer.from_pretrained(model_init)
         tokenizer.pad_token = tokenizer.eos_token

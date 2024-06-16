@@ -669,6 +669,7 @@ if __name__ == "__main__":
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
             data_collator = data_collator,
+            max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config
             )
