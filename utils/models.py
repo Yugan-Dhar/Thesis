@@ -54,7 +54,7 @@ def select_extractive_model(model_name):
         raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from: { ', '.join(models)}")  
     
 
-def initialize_abstractive_model(model_init):
+def initialize_abstractive_model(model_init, args):
     """
     Initializes the specified model for abstractive summarization.
 
@@ -88,7 +88,7 @@ def initialize_abstractive_model(model_init):
         """quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
         )
-"""
+        """
         device_map = {"":0}
         #device_map = 'sequential'
         #
@@ -96,10 +96,11 @@ def initialize_abstractive_model(model_init):
         device_map={"": PartialState().process_index}
         model = AutoModelForCausalLM.from_pretrained(
             model_init, 
-            device_map=device_map,
-            #max_memory = {0: "30GiB", 1: "30GiB", 2: "30GiB", 3:"30GiB", "cpu": "30GiB"},
+            #device_map=device_map,
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
+            attn_implementation="sdpa",
+            use_cache=False if args.gradient_checkpointing else True,
             )
         
         tokenizer = AutoTokenizer.from_pretrained(model_init)
@@ -113,7 +114,7 @@ def initialize_abstractive_model(model_init):
 
 
 
-def select_abstractive_model(model_name):
+def select_abstractive_model(model_name, args):
     """
     Selects and initializes the specified abstractive model.
 
@@ -135,6 +136,6 @@ def select_abstractive_model(model_name):
     'Mixtral': 'mistralai/Mixtral-8x7B-v0.1'}
 
     if model_name in models:
-        return initialize_abstractive_model(models[model_name])
+        return initialize_abstractive_model(models[model_name], args)
     else:
         raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from: {', '.join(models)}")  

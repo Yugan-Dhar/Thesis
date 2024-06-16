@@ -442,7 +442,7 @@ if __name__ == "__main__":
 
     else:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-        abstractive_model, abstractive_tokenizer = select_abstractive_model(args.abstractive_model)
+        abstractive_model, abstractive_tokenizer = select_abstractive_model(args.abstractive_model, args)
         print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
 
     #Needs to be set manually because not all models have same config setup
@@ -602,10 +602,10 @@ if __name__ == "__main__":
         # So, we can just use the same list for both models. But might be better to keep them separate for clarity and future changes.
 
         if args.abstractive_model == 'LLama3':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj", "lm_head"]
+            target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 
         elif args.abstractive_model == 'Mixtral':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3","lm_head"]
+            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3"]
 
         lora_config = LoraConfig(
             r= 8,
@@ -671,7 +671,8 @@ if __name__ == "__main__":
             data_collator = data_collator,
             max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
-            peft_config = lora_config
+            peft_config = lora_config,
+            packing= True
             )
    
     else:
