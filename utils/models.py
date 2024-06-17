@@ -94,6 +94,7 @@ def initialize_abstractive_model(model_init, args):
         #
         device_map = 'auto'
         device_map={"": PartialState().process_index}
+   
         model = AutoModelForCausalLM.from_pretrained(
             model_init, 
             #device_map=device_map,
@@ -105,6 +106,7 @@ def initialize_abstractive_model(model_init, args):
         
         tokenizer = AutoTokenizer.from_pretrained(model_init)
         tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.padding_side = 'right'
 
     else:
         model = AutoModelForSeq2SeqLM.from_pretrained(model_init)

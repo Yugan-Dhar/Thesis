@@ -614,15 +614,7 @@ if __name__ == "__main__":
             target_modules = target_modules,
             task_type= 'CAUSAL_LM',
             bias= 'none',
-
         )
-
-        abstractive_model = get_peft_model(abstractive_model, lora_config)
-        print_trainable_parameters(abstractive_model)
-    
-    
-        # Define the data collator
-        data_collator = DataCollatorForLanguageModeling(abstractive_tokenizer, mlm=False)
 
     else:
         training_args = Seq2SeqTrainingArguments(
@@ -658,22 +650,32 @@ if __name__ == "__main__":
     if args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
         # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
-        training_args.ddp_find_unused_parameters = True
+        #training_args.ddp_find_unused_parameters = True #Used to be True
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
-
+        
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+        training_args.gradient_checkpointing_kwargs= {'use_reentrant': True}
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
             args = training_args,
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
-            data_collator = data_collator,
+            #data_collator = data_collator,
             max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
             packing= True
             )
+        
+        if getattr(trainer.accelerator.state, "fsdp_plugin", None):
+            from peft.utils.other import fsdp_auto_wrap_policy
+
+            fsdp_plugin = trainer.accelerator.state.fsdp_plugin
+            fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
+
+        print_trainable_parameters(abstractive_model)
+
    
     else:
     # Create the trainer
@@ -691,11 +693,14 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.ERROR)
 
     if not args.testing_only:
+        
+
         if args.verbose:
             print(f"Starting training on the abstractive model.")
 
         trainer.train()
-
+        if trainer.is_fsdp_enabled:
+            trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
         trainer.push_to_hub()
