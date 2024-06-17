@@ -85,19 +85,11 @@ def initialize_abstractive_model(model_init, args):
             bnb_4bit_quant_storage=torch.bfloat16,
             )
 
-        """quantization_config = BitsAndBytesConfig(
-            load_in_8bit=True,
-        )
-        """
-        device_map = {"":0}
-        #device_map = 'sequential'
-        #
-        device_map = 'auto'
         device_map={"": PartialState().process_index}
    
         model = AutoModelForCausalLM.from_pretrained(
             model_init, 
-            #device_map=device_map,
+            device_map=device_map,
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
             attn_implementation="sdpa",

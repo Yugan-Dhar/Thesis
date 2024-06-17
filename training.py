@@ -661,7 +661,6 @@ if __name__ == "__main__":
             args = training_args,
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
-            #data_collator = data_collator,
             max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
@@ -699,6 +698,8 @@ if __name__ == "__main__":
             print(f"Starting training on the abstractive model.")
 
         trainer.train()
+
+        
         if trainer.is_fsdp_enabled:
             trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
