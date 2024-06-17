@@ -92,7 +92,7 @@ def initialize_abstractive_model(model_init, args):
             device_map=device_map,
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
-            attn_implementation="sdpa",
+            attn_implementation="flash_attention_2",
             use_cache=False if args.gradient_checkpointing else True,
             )
         
