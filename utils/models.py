@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 from summarizer import Summarizer 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PegasusForConditionalGeneration, PegasusTokenizerFast, PegasusXForConditionalGeneration, BitsAndBytesConfig
 from peft import prepare_model_for_kbit_training
-from accelerate import PartialState
+from accelerate import PartialState, Accelerator
 
 def initialize_extractive_model(model_init):
     """
@@ -54,7 +54,7 @@ def select_extractive_model(model_name):
         raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from: { ', '.join(models)}")  
     
 
-def initialize_abstractive_model(model_init, args):
+def initialize_abstractive_model(model_init):
     """
     Initializes the specified model for abstractive summarization.
 
@@ -85,17 +85,18 @@ def initialize_abstractive_model(model_init, args):
             bnb_4bit_quant_storage=torch.bfloat16,
             )
 
-        device_map={"": PartialState().process_index}
-   
+        device_index = Accelerator().process_index
+        device_map = {"": device_index}
+
         model = AutoModelForCausalLM.from_pretrained(
             model_init, 
             device_map=device_map,
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
             attn_implementation="flash_attention_2",
-            use_cache=False if args.gradient_checkpointing else True,
+            use_cache=False 
             )
-        
+
         tokenizer = AutoTokenizer.from_pretrained(model_init)
         tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = 'right'
@@ -108,7 +109,7 @@ def initialize_abstractive_model(model_init, args):
 
 
 
-def select_abstractive_model(model_name, args):
+def select_abstractive_model(model_name):
     """
     Selects and initializes the specified abstractive model.
 
@@ -130,6 +131,6 @@ def select_abstractive_model(model_name, args):
     'Mixtral': 'mistralai/Mixtral-8x7B-v0.1'}
 
     if model_name in models:
-        return initialize_abstractive_model(models[model_name], args)
+        return initialize_abstractive_model(models[model_name])
     else:
         raise ValueError(f"Invalid extractive model type: {model_name}\nPlease select from: {', '.join(models)}")  

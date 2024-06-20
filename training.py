@@ -8,13 +8,13 @@ import logging
 import evaluate
 import json
 import numpy as np
-import torch.nn as nn
+import torch
 import wandb
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
-from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling
-from trl import SFTTrainer
+from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling, AutoModelForCausalLM
+from trl import SFTTrainer, SFTConfig
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
@@ -79,6 +79,7 @@ def set_device(abstractive_model, args):
 
     return num_gpu  
 
+
 def calculate_word_length_summary(example): 
     """
     Calculates the word length of the summary in the given example.
@@ -104,7 +105,6 @@ def remove_outliers_from_dataset(dataset):
         dataset (Dataset): The dataset with outliers removed.
     """
 
-    #dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code=True)
     averages = []
     for data in dataset:
         for example in dataset[data]:
@@ -324,7 +324,7 @@ def get_feature(batch):
                         max_length=context_length_abstractive_model, truncation=True, padding ='max_length')
     else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length=context_length_abstractive_model)
+                        max_length=context_length_abstractive_model, truncation=True, padding='max_length')
 
     encodings = {'input_ids': encodings['input_ids'],
                  'attention_mask': encodings['attention_mask'],
@@ -421,9 +421,11 @@ if __name__ == "__main__":
                         help= "Only preprocess the dataset and exit the program.")
     
     args = parser.parse_args()  
-    #TODO: Change this to a more general approach. This is only for the thesis project.
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-    os.environ["WANDB_LOG_MODEL"] = "end"
+
+    # For some reason, setting wandb will cause a ValueError when saving the trainer using SFTTRainer. This is a workaround for now.
+    if args.abstractive_model != 'LLama3' and args.abstractive_model != 'Mixtral':
+        os.environ["WANDB_PROJECT"] = "thesis_sie"
+        os.environ["WANDB_LOG_MODEL"] = "end"
 
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
@@ -431,18 +433,25 @@ if __name__ == "__main__":
 
     if args.testing_only:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-     
+
         if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-            abstractive_model = AutoPeftModelForCausalLM(f"MikaSie/{model_id}")
+            #TODO: Check if we need to merge and unload the model here. 
+            abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
+                f"MikaSie/{model_id}",
+                torch_dtype = torch.bfloat16,
+                quantization_config= {"load_in_4bit": True},
+                device_map="auto",
+                attn_implementation="flash_attention_2")
+            
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
         abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
-        print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
+        print(f"Loaded a fine-tuned {args.abstractive_model} model withf model id {model_id} to be used for testing only.")
 
     else:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-        abstractive_model, abstractive_tokenizer = select_abstractive_model(args.abstractive_model, args)
+        abstractive_model, abstractive_tokenizer = select_abstractive_model(args.abstractive_model)
         print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
 
     #Needs to be set manually because not all models have same config setup
@@ -551,7 +560,8 @@ if __name__ == "__main__":
 
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
-
+    torch.cuda.empty_cache
+    
     if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
         gen_max_length = 1024
     else:
@@ -562,9 +572,9 @@ if __name__ == "__main__":
     if eval_batch_size < 1:
         eval_batch_size = 1
     
-    #TODO: If model is LLama3 or Mixtral, we just TrainingArguments, otherwise we use Seq2SeqTrainingArguments
+
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-        training_args = TrainingArguments(
+        training_args = SFTConfig(
             output_dir = os.path.join('results', model_id, 'output'),
             num_train_epochs = args.num_train_epochs,
             per_device_train_batch_size = args.batch_size // num_gpu,
@@ -580,8 +590,6 @@ if __name__ == "__main__":
             save_total_limit= 2,
             evaluation_strategy = "epoch",
             label_names=["labels"],
-            report_to = "wandb",
-            logging_strategy = "epoch",
             run_name = model_id,
             eval_accumulation_steps = 1,
             hub_model_id = f"{model_id}",
@@ -591,8 +599,6 @@ if __name__ == "__main__":
         )
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
-        #Just attention matrices
-        target_modules = ["q_proj"]
 
         #Attention matrices and MLP:
         #target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
@@ -600,12 +606,11 @@ if __name__ == "__main__":
         #Attention matrices, MLP and lm_head:
         #NOTE: we can also keep one list with all the modules for LLama3 and mixtral combined as the LoraConfig does a RegEx search.
         # So, we can just use the same list for both models. But might be better to keep them separate for clarity and future changes.
-
         if args.abstractive_model == 'LLama3':
             target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 
-        elif args.abstractive_model == 'Mixtral':
-            target_modules = ["q_proj","k_proj","v_proj","o_proj","w1","w2","w3"]
+        else:
+            target_modules = ['q_proj','k_proj','v_proj','o_proj','w1', 'w2', 'w3']
 
         lora_config = LoraConfig(
             r= 8,
@@ -647,14 +652,15 @@ if __name__ == "__main__":
         
         data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
 
-    if args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+    if args.abstractive_model == 'LongT5':
         # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
-        #training_args.ddp_find_unused_parameters = True #Used to be True
+        training_args.ddp_find_unused_parameters = True #Used to be True
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
         
     if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': True}
+                
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
@@ -664,18 +670,17 @@ if __name__ == "__main__":
             max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
-            packing= True
+            packing= True,
             )
-        
+
         if getattr(trainer.accelerator.state, "fsdp_plugin", None):
             from peft.utils.other import fsdp_auto_wrap_policy
-
             fsdp_plugin = trainer.accelerator.state.fsdp_plugin
             fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
 
-        print_trainable_parameters(abstractive_model)
+        print_trainable_parameters(trainer.model)
 
-   
+
     else:
     # Create the trainer
         trainer = Seq2SeqTrainer(
@@ -692,20 +697,22 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.ERROR)
 
     if not args.testing_only:
-        
 
         if args.verbose:
-            print(f"Starting training on the abstractive model.")
+            print(f"Starting training on the abstractive model....")
 
         trainer.train()
 
-        
+        print("Training done, proceeding with saving the model to disk and pushing to Huggingface.....")
+
         if trainer.is_fsdp_enabled:
             trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
+
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
+        print("Model saved to disk.")
         trainer.push_to_hub()
-        
+        print('model pushed to hub')
         new_result =   {
             "Model_ID": model_id,
             "Date_Created": date.today().strftime("%d/%m/%Y"),
