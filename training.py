@@ -635,7 +635,7 @@ if __name__ == "__main__":
             logging_strategy = "epoch",
             run_name = model_id,
             predict_with_generate = True, 
-            eval_accumulation_steps = 1,
+            eval_accumulation_steps = args.eval_accumulation_steps,
             generation_max_length = gen_max_length,
             hub_model_id = f"{model_id}",
             gradient_checkpointing= args.gradient_checkpointing,

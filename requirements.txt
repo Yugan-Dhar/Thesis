@@ -170,6 +170,7 @@ uvicorn==0.24.0.post1
 wandb==0.16.6
 wasabi==1.1.2
 weasel==0.3.4
+wheel==0.43.0
 xxhash==3.4.1
 yarl==1.9.4
 zipp==3.18.1
