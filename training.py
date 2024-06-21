@@ -407,6 +407,8 @@ if __name__ == "__main__":
                         help= "Turn verbosity on or off.")
     parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
                         help= "The weight decay to train the abstractive model with.")
+    parser.add_argument('-eas', '--eval_accumulation_steps', type= int, default= 1, metavar= "",
+                        help= "The amount of accumulation steps to use during evaluation.")
     parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
                         help= "Load the best model at the end of training.")
     parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
@@ -591,7 +593,7 @@ if __name__ == "__main__":
             evaluation_strategy = "epoch",
             label_names=["labels"],
             run_name = model_id,
-            eval_accumulation_steps = 1,
+            eval_accumulation_steps = args.eval_accumulation_steps,
             hub_model_id = f"{model_id}",
             gradient_checkpointing= args.gradient_checkpointing,
             fp16= args.fp16,
