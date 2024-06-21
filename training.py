@@ -321,7 +321,7 @@ def get_feature(batch):
     """
     if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length=context_length_abstractive_model, truncation=True, padding ='max_length')
+                        max_length=context_length_abstractive_model, truncation=True, padding ='max_length' )
     else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
                         max_length=context_length_abstractive_model, truncation=True, padding='max_length')
@@ -333,27 +333,99 @@ def get_feature(batch):
     return encodings
 
 
-def write_predicted_summaries_to_file(path, summary_list):
+def write_predicted_summaries_to_file(path, summary_list, start_index=0):
     """
     Write a list of summaries to a file.
 
     Args:
         path (str): The path to the file where the summaries will be written.
         summary_list (list): A list of summaries to be written to the file.
+        start_index (int): The starting index for summary numbering.
 
     Returns:
         None
     """
-
-    file = open(path,'w+')
-    i = 0
-    for summary in summary_list:
-        file.write(f"Summary {i}:\n")
-        file.write(summary+"\n\n\n\n")
-        i+=1
-    file.close()
+    with open(path, 'a') as file:
+        i = start_index
+        for summary in summary_list:
+            file.write(f"Summary {i}:\n")
+            file.write(summary + "\n\n\n\n")
+            i += 1
     if args.verbose:
         print(f"Summaries written to {path}")
+
+
+def get_last_saved_index(filepath):
+    """
+    Get the index of the last saved summary.
+
+    Args:
+        filepath (str): The path to the file where summaries are saved.
+
+    Returns:
+        int: The index of the last saved summary.
+    """
+    if not os.path.exists(filepath):
+        return 0
+    with open(filepath, 'r') as file:
+        lines = file.readlines()
+    if not lines:
+        return 0
+    last_index = 0
+    for line in reversed(lines):
+        if line.startswith("Summary"):
+            last_index = int(line.split()[1][:-1])
+            break
+    return last_index + 1
+
+
+def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index, predictions_path, batch_size=5):
+    """
+    Process predictions in batches and save the results.
+
+    Args:
+        model: The model used for generating predictions.
+        tokenizer: The tokenizer used for decoding predictions.
+        inputs: Tokenized input_ids.
+        attention_masks: Corresponding attention masks.
+        start_index: Starting index for summary numbering.
+        predictions_path: Path to save predictions.
+        batch_size: Number of inputs to process in each batch.
+
+    Returns:
+        None
+    """
+    pred_str = []
+    num_batches = (len(inputs) + batch_size - 1) // batch_size
+    for i in range(num_batches):
+        batch_inputs = inputs[i*batch_size:(i+1)*batch_size]
+        batch_attention_masks = attention_masks[i*batch_size:(i+1)*batch_size]
+        outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=1500)
+        batch_pred_str = [tokenizer.decode(ids, skip_special_tokens=True) for ids in outputs]
+        pred_str.extend(batch_pred_str)
+    
+    write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
+
+
+def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5):
+    predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+    last_saved_index = get_last_saved_index(predictions_path)
+    total_size = len(dataset['test'])
+    for start_idx in range(last_saved_index, total_size, chunk_size):
+        end_idx = min(start_idx + chunk_size, total_size)
+        subset = dataset['test'].select(range(start_idx, end_idx))
+        
+        if args.verbose:
+            print(f"Predicting on dataset chunk {start_idx} to {end_idx}...")
+        
+        inputs = torch.tensor(subset['input_ids'])
+        attention_masks = torch.tensor(subset['attention_mask'])
+        batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size)
+        
+        if args.verbose:
+            print(f"Chunk {start_idx} to {end_idx} predictions finished and written to file.")
+    
+    return predictions_path
 
 
 def print_trainable_parameters(model):
@@ -747,14 +819,27 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting with predictions on the test dataset...")
         
-    results = trainer.predict(dataset['test'])
+    #TODO: We want to batch through the predictions as our CPU can't handle the whole dataset at once.
+    # We check the txt output file to see what the range should be of the
+
+    #print(abstractive_model.generate(input_ids=abstractive_tokenizer(dataset['test']['input_ids'][0], return_tensors='pt'), max_new_tokens=1500))
+
+    """results = trainer.predict(dataset['test'])
     pred_ids = results.predictions
 
     pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
-    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
+    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)"""
 
-    write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
+
+    predictions_path = chunked_predict_and_save(model = abstractive_model, 
+                                                tokenizer = abstractive_tokenizer, 
+                                                dataset = dataset, 
+                                                model_id = model_id
+                                                #generation_max_length = gen_max_length
+                                                )
+    exit()
+    #write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
 
     if args.verbose:
         print("Predictions finished and written to file.")

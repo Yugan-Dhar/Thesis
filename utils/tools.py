@@ -112,6 +112,7 @@ def calculate_rouge_score(predictions, references):
         dict: A dictionary containing the ROUGE scores for rouge1, rouge2, and rougeL.
 
     """
+    print("Calculating ROUGE scores...")
     rouge_evaluation_metric = evaluate.load('rouge')
     rouge_scores = rouge_evaluation_metric.compute(predictions=predictions, references=references, rouge_types=["rouge1", "rouge2", "rougeL"])
 

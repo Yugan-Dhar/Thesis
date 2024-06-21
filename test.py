@@ -422,6 +422,8 @@ if __name__ == "__main__":
                         help= "Turn verbosity on or off.")
     parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
                         help= "The weight decay to train the abstractive model with.")
+    parser.add_argument('-eas', '--eval_accumulation_steps', type= int, default= 1, metavar= "",
+                        help= "The amount of accumulation steps to use during evaluation.")
     parser.add_argument('-lbm', '--load_best_model_at_end', action= "store_false", default= True,
                         help= "Load the best model at the end of training.")
     parser.add_argument('-es', '--early_stopping_patience', type= int, default= 5, metavar= "",
@@ -434,9 +436,8 @@ if __name__ == "__main__":
                         help= "Write the actual summaries to a txt file for reference.")
     parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
                         help= "Only preprocess the dataset and exit the program.")
-    
+
     args = parser.parse_args()  
-    #TODO: Change this to a more general approach. This is only for the thesis project.
 
     extractive_model, extractive_tokenizer = utils.models.select_extractive_model(args.extractive_model)
     
@@ -446,7 +447,12 @@ if __name__ == "__main__":
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
      
         if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-            abstractive_model = AutoPeftModelForCausalLM(f"MikaSie/{model_id}")
+            abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
+                f"MikaSie/{model_id}",
+                torch_dtype = torch.bfloat16,
+                quantization_config= {"load_in_4bit": True},
+                device_map="auto",
+                attn_implementation="flash_attention_2")
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
@@ -530,11 +536,7 @@ if __name__ == "__main__":
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
-
     del abstractive_model, abstractive_tokenizer
-
-    if args.verbose:
-        print("Calculating evaluation metrics...")
         
     import re
 
@@ -548,17 +550,32 @@ if __name__ == "__main__":
 
     # Find all matches
     summaries = re.findall(pattern, text_content, re.DOTALL)
-
+    print("Found all summaries")
     pred_str = [summary.strip() for summary in summaries]
     
+    if args.verbose:
+        print("Calculating evaluation metrics...")
+
+    print(len(pred_str))
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    print("Calculated ROUGE scores")
     bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
+    print("Calculated BERT scores")
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
+    print("Calculated BART scores")
     blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
+    print("Calculated BLANC scores")
     
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     
-    new_result["Evaluation_metrics"]["BARTScore"] = bart_score
+    new_result["Evaluation_metrics"] = {
+                "ROUGE-1": rouge_scores['rouge1'],
+                "ROUGE-2": rouge_scores['rouge2'],
+                "ROUGE-L": rouge_scores['rougeL'],
+                "BERTScore": bert_score,
+                "BARTScore": bart_score,
+                "BLANC": blanc_score
+    }
 
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
