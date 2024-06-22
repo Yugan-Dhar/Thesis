@@ -18,7 +18,7 @@ from trl import SFTTrainer, SFTConfig
 from datasets import load_dataset
 from datetime import date
 from string2string.similarity import BARTScore
-from peft import LoraConfig, get_peft_model, AutoPeftModelForCausalLM
+from peft import LoraConfig, get_peft_model, AutoPeftModelForCausalLM, PeftModel, PeftConfig
 from utils.tools import *
 from utils.models import select_abstractive_model, select_extractive_model
 
@@ -475,6 +475,8 @@ if __name__ == "__main__":
                         help= "Use bfloat16 precision training to train the abstractive model.")
     parser.add_argument('-w', '--warmup_ratio', type= float, default= 0.1, metavar= "",
                         help= "The warmup ratio to train the abstractive model for.")
+    parser.add_argument('-gm', '--gen_max_length', type= int, default= 1500, metavar= "",
+                        help= "The maximum length of the generated summaries."  )
     parser.add_argument('-v', '--verbose', action= "store_false", default= True,
                         help= "Turn verbosity on or off.")
     parser.add_argument('-wd', '--weight_decay', type= float, default= 0.01, metavar= "",
@@ -622,6 +624,7 @@ if __name__ == "__main__":
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
 
+    test = dataset['test']['reference'][0]
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
@@ -637,9 +640,8 @@ if __name__ == "__main__":
     torch.cuda.empty_cache
     
     if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
-        gen_max_length = 1024
-    else:
-        gen_max_length = 1500
+        args.gen_max_length = 1024
+
 
     adjusted_size = num_gpu * 2
     eval_batch_size = args.batch_size // adjusted_size
@@ -673,7 +675,7 @@ if __name__ == "__main__":
         )
         print_trainable_parameters(abstractive_model)
         print("LLama3 or Mixtral model detected. Using LORA for training..")
-
+        data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
         
         target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 
@@ -729,6 +731,7 @@ if __name__ == "__main__":
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
+            data_collator = data_collator,
             args = training_args,
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
@@ -824,20 +827,34 @@ if __name__ == "__main__":
 
     #print(abstractive_model.generate(input_ids=abstractive_tokenizer(dataset['test']['input_ids'][0], return_tensors='pt'), max_new_tokens=1500))
 
-    """results = trainer.predict(dataset['test'])
-    pred_ids = results.predictions
+    test = 'Dit is een heel lang stuk tekst om te kijken of het model goed werkt. Het model moet een samenvatting maken van deze tekst. De samenvatting moet kort zijn en de tekst goed samenvatten. Het is belangrijk dat de samenvatting de tekst goed weergeeft. Ik heb het idee dat het niet goed werkt.'
+    tokenized = abstractive_tokenizer(test, return_tensors='pt', max_length =8192, truncation=True, padding='max_length')
+    
+    outcome = abstractive_model.generate(input_ids=tokenized['input_ids'], attention_mask=tokenized['attention_mask'], max_new_tokens =1500)
+    outcome_text = abstractive_tokenizer.decode(outcome[0], skip_special_tokens=True)
 
-    pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
+    print(f"Original text:\n {test}")
+    print(f"Generated text:\n {outcome_text}")
+    print(f"Generated text length: {abstractive_tokenizer(outcome_text, return_tensors='pt')['input_ids'].shape[1]}")
 
-    pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)"""
 
+    if args.abstractive_model == 'LLama3':
+        predictions_path = chunked_predict_and_save(model = abstractive_model, 
+                                                    tokenizer = abstractive_tokenizer, 
+                                                    dataset = dataset, 
+                                                    model_id = model_id
+                                                    #generation_max_length = gen_max_length
+                                                    )
 
-    predictions_path = chunked_predict_and_save(model = abstractive_model, 
-                                                tokenizer = abstractive_tokenizer, 
-                                                dataset = dataset, 
-                                                model_id = model_id
-                                                #generation_max_length = gen_max_length
-                                                )
+                                                    
+    else:
+        results = trainer.predict(dataset["test"])
+        results = trainer.predict(dataset['test'])
+        pred_ids = results.predictions
+
+        pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
+
+        pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
     exit()
     #write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
 
