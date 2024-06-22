@@ -10,6 +10,7 @@ import json
 import numpy as np
 import torch
 import wandb
+import re
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
@@ -179,8 +180,11 @@ def calculate_extractive_steps(example):
     Returns:
         dict: The updated example dictionary with the amount of extractive steps calculated.
     """
+    length = context_length_abstractive_model 
 
-    outcome = (math.log10(context_length_abstractive_model / example["token_length"])) / (math.log10(args.compression_ratio / 10))
+    """if args.abstractive_model == 'LLama3':
+        length = context_length_abstractive_model - args.gen_max_length"""
+    outcome = (math.log10(length / example["token_length"])) / (math.log10(args.compression_ratio / 10))
     
     # Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values.
     # Otherwise, if value is -1.4 it will be set to -1. This isn't possible.
@@ -319,6 +323,7 @@ def get_feature(batch):
     Returns:
         dict: The feature encodings, including input_ids, attention_mask, and labels.
     """
+    #TODO: Change for LLama3
     if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
                         max_length=context_length_abstractive_model, truncation=True, padding ='max_length' )
@@ -379,7 +384,7 @@ def get_last_saved_index(filepath):
     return last_index + 1
 
 
-def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index, predictions_path, batch_size=5):
+def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index, predictions_path, batch_size=5, generation_max_length = 1500):
     """
     Process predictions in batches and save the results.
 
@@ -400,6 +405,7 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
     for i in range(num_batches):
         batch_inputs = inputs[i*batch_size:(i+1)*batch_size]
         batch_attention_masks = attention_masks[i*batch_size:(i+1)*batch_size]
+        #TODO: Add generation_max_length to the model.generate function
         outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=1500)
         batch_pred_str = [tokenizer.decode(ids, skip_special_tokens=True) for ids in outputs]
         pred_str.extend(batch_pred_str)
@@ -407,7 +413,22 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
     write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
 
 
-def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5):
+def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5, generation_max_length=1500):
+    """
+    Predicts on the dataset in chunks and saves the predictions to a file.
+
+    Args:
+        model (torch.nn.Module): The pre-trained model used for prediction.
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer used for tokenizing the input data.
+        dataset (torch.utils.data.Dataset): The dataset containing the input data.
+        model_id (str): The ID of the model.
+        chunk_size (int, optional): The size of each chunk. Defaults to 20.
+        batch_size (int, optional): The batch size used for prediction. Defaults to 5.
+        generation_max_length (int, optional): The maximum length of the generated text. Defaults to 1500.
+
+    Returns:
+        str: The path to the file where the predictions are saved.
+    """
     predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
     last_saved_index = get_last_saved_index(predictions_path)
     total_size = len(dataset['test'])
@@ -420,12 +441,39 @@ def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20,
         
         inputs = torch.tensor(subset['input_ids'])
         attention_masks = torch.tensor(subset['attention_mask'])
-        batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size)
+        batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size, generation_max_length=generation_max_length)
         
         if args.verbose:
             print(f"Chunk {start_idx} to {end_idx} predictions finished and written to file.")
     
     return predictions_path
+
+
+def read_created_summaries(model_id):
+    """
+    Read the created summaries from a text file.
+
+    Args:
+        model_id (str): The ID of the model.
+
+    Returns:
+        list: A list of created summaries.
+
+    """
+    # Load the text file content
+    file_path = f'results/text_outputs/{model_id}_predictions.txt'
+    with open(file_path, 'r', encoding='utf-8') as file:
+        text_content = file.read()
+
+    # Regular expression to find all summaries
+    pattern = r'Summary \d+:\s(.*?)(?=Summary \d+:|\Z)'
+
+    # Find all matches
+    summaries = re.findall(pattern, text_content, re.DOTALL)
+    print("Found all summaries")
+    pred_str = [summary.strip() for summary in summaries]
+
+    return pred_str
 
 
 def print_trainable_parameters(model):
@@ -748,7 +796,6 @@ if __name__ == "__main__":
 
         print_trainable_parameters(trainer.model)
 
-
     else:
     # Create the trainer
         trainer = Seq2SeqTrainer(
@@ -822,41 +869,50 @@ if __name__ == "__main__":
     if args.verbose:
         print("Starting with predictions on the test dataset...")
         
-    #TODO: We want to batch through the predictions as our CPU can't handle the whole dataset at once.
-    # We check the txt output file to see what the range should be of the
 
-    #print(abstractive_model.generate(input_ids=abstractive_tokenizer(dataset['test']['input_ids'][0], return_tensors='pt'), max_new_tokens=1500))
 
-    test = 'Dit is een heel lang stuk tekst om te kijken of het model goed werkt. Het model moet een samenvatting maken van deze tekst. De samenvatting moet kort zijn en de tekst goed samenvatten. Het is belangrijk dat de samenvatting de tekst goed weergeeft. Ik heb het idee dat het niet goed werkt.'
-    tokenized = abstractive_tokenizer(test, return_tensors='pt', max_length =8192, truncation=True, padding='max_length')
+    """tokenized = abstractive_tokenizer(test, return_tensors='pt', max_length =8192-1500, truncation=True, padding='max_length')
     
     outcome = abstractive_model.generate(input_ids=tokenized['input_ids'], attention_mask=tokenized['attention_mask'], max_new_tokens =1500)
     outcome_text = abstractive_tokenizer.decode(outcome[0], skip_special_tokens=True)
 
     print(f"Original text:\n {test}")
     print(f"Generated text:\n {outcome_text}")
-    print(f"Generated text length: {abstractive_tokenizer(outcome_text, return_tensors='pt')['input_ids'].shape[1]}")
+    print(f"Generated text length: {abstractive_tokenizer(outcome_text, return_tensors='pt')['input_ids'].shape[1]}")"""
 
+    inputs = abstractive_tokenizer(test, return_tensors="pt", return_attention_mask=False, max_length = 3000)
 
+    outputs = abstractive_model.generate(**inputs.to('cuda')) 
+
+    text = abstractive_tokenizer.batch_decode(outputs)[0]
+    
+    print(text)
+
+    outputs_2 = abstractive_model.generate(**inputs,max_new_tokens=200) 
+
+    text_2 = abstractive_tokenizer.batch_decode(outputs_2)[0]
+    print(text_2)
+    print(f"Generated text length: {len(abstractive_tokenizer.convert_ids_to_tokens(outputs[0]))}\nGenerated text 2 length: {abstractive_tokenizer(text_2, return_tensors='pt')['input_ids'].shape[1]}")
+    exit()
+    #LLama3 can't use trainer.predict so we need to use a different method for this model.
     if args.abstractive_model == 'LLama3':
         predictions_path = chunked_predict_and_save(model = abstractive_model, 
                                                     tokenizer = abstractive_tokenizer, 
                                                     dataset = dataset, 
-                                                    model_id = model_id
-                                                    #generation_max_length = gen_max_length
+                                                    model_id = model_id,
+                                                    generation_max_length = args.gen_max_length
                                                     )
-
+        pred_str = read_created_summaries(model_id = model_id)
                                                     
     else:
         results = trainer.predict(dataset["test"])
-        results = trainer.predict(dataset['test'])
         pred_ids = results.predictions
 
         pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
         pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-    exit()
-    #write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
+        write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
+
 
     if args.verbose:
         print("Predictions finished and written to file.")
