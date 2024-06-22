@@ -452,7 +452,8 @@ if __name__ == "__main__":
                 torch_dtype = torch.bfloat16,
                 quantization_config= {"load_in_4bit": True},
                 device_map="auto",
-                attn_implementation="flash_attention_2")
+                #attn_implementation="flash_attention_2"
+                )
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
@@ -559,15 +560,15 @@ if __name__ == "__main__":
     print(len(pred_str))
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")
-    bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
+    bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BERT scores")
-    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
+    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BART scores")
-    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
+    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
-    
+    print(f"ROUGE-1: {rouge_scores['rouge1']}, ROUGE-2: {rouge_scores['rouge2']}, ROUGE-L: {rouge_scores['rougeL']}, BERTScore: {bert_score}, BARTScore: {bart_score}, BLANC: {blanc_score}")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
-    
+    """
     new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
@@ -590,4 +591,4 @@ if __name__ == "__main__":
         
 
     if args.verbose:
-        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
+        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")"""
