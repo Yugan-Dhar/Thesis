@@ -10,7 +10,6 @@ import json
 import numpy as np
 import torch
 import wandb
-import re
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
@@ -160,7 +159,7 @@ def get_dependent_compression_ratio(example):
     Returns:
     dict: A dictionary containing the dependent compression ratio.
     """
-    
+
     if args.abstractive_model == 'LLama3':
         length = context_length_abstractive_model - args.gen_max_length
     else:
@@ -336,7 +335,7 @@ def get_feature(batch):
 
     if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length=length, truncation=True, padding ='max_length' )
+                        max_length=length, truncation=True, padding ='max_length')
 
     else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
@@ -416,6 +415,7 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
 
     pred_str = []
     num_batches = (len(inputs) + batch_size - 1) // batch_size
+    print(f"Number of batches: {num_batches}\nLength of inputs: {len(inputs)}")
     for i in range(num_batches):
         batch_inputs = inputs[i*batch_size:(i+1)*batch_size]
         print(f"Batch inputs: {batch_inputs}")
@@ -423,10 +423,7 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
         
         outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=generation_max_length)
         #TODO: In every batch we need to cut off the first part of the output, because it is the input text.
-        for response in outputs:
-            response = response[batch_inputs.shape[-1]:]
-            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
-            
+         
         response = outputs[0][batch_inputs.shape[-1]:]
         
         print(f"Total output:{outputs}")
@@ -438,6 +435,69 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
         pred_str.append(batch_pred_str)
     
     write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
+
+
+def batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_index, predictions_path, generation_max_length=1500):
+        """
+        Process predictions for each input and save the results.
+
+        Args:
+            model: The model used for generating predictions.
+            tokenizer: The tokenizer used for decoding predictions.
+            inputs: Tokenized input_ids.
+            attention_masks: Corresponding attention masks.
+            start_index: Starting index for summary numbering.
+            predictions_path: Path to save predictions.
+            generation_max_length: Maximum length of the generated text.
+
+        Returns:
+            None
+        """
+        pred_str = []
+
+        for i in range(len(inputs)):
+            input_ids = inputs[i].to(model.device)
+            input_ids = input_ids.unsqueeze(0)
+            attention_mask = attention_masks[i]
+            output = model.generate(input_ids= input_ids, attention_mask = attention_mask, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id, pad_token_id = tokenizer.eos_token_id)
+            response = output[0][input_ids.shape[-1]:]
+
+            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
+        
+        write_predicted_summaries_to_file(predictions_path, pred_str)
+
+
+def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=1500):
+        """
+        Process predictions for each input and save the results.
+
+        Args:
+            model: The model used for generating predictions.
+            tokenizer: The tokenizer used for decoding predictions.
+            inputs: Tokenized input_ids.
+            attention_masks: Corresponding attention masks.
+            start_index: Starting index for summary numbering.
+            predictions_path: Path to save predictions.
+            generation_max_length: Maximum length of the generated text.
+
+        Returns:
+            None
+        """
+        pred_str = []
+        predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+        for i in range(len(dataset)):
+
+            input_ids = torch.tensor(dataset['input_ids'][i]).to(model.device)
+            input_ids = input_ids.unsqueeze(0)
+            output = model.generate(input_ids= input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
+
+            response = output[0][input_ids.shape[-1]:]
+            if i % 10 == 0:
+                print(f"Summarized {i + 1} examples.")
+            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
+        
+        write_predicted_summaries_to_file(predictions_path, pred_str)
+        return pred_str
 
 
 def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5, generation_max_length=1500):
@@ -462,45 +522,18 @@ def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20,
     for start_idx in range(last_saved_index, total_size, chunk_size):
         end_idx = min(start_idx + chunk_size, total_size)
         subset = dataset['test'].select(range(start_idx, end_idx))
-        
+         
         if args.verbose:
             print(f"Predicting on dataset chunk {start_idx} to {end_idx}...")
         
         inputs = torch.tensor(subset['input_ids'])
         attention_masks = torch.tensor(subset['attention_mask'])
-        batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size, generation_max_length=generation_max_length)
-        
+        #batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size, generation_max_length=generation_max_length)
+        batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, generation_max_length=generation_max_length)
         if args.verbose:
             print(f"Chunk {start_idx} to {end_idx} predictions finished and written to file.")
     
     return predictions_path
-
-
-def read_created_summaries(model_id):
-    """
-    Read the created summaries from a text file.
-
-    Args:
-        model_id (str): The ID of the model.
-
-    Returns:
-        list: A list of created summaries.
-
-    """
-    # Load the text file content
-    file_path = f'results/text_outputs/{model_id}_predictions.txt'
-    with open(file_path, 'r', encoding='utf-8') as file:
-        text_content = file.read()
-
-    # Regular expression to find all summaries
-    pattern = r'Summary \d+:\s(.*?)(?=Summary \d+:|\Z)'
-
-    # Find all matches
-    summaries = re.findall(pattern, text_content, re.DOTALL)
-    print("Found all summaries")
-    pred_str = [summary.strip() for summary in summaries]
-
-    return pred_str
 
 
 def print_trainable_parameters(model):
@@ -586,7 +619,6 @@ if __name__ == "__main__":
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
         if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-            #TODO: Check if we need to merge and unload the model here. 
             abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
                 f"MikaSie/{model_id}",
                 torch_dtype = torch.bfloat16,
@@ -699,7 +731,6 @@ if __name__ == "__main__":
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
 
-    test = dataset['test']['reference'][0]
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
@@ -901,15 +932,22 @@ if __name__ == "__main__":
 
     #LLama3 can't use trainer.predict so we need to use a different method for this model.
     if args.abstractive_model == 'LLama3':
+        pred_str = predict_and_save(model = abstractive_model,
+                                            tokenizer = abstractive_tokenizer,
+                                            dataset = dataset['test'],
+                                            model_id = model_id
+                                            )
 
         
-        predictions_path = chunked_predict_and_save(model = abstractive_model, 
+        """predictions_path = chunked_predict_and_save(model = abstractive_model, 
                                                     tokenizer = abstractive_tokenizer, 
                                                     dataset = dataset, 
                                                     model_id = model_id,
                                                     generation_max_length = args.gen_max_length
-                                                    )
-        pred_str = read_created_summaries(model_id = model_id)
+                                                    )"""
+
+        
+        #pred_str = read_created_summaries(model_id = model_id)
                                                     
     else:
         results = trainer.predict(dataset["test"])

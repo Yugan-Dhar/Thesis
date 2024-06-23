@@ -1,6 +1,7 @@
 import os
 import json
 import evaluate
+import re
 from string2string.similarity import BARTScore
 from huggingface_hub import ModelCard, ModelCardData, metadata_update
 from blanc import BlancHelp
@@ -194,6 +195,32 @@ def calculate_blanc_score(predictions, references, batch_size=2):
     return blanc_score
 
 
+
+def read_created_summaries(model_id):
+    """
+    Read the created summaries from a text file.
+
+    Args:
+        model_id (str): The ID of the model.
+
+    Returns:
+        list: A list of created summaries.
+
+    """
+    # Load the text file content
+    file_path = f'results/text_outputs/{model_id}_predictions.txt'
+    with open(file_path, 'r', encoding='utf-8') as file:
+        text_content = file.read()
+
+    # Regular expression to find all summaries
+    pattern = r'Summary \d+:\s(.*?)(?=Summary \d+:|\Z)'
+
+    # Find all matches
+    summaries = re.findall(pattern, text_content, re.DOTALL)
+    print("Found all summaries")
+    pred_str = [summary.strip() for summary in summaries]
+
+    return pred_str
 def create_model_card(results):
     """
     Creates a model card based on the provided results. If a template is not found, a default model card is generated, so it is recommended to have a template in the 'docs' directory.
@@ -235,5 +262,3 @@ def create_model_card(results):
 
     return card
 
-
-    
