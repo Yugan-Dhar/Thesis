@@ -395,48 +395,6 @@ def get_last_saved_index(filepath):
     return last_index + 1
 
 
-def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index, predictions_path, batch_size=5, generation_max_length = 1500):
-    """
-    Process predictions in batches and save the results.
-
-    Args:
-        model: The model used for generating predictions.
-        tokenizer: The tokenizer used for decoding predictions.
-        inputs: Tokenized input_ids.
-        attention_masks: Corresponding attention masks.
-        start_index: Starting index for summary numbering.
-        predictions_path: Path to save predictions.
-        batch_size: Number of inputs to process in each batch.
-
-    Returns:
-        None
-    """
-    #Only works for LLama3
-
-    pred_str = []
-    num_batches = (len(inputs) + batch_size - 1) // batch_size
-    print(f"Number of batches: {num_batches}\nLength of inputs: {len(inputs)}")
-    for i in range(num_batches):
-        batch_inputs = inputs[i*batch_size:(i+1)*batch_size]
-        print(f"Batch inputs: {batch_inputs}")
-        batch_attention_masks = attention_masks[i*batch_size:(i+1)*batch_size]
-        
-        outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=generation_max_length)
-        #TODO: In every batch we need to cut off the first part of the output, because it is the input text.
-         
-        response = outputs[0][batch_inputs.shape[-1]:]
-        
-        print(f"Total output:{outputs}")
-        print(f"Response: {response}")
-        print(f"Total output length{len(outputs[0])}")
-        print(f"Response length: {len(response)}")
-
-        batch_pred_str = [tokenizer.decode(ids, skip_special_tokens=True) for ids in outputs]
-        pred_str.append(batch_pred_str)
-    
-    write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
-
-
 def batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_index, predictions_path, generation_max_length=1500):
         """
         Process predictions for each input and save the results.
@@ -468,36 +426,34 @@ def batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_in
 
 
 def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=1500):
-        """
-        Process predictions for each input and save the results.
+    """
+    Process predictions for each input and save the results.
 
-        Args:
-            model: The model used for generating predictions.
-            tokenizer: The tokenizer used for decoding predictions.
-            inputs: Tokenized input_ids.
-            attention_masks: Corresponding attention masks.
-            start_index: Starting index for summary numbering.
-            predictions_path: Path to save predictions.
-            generation_max_length: Maximum length of the generated text.
+    Args:
+        model (object): The model used for generating predictions.
+        tokenizer (object): The tokenizer used for decoding predictions.
+        dataset (object): The dataset containing input_ids.
+        model_id (str): The ID of the model.
+        generation_max_length (int, optional): Maximum length of the generated text. Defaults to 1500.
 
-        Returns:
-            None
-        """
-        pred_str = []
-        predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
-        for i in range(len(dataset)):
+    Returns:
+        list: A list of predicted summaries.
 
-            input_ids = torch.tensor(dataset['input_ids'][i]).to(model.device)
-            input_ids = input_ids.unsqueeze(0)
-            output = model.generate(input_ids= input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
+    """
 
-            response = output[0][input_ids.shape[-1]:]
-            if i % 10 == 0:
-                print(f"Summarized {i + 1} examples.")
-            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
-        
-        write_predicted_summaries_to_file(predictions_path, pred_str)
-        return pred_str
+    pred_str = []
+    predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+    for i in range(len(dataset)):
+        input_ids = torch.tensor(dataset['input_ids'][i]).to(model.device)
+        input_ids = input_ids.unsqueeze(0)
+        output = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
+        response = output[0][input_ids.shape[-1]:]
+        if i % 10 == 0:
+            print(f"Summarized {i + 1} examples.")
+        pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
+    
+    write_predicted_summaries_to_file(predictions_path, pred_str)
+    return pred_str
 
 
 def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5, generation_max_length=1500):
@@ -947,8 +903,8 @@ if __name__ == "__main__":
 
         
         #pred_str = read_created_summaries(model_id = model_id)
-  
-                                                    
+
+
     else:
         results = trainer.predict(dataset["test"])
         pred_ids = results.predictions

@@ -729,5 +729,24 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         }
+    },
+    {
+        "Model_ID": "LLama3_no_extraction_V3",
+        "Date_Created": "23/06/2024",
+        "Abstractive_model": "LLama3",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
+        "Version": 3,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 40,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "No_extraction": true
     }
 ]
