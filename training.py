@@ -837,7 +837,6 @@ if __name__ == "__main__":
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
-            data_collator = data_collator,
             args = training_args,
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
@@ -948,6 +947,7 @@ if __name__ == "__main__":
 
         
         #pred_str = read_created_summaries(model_id = model_id)
+  
                                                     
     else:
         results = trainer.predict(dataset["test"])
@@ -956,7 +956,7 @@ if __name__ == "__main__":
         pred_ids[pred_ids == -100] = abstractive_tokenizer.pad_token_id
 
         pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
-        write_predicted_summaries_to_file(os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), pred_str)
+        write_predicted_summaries_to_file(path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), summary_list = pred_str)
 
 
     if args.verbose:
