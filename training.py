@@ -160,8 +160,13 @@ def get_dependent_compression_ratio(example):
     Returns:
     dict: A dictionary containing the dependent compression ratio.
     """
+    
+    if args.abstractive_model == 'LLama3':
+        length = context_length_abstractive_model - args.gen_max_length
+    else:
+        length = context_length_abstractive_model
 
-    dependent_ratio = (context_length_abstractive_model / example['token_length'])
+    dependent_ratio = (length / example['token_length'])
 
     # If the dependent ratio is larger than 1, set it to 1 because we cannot compress more than the original text
     if dependent_ratio > 1:
@@ -182,8 +187,9 @@ def calculate_extractive_steps(example):
     """
     length = context_length_abstractive_model 
 
-    """if args.abstractive_model == 'LLama3':
-        length = context_length_abstractive_model - args.gen_max_length"""
+    if args.abstractive_model == 'LLama3':
+        length = context_length_abstractive_model - args.gen_max_length
+
     outcome = (math.log10(length / example["token_length"])) / (math.log10(args.compression_ratio / 10))
     
     # Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values.
@@ -323,13 +329,19 @@ def get_feature(batch):
     Returns:
         dict: The feature encodings, including input_ids, attention_mask, and labels.
     """
-    #TODO: Change for LLama3
+    if args.abstractive_model == 'LLama3':
+        length = context_length_abstractive_model - args.gen_max_length
+    else:
+        length = context_length_abstractive_model
+
     if args.no_extraction:
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length=context_length_abstractive_model, truncation=True, padding ='max_length' )
+                        max_length=length, truncation=True, padding ='max_length' )
+
     else:
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length=context_length_abstractive_model, truncation=True, padding='max_length')
+                        max_length=length, truncation=True, padding='max_length')
+
 
     encodings = {'input_ids': encodings['input_ids'],
                  'attention_mask': encodings['attention_mask'],
@@ -400,15 +412,30 @@ def batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_inde
     Returns:
         None
     """
+    #Only works for LLama3
+
     pred_str = []
     num_batches = (len(inputs) + batch_size - 1) // batch_size
     for i in range(num_batches):
         batch_inputs = inputs[i*batch_size:(i+1)*batch_size]
+        print(f"Batch inputs: {batch_inputs}")
         batch_attention_masks = attention_masks[i*batch_size:(i+1)*batch_size]
-        #TODO: Add generation_max_length to the model.generate function
-        outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=1500)
+        
+        outputs = model.generate(input_ids=batch_inputs, attention_mask=batch_attention_masks, max_new_tokens=generation_max_length)
+        #TODO: In every batch we need to cut off the first part of the output, because it is the input text.
+        for response in outputs:
+            response = response[batch_inputs.shape[-1]:]
+            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
+            
+        response = outputs[0][batch_inputs.shape[-1]:]
+        
+        print(f"Total output:{outputs}")
+        print(f"Response: {response}")
+        print(f"Total output length{len(outputs[0])}")
+        print(f"Response length: {len(response)}")
+
         batch_pred_str = [tokenizer.decode(ids, skip_special_tokens=True) for ids in outputs]
-        pred_str.extend(batch_pred_str)
+        pred_str.append(batch_pred_str)
     
     write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
 
@@ -870,32 +897,12 @@ if __name__ == "__main__":
         print("Starting with predictions on the test dataset...")
         
 
-
-    """tokenized = abstractive_tokenizer(test, return_tensors='pt', max_length =8192-1500, truncation=True, padding='max_length')
     
-    outcome = abstractive_model.generate(input_ids=tokenized['input_ids'], attention_mask=tokenized['attention_mask'], max_new_tokens =1500)
-    outcome_text = abstractive_tokenizer.decode(outcome[0], skip_special_tokens=True)
 
-    print(f"Original text:\n {test}")
-    print(f"Generated text:\n {outcome_text}")
-    print(f"Generated text length: {abstractive_tokenizer(outcome_text, return_tensors='pt')['input_ids'].shape[1]}")"""
-
-    inputs = abstractive_tokenizer(test, return_tensors="pt", return_attention_mask=False, max_length = 3000)
-
-    outputs = abstractive_model.generate(**inputs.to('cuda')) 
-
-    text = abstractive_tokenizer.batch_decode(outputs)[0]
-    
-    print(text)
-
-    outputs_2 = abstractive_model.generate(**inputs,max_new_tokens=200) 
-
-    text_2 = abstractive_tokenizer.batch_decode(outputs_2)[0]
-    print(text_2)
-    print(f"Generated text length: {len(abstractive_tokenizer.convert_ids_to_tokens(outputs[0]))}\nGenerated text 2 length: {abstractive_tokenizer(text_2, return_tensors='pt')['input_ids'].shape[1]}")
-    exit()
     #LLama3 can't use trainer.predict so we need to use a different method for this model.
     if args.abstractive_model == 'LLama3':
+
+        
         predictions_path = chunked_predict_and_save(model = abstractive_model, 
                                                     tokenizer = abstractive_tokenizer, 
                                                     dataset = dataset, 
