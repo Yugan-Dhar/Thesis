@@ -747,6 +747,14 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "No_extraction": true
+        "No_extraction": true,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.0,
+            "ROUGE-2": 0.0,
+            "ROUGE-L": 0.0,
+            "BERTScore": 0.0,
+            "BARTScore": -5.38701422259001,
+            "BLANC": 0.0
+        }
     }
 ]
