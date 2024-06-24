@@ -728,6 +728,14 @@
             "Load_best_model_at_end": true,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.0,
+            "ROUGE-2": 0.0,
+            "ROUGE-L": 0.0,
+            "BERTScore": 0.0,
+            "BARTScore": -5.38701422259001,
+            "BLANC": 0.0
         }
     },
     {
@@ -747,14 +755,25 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "No_extraction": true,
-        "Evaluation_metrics": {
-            "ROUGE-1": 0.0,
-            "ROUGE-2": 0.0,
-            "ROUGE-L": 0.0,
-            "BERTScore": 0.0,
-            "BARTScore": -5.38701422259001,
-            "BLANC": 0.0
-        }
+        "No_extraction": true
+    },
+    {
+        "Model_ID": "LLama3_no_extraction_V4",
+        "Date_Created": "23/06/2024",
+        "Abstractive_model": "LLama3",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
+        "Version": 4,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 2,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": true,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "eval_loss"
+        },
+        "No_extraction": true
     }
 ]

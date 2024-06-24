@@ -136,7 +136,7 @@ def add_prefix(batch):
     return batch
 
 
-def calculate_token_length(example):
+def calculate_extractive_token_length(example):
     """
     Calculates the token length of a given example.
 
@@ -146,7 +146,7 @@ def calculate_token_length(example):
     Returns:
     dict: A dictionary with the token length of the reference text.
     """
-    return {'token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
+    return {'extractive_token_length': extractive_tokenizer(example['reference'], return_tensors='pt')['input_ids'].shape[1]}
 
 
 def get_dependent_compression_ratio(example):
@@ -160,12 +160,14 @@ def get_dependent_compression_ratio(example):
     dict: A dictionary containing the dependent compression ratio.
     """
 
+    #TODO: Check is this is still applicable!
     if args.abstractive_model == 'LLama3':
         length = context_length_abstractive_model - args.gen_max_length
+        print("Using adjusted length for LLama3 model.")
     else:
         length = context_length_abstractive_model
 
-    dependent_ratio = (length / example['token_length'])
+    dependent_ratio = (length / example['extractive_token_length'])
 
     # If the dependent ratio is larger than 1, set it to 1 because we cannot compress more than the original text
     if dependent_ratio > 1:
@@ -189,7 +191,7 @@ def calculate_extractive_steps(example):
     if args.abstractive_model == 'LLama3':
         length = context_length_abstractive_model - args.gen_max_length
 
-    outcome = (math.log10(length / example["token_length"])) / (math.log10(args.compression_ratio / 10))
+    outcome = (math.log10(length / example["extractive_token_length"])) / (math.log10(args.compression_ratio / 10))
     
     # Check here if an outcome is smaller than 0, it should be set to 0. This way we can avoid negative values.
     # Otherwise, if value is -1.4 it will be set to -1. This isn't possible.
@@ -328,18 +330,17 @@ def get_feature(batch):
     Returns:
         dict: The feature encodings, including input_ids, attention_mask, and labels.
     """
-    if args.abstractive_model == 'LLama3':
-        length = context_length_abstractive_model - args.gen_max_length
-    else:
-        length = context_length_abstractive_model
+
 
     if args.no_extraction:
+
         encodings = abstractive_tokenizer(batch['reference'], text_target=batch['summary'],
-                        max_length=length, truncation=True, padding ='max_length')
+                        max_length=context_length_abstractive_model, truncation=True, padding ='max_length')
 
     else:
+
         encodings = abstractive_tokenizer(batch['concatenated_summary'], text_target=batch['summary'],
-                        max_length=length, truncation=True, padding='max_length')
+                        max_length=context_length_abstractive_model, truncation=True, padding='max_length')
 
 
     encodings = {'input_ids': encodings['input_ids'],
@@ -371,60 +372,6 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
         print(f"Summaries written to {path}")
 
 
-def get_last_saved_index(filepath):
-    """
-    Get the index of the last saved summary.
-
-    Args:
-        filepath (str): The path to the file where summaries are saved.
-
-    Returns:
-        int: The index of the last saved summary.
-    """
-    if not os.path.exists(filepath):
-        return 0
-    with open(filepath, 'r') as file:
-        lines = file.readlines()
-    if not lines:
-        return 0
-    last_index = 0
-    for line in reversed(lines):
-        if line.startswith("Summary"):
-            last_index = int(line.split()[1][:-1])
-            break
-    return last_index + 1
-
-
-def batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_index, predictions_path, generation_max_length=1500):
-        """
-        Process predictions for each input and save the results.
-
-        Args:
-            model: The model used for generating predictions.
-            tokenizer: The tokenizer used for decoding predictions.
-            inputs: Tokenized input_ids.
-            attention_masks: Corresponding attention masks.
-            start_index: Starting index for summary numbering.
-            predictions_path: Path to save predictions.
-            generation_max_length: Maximum length of the generated text.
-
-        Returns:
-            None
-        """
-        pred_str = []
-
-        for i in range(len(inputs)):
-            input_ids = inputs[i].to(model.device)
-            input_ids = input_ids.unsqueeze(0)
-            attention_mask = attention_masks[i]
-            output = model.generate(input_ids= input_ids, attention_mask = attention_mask, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id, pad_token_id = tokenizer.eos_token_id)
-            response = output[0][input_ids.shape[-1]:]
-
-            pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
-        
-        write_predicted_summaries_to_file(predictions_path, pred_str)
-
-
 def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=1500):
     """
     Process predictions for each input and save the results.
@@ -444,6 +391,7 @@ def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=
     pred_str = []
     predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
     for i in range(len(dataset)):
+        #TODO: Check if this is correct, also try 
         input_ids = torch.tensor(dataset['input_ids'][i]).to(model.device)
         input_ids = input_ids.unsqueeze(0)
         output = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
@@ -454,42 +402,6 @@ def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=
     
     write_predicted_summaries_to_file(predictions_path, pred_str)
     return pred_str
-
-
-def chunked_predict_and_save(model, tokenizer, dataset, model_id, chunk_size=20, batch_size=5, generation_max_length=1500):
-    """
-    Predicts on the dataset in chunks and saves the predictions to a file.
-
-    Args:
-        model (torch.nn.Module): The pre-trained model used for prediction.
-        tokenizer (transformers.PreTrainedTokenizer): The tokenizer used for tokenizing the input data.
-        dataset (torch.utils.data.Dataset): The dataset containing the input data.
-        model_id (str): The ID of the model.
-        chunk_size (int, optional): The size of each chunk. Defaults to 20.
-        batch_size (int, optional): The batch size used for prediction. Defaults to 5.
-        generation_max_length (int, optional): The maximum length of the generated text. Defaults to 1500.
-
-    Returns:
-        str: The path to the file where the predictions are saved.
-    """
-    predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
-    last_saved_index = get_last_saved_index(predictions_path)
-    total_size = len(dataset['test'])
-    for start_idx in range(last_saved_index, total_size, chunk_size):
-        end_idx = min(start_idx + chunk_size, total_size)
-        subset = dataset['test'].select(range(start_idx, end_idx))
-         
-        if args.verbose:
-            print(f"Predicting on dataset chunk {start_idx} to {end_idx}...")
-        
-        inputs = torch.tensor(subset['input_ids'])
-        attention_masks = torch.tensor(subset['attention_mask'])
-        #batch_predict_and_save(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, batch_size=batch_size, generation_max_length=generation_max_length)
-        batch_predict_and_save_2(model, tokenizer, inputs, attention_masks, start_index=start_idx, predictions_path=predictions_path, generation_max_length=generation_max_length)
-        if args.verbose:
-            print(f"Chunk {start_idx} to {end_idx} predictions finished and written to file.")
-    
-    return predictions_path
 
 
 def print_trainable_parameters(model):
@@ -505,6 +417,123 @@ def print_trainable_parameters(model):
     print(
         f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param:.2f}"
     )
+
+
+def abstractive_tokenized_text(example):
+    """
+    Tokenizes the text in the example using the abstractive tokenizer.
+
+    Args:
+        example (dict): A dictionary containing the text to be tokenized.
+
+    Returns:
+        dict: A dictionary containing the tokenized text.
+    """
+
+    if args.no_extraction:
+        text = example['reference']
+    else:
+        text = example['concatenated_summary']
+
+
+    return {'abstractive_tokenized_text': abstractive_tokenizer(text, return_tensors='pt')}
+
+
+def calculate_abstractive_token_length(example):
+    """
+    Calculates the token length of a given example. 
+
+    Parameters:
+    example (dict): The example containing the reference text.
+
+    Returns:
+    dict: A dictionary with the token length of the reference text.
+    """
+
+    return {'abstractive_token_length': torch.tensor(example['abstractive_tokenized_text']['input_ids']).shape[1]}
+
+
+def apply_summarization_template(reference, summary):
+    """
+    Apply summarization template to the given reference and summary.
+
+    Args:
+        reference (str): The text to be summarized.
+        summary (str): The summary of the reference text.
+
+    Returns:
+        str: The formatted text with the summarization template applied.
+    """
+    return f"""
+Summarize the following text.
+
+### Text:
+{reference}
+
+### Summary:
+{summary}
+""".strip()
+
+
+def generate_summarization_datset_causal_model(example):
+
+
+    # If length is shorter than context_length - gen_max_length, immediately apply summarization template on the correct text.
+    args.gen_max_length = 1500
+
+    if example['abstractive_token_length'] <= (context_length_abstractive_model - args.gen_max_length):
+
+        #print(f"Not cut off because example token length is {example['abstractive_token_length']}")
+        # If no extraction is enabled, we use the reference text to generate the summary.
+        if args.no_extraction:
+            example['text'] = apply_summarization_template(reference= example['reference'], summary =example['summary'])
+
+        # If extraction is enabled, we use the concatenated summary to generate the summary.
+        else:
+            example['text'] = apply_summarization_template(reference = example['concatenated_summary'], summary = example['summary'])
+
+
+    else:
+        text = torch.tensor(example['abstractive_tokenized_text']['input_ids'][0]) 
+        text = text[:context_length_abstractive_model - args.gen_max_length]
+
+        #print(f"Cut off because example token length is {example['abstractive_token_length']}\nNow the length is {len(text)}")
+        
+        #Here we don't need to check if it's no extraction or not because the text is cut off, we don't use reference or concatenated summary either way as the reference or concatenated summary is too long.
+
+        example['text'] = apply_summarization_template(reference= abstractive_tokenizer.decode(text, skip_special_tokens=True), summary = example['summary'])
+    
+    #print(f"Generated text for example:\n{example['text']}\nCorresponding text token length: {len(abstractive_tokenizer(example['text'], return_tensors='pt')['input_ids'].squeeze())}")
+    example['text_context_length'] = abstractive_tokenizer(example['text'], return_tensors='pt')['input_ids'].shape[1]
+
+    return example
+
+
+def prepare_dataset_for_causal_lm(dataset):
+
+    #Step 1: Tokenize the reference text
+    dataset = dataset.map(abstractive_tokenized_text)
+    print("Tokenized the reference text.")
+    #Step 2: Calculate the token length of the reference text
+    dataset = dataset.map(calculate_abstractive_token_length)
+    print("Calculated the token length of the required text.")
+
+    dataset = dataset.map(generate_summarization_datset_causal_model)
+    #TODO: Check if length is within abstractive_context_length 
+
+    averages = []
+    flag = 0
+    for data in dataset:
+        for example in dataset[data]:
+            if example['text_context_length'] > context_length_abstractive_model:
+                flag += 1
+            averages.append(example['text_context_length'])
+        print(f"Amount of examples that will be off for {data}: {flag}")
+
+    mean_token_length = np.mean(averages)
+    print(f"Mean token length of the text: {mean_token_length}\nAmount of examples cut off: {flag}")
+    exit()
+    return dataset
 
 
 if __name__ == "__main__":
@@ -642,10 +671,10 @@ if __name__ == "__main__":
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
 
-        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'LLama3':
+        if args.abstractive_model == 'T5' or args.abstractive_model == 'LongT5':
             dataset = dataset.map(add_prefix, batched= True)
 
-        dataset = dataset.map(calculate_token_length)
+        dataset = dataset.map(calculate_extractive_token_length)
 
         if args.mode == 'dependent':
             dataset = dataset.map(get_dependent_compression_ratio)
@@ -655,6 +684,7 @@ if __name__ == "__main__":
         if args.verbose:
             print("Starting on extractive summaries")
 
+        
         dataset = dataset.map(get_summarized_chunks)
         dataset.save_to_disk(dataset_path)
 
@@ -688,7 +718,10 @@ if __name__ == "__main__":
         dataset = remove_outliers_from_dataset(dataset)
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    dataset = dataset.map(get_feature, batched= True, batch_size = 32)
+    if args.abstractive_model == 'LLama3':
+        dataset = prepare_dataset_for_causal_lm(dataset)
+    else:
+        dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
     label_str = dataset["test"]["summary"]
 
@@ -727,7 +760,6 @@ if __name__ == "__main__":
             save_strategy= "epoch",
             save_total_limit= 2,
             evaluation_strategy = "epoch",
-            label_names=["labels"],
             run_name = model_id,
             eval_accumulation_steps = args.eval_accumulation_steps,
             hub_model_id = f"{model_id}",
@@ -794,6 +826,8 @@ if __name__ == "__main__":
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
             args = training_args,
+            #data_collator = data_collator,
+            dataset_text_field = 'text',
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"],
             max_seq_length = context_length_abstractive_model,
@@ -828,7 +862,7 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"Starting training on the abstractive model....")
-
+        
         trainer.train()
 
         print("Training done, proceeding with saving the model to disk and pushing to Huggingface.....")

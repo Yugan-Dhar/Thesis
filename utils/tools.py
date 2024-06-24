@@ -92,13 +92,37 @@ def remove_unused_columns(dataset):
     Returns:
         Dataset: The dataset with unused columns removed.
     """
-    columns_to_keep = ["input_ids", "attention_mask", "labels"]
+    columns_to_keep = ["input_ids", "attention_mask", "labels", 'text']
     all_datasets = ["train", "validation", "test"]
     for dataset_name in all_datasets:
         all_columns = dataset[dataset_name].column_names
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     return dataset
+
+
+def get_last_saved_index(filepath):
+    """
+    Get the index of the last saved summary.
+
+    Args:
+        filepath (str): The path to the file where summaries are saved.
+
+    Returns:
+        int: The index of the last saved summary.
+    """
+    if not os.path.exists(filepath):
+        return 0
+    with open(filepath, 'r') as file:
+        lines = file.readlines()
+    if not lines:
+        return 0
+    last_index = 0
+    for line in reversed(lines):
+        if line.startswith("Summary"):
+            last_index = int(line.split()[1][:-1])
+            break
+    return last_index + 1
 
 
 def calculate_rouge_score(predictions, references):
