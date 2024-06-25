@@ -719,5 +719,24 @@
             "BARTScore": -5.38701422259001,
             "BLANC": 0.0
         }
+    },
+    {
+        "Model_ID": "Llama3_no_extraction_V2",
+        "Date_Created": "25/06/2024",
+        "Abstractive_model": "Llama3",
+        "Extractive_model": "No extractive model",
+        "Ratio_mode": "No ratio",
+        "Version": 2,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 10,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": false,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "none"
+        },
+        "No_extraction": true
     }
 ]
