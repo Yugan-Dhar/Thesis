@@ -734,7 +734,7 @@
             "Warmup_ratio": 0.1,
             "Weight_decay": 0.01,
             "Load_best_model_at_end": false,
-            "Early_stopping_patience": 5,
+            "Early_stopping_patience": "none",
             "Metric_for_best_model": "none"
         },
         "No_extraction": true
