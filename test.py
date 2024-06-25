@@ -446,7 +446,7 @@ if __name__ == "__main__":
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
      
-        if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+        if args.abstractive_model == 'Llama3' or args.abstractive_model == 'Mixtral':
             abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
                 f"MikaSie/{model_id}",
                 torch_dtype = torch.bfloat16,

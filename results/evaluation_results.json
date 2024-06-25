@@ -668,9 +668,9 @@
         }
     },
     {
-        "Model_ID": "LLama3_no_extraction_V1",
+        "Model_ID": "Llama3_no_extraction_V1",
         "Date_Created": "21/06/2024",
-        "Abstractive_model": "LLama3",
+        "Abstractive_model": "Llama3",
         "Extractive_model": "No extractive model",
         "Ratio_mode": "No ratio",
         "Version": 2,
@@ -695,9 +695,9 @@
         }
     },
     {
-        "Model_ID": "RoBERTa_LLama3_dependent_V1",
+        "Model_ID": "RoBERTa_Llama3_dependent_V1",
         "Date_Created": "21/06/2024",
-        "Abstractive_model": "LLama3",
+        "Abstractive_model": "Llama3",
         "Extractive_model": "RoBERTa",
         "Ratio_mode": "dependent",
         "Version": 1,
@@ -718,32 +718,6 @@
             "BERTScore": 0.0,
             "BARTScore": -5.38701422259001,
             "BLANC": 0.0
-        }
-    },
-    {
-        "Model_ID": "RoBERTa_LLama3_dependent_V2",
-        "Date_Created": "21/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "dependent",
-        "Version": 2,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 40,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
-        },
-        "Evaluation_metrics": {
-            "ROUGE-1": 0.018466770295461177,
-            "ROUGE-2": 0.00803563747419133,
-            "ROUGE-L": 0.014328169760641309,
-            "BERTScore": 0.4054751992225647,
-            "BARTScore": -4.82056874499692,
-            "BLANC": 0.0164346260146678
         }
     }
 ]

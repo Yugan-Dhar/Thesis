@@ -10,6 +10,7 @@ import json
 import numpy as np
 import torch
 import wandb
+import sys
 from accelerate import Accelerator
 from huggingface_hub import whoami
 from blanc import BlancHelp
@@ -161,10 +162,10 @@ def get_dependent_compression_ratio(example):
     dict: A dictionary containing the dependent compression ratio.
     """
 
-    #TODO: Check is this is still applicable!
-    if args.abstractive_model == 'LLama3':
+    #TODO: Check is this is still applicable! For now it is.
+    if args.abstractive_model == 'Llama3':
         length = context_length_abstractive_model - args.gen_max_length
-        print("Using adjusted length for LLama3 model.")
+        
     else:
         length = context_length_abstractive_model
 
@@ -189,8 +190,8 @@ def calculate_extractive_steps(example):
     """
     length = context_length_abstractive_model 
 
-    #TODO: CHeck if this is still correct
-    if args.abstractive_model == 'LLama3':
+    #TODO: CHeck if this is still correct For now it is.
+    if args.abstractive_model == 'Llama3':
         length = context_length_abstractive_model - args.gen_max_length
 
     outcome = (math.log10(length / example["extractive_token_length"])) / (math.log10(args.compression_ratio / 10))
@@ -394,8 +395,6 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
     pred_str = []
     predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
     for i in range(len(dataset)):
-        if i ==4:
-            break
         text = dataset['text'][i]  
 
         split_text = re.split(r'(### Summary:)', text)
@@ -404,18 +403,15 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
         result_text = result_text.strip()
 
         input_ids = tokenizer(result_text, return_tensors='pt').input_ids.to(model.device)
-        print("Starting on prediction")
+        
         #TODO: CHeck if this is correct --> Not needed when using torch.bfloat16 as dtype
         """with torch.cuda.amp.autocast():
             outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)"""
         
-        generation_max_length = 50
         outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
-        print(f"Output without cutting off input:\n{tokenizer.decode(outputs[0], skip_special_tokens=True)}")
         output = outputs[0][len(input_ids[0]):]
 
         output = tokenizer.decode(output, skip_special_tokens=True)
-        print(f"Predicted summary:\n{output}")
         if i % 10 == 0:
             print(f"Summarized {i + 1} examples.")
 
@@ -423,21 +419,6 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
         
     write_predicted_summaries_to_file(predictions_path, pred_str)
     return pred_str
-
-
-def print_trainable_parameters(model):
-    """
-    Prints the number of trainable parameters in the model.
-    """
-    trainable_params = 0
-    all_param = 0
-    for _, param in model.named_parameters():
-        all_param += param.numel()
-        if param.requires_grad:
-            trainable_params += param.numel()
-    print(
-        f"trainable params: {trainable_params} || all params: {all_param} || trainable%: {100 * trainable_params / all_param:.2f}"
-    )
 
 
 def abstractive_tokenized_text(example):
@@ -538,10 +519,20 @@ def generate_summarization_datset_causal_model(example):
 
 
 def prepare_dataset_for_causal_lm(dataset):
+    """
+    Preprocesses the dataset for training a causal language model such as Llama3.
 
-    #Step 1: Tokenize the reference text
+    Args:
+        dataset (Dataset): The input dataset.
+
+    Returns:
+        Dataset: The preprocessed dataset.
+
+    """
+    # Step 1: Tokenize the reference text
     dataset = dataset.map(abstractive_tokenized_text)
-    #Step 2: Calculate the token length of the reference text
+    
+    # Step 2: Calculate the token length of the reference text
     dataset = dataset.map(calculate_abstractive_token_length)
 
     dataset = dataset.map(generate_summarization_datset_causal_model)
@@ -553,10 +544,8 @@ def prepare_dataset_for_causal_lm(dataset):
             if example['text_context_length'] > context_length_abstractive_model:
                 flag += 1
             averages.append(example['text_context_length'])
-        print(f"Amount of examples that will be off for {data}: {flag}")
+        print(f"Amount of examples that will too long for 8192 tokens {data}: {flag}")
 
-    #mean_token_length = np.mean(averages)
-    #print(f"Mean token length of the text: {mean_token_length}\nAmount of examples cut off: {flag}")
     return dataset
 
 
@@ -616,12 +605,16 @@ if __name__ == "__main__":
     args = parser.parse_args()  
 
     # For some reason, setting wandb will cause a ValueError when saving the trainer using SFTTRainer. This is a workaround for now.
-    if args.abstractive_model != 'LLama3':
-        os.environ["WANDB_PROJECT"] = "thesis_sie"
+    if args.abstractive_model != 'Llama3':
         os.environ["WANDB_LOG_MODEL"] = "end"
+    os.environ["WANDB_MODE"] = 'online'
+    os.environ["WANDB_PROJECT"] = "thesis_sie"
+
 
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
+    accelerator = Accelerator()
+
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
     if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
         args.gen_max_length = 1024
@@ -629,13 +622,13 @@ if __name__ == "__main__":
     if args.testing_only:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-        if args.abstractive_model == 'LLama3':
-            #TODO: Maybe change the quantization config to a different one.
+        if args.abstractive_model == 'Llama3':
+            #TODO: Maybe change the quantization config to a different one. Test later.
             quantization_config = BitsAndBytesConfig(
                     load_in_4bit=True,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_compute_dtype=torch.bfloat16,
-                    bnb_4bit_use_double_quant=True,
+                    #bnb_4bit_quant_type="nf4",
+                    #bnb_4bit_compute_dtype=torch.bfloat16,
+                    #bnb_4bit_use_double_quant=True,
                     
                 )
             abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
@@ -677,15 +670,18 @@ if __name__ == "__main__":
         if args.no_extraction:
             print("No extractive steps are enabled.")
 
-    #num_gpu = set_device(abstractive_model, args)
-    num_gpu = torch.cuda.device_count()
 
-    # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
+    if args.abstractive_model == 'Llama3' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'PegasusX':
+        num_gpu = torch.cuda.device_count()
+    else:
+        num_gpu = set_device(abstractive_model, args)
+    
+
+    # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this!
     if args.mode == 'fixed' or args.mode == 'hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
     else:
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
-
 
     if args.no_extraction:
         dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
@@ -721,7 +717,6 @@ if __name__ == "__main__":
 
         if args.verbose:
             print("Starting on extractive summaries")
-
         
         dataset = dataset.map(get_summarized_chunks)
         dataset.save_to_disk(dataset_path)
@@ -755,14 +750,16 @@ if __name__ == "__main__":
         dataset = dataset.map(calculate_word_length_summary)
         dataset = remove_outliers_from_dataset(dataset)
 
-    # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
-    if args.abstractive_model == 'LLama3':
+    # Dataset is processed for training according to model type
+    if args.abstractive_model == 'Llama3':
         dataset = prepare_dataset_for_causal_lm(dataset)
     else:
         dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
+    # Extract golden reference summaries from the dataset for later evaluation  
     label_str = dataset["test"]["summary"]
-    label_str = dataset["test"]["summary"][:4]
+
+    # Remove unsed columns to save space
     dataset = remove_unused_columns(dataset)
     
     if args.verbose:
@@ -772,28 +769,28 @@ if __name__ == "__main__":
     del extractive_model, extractive_tokenizer
     torch.cuda.empty_cache
     
+    # Use adjusted eval batch size because of OOM errors during evaluation
     adjusted_size = num_gpu * 2
     eval_batch_size = args.batch_size // adjusted_size
     if eval_batch_size < 1:
         eval_batch_size = 1
     
+    if args.abstractive_model == 'Llama3':
 
-    if args.abstractive_model == 'LLama3':
+        # For Llama3, no loading best model and early stopping is possible because of HF and FSDP incompatibility.
+        # If this is enabled, checkpoints are saved in a sharded state while they should be saved in a full state.
+        # This will result in LORA weights being set to 0 because they are not as the FQN isn't correct.
+        # For now there is no fix from my side on how to solve this.
         training_args = SFTConfig(
             output_dir = os.path.join('results', model_id, 'output'),
             num_train_epochs = args.num_train_epochs,
-            max_steps = 1, #TODO: Remove later on but for now we use this to test the model.
             per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            per_device_eval_batch_size = eval_batch_size,
             gradient_accumulation_steps = args.gradient_accumulation_steps,
             warmup_ratio = args.warmup_ratio,
             weight_decay = args.weight_decay,
             logging_dir = os.path.join('results', model_id, 'logs'),
             remove_unused_columns = False,        
-            #load_best_model_at_end = args.load_best_model_at_end,
-            #metric_for_best_model = args.metric_for_best_model,
-            #save_strategy= "epoch",
-            #save_total_limit= 2,
             evaluation_strategy = "epoch",
             run_name = model_id,
             eval_accumulation_steps = args.eval_accumulation_steps,
@@ -803,9 +800,8 @@ if __name__ == "__main__":
             fp16= args.fp16,
             bf16= args.bf16,
         )
-        print_trainable_parameters(abstractive_model)
-        print("LLama3 model detected. Using LORA for training..")
-        data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
+
+        print("Llama3 model detected. Using LORA for training..")
         
         target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 
@@ -823,7 +819,7 @@ if __name__ == "__main__":
             output_dir = os.path.join('results', model_id, 'output'),
             num_train_epochs = args.num_train_epochs,
             per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            per_device_eval_batch_size = eval_batch_size, 
             gradient_accumulation_steps = args.gradient_accumulation_steps,
             warmup_ratio = args.warmup_ratio,
             weight_decay = args.weight_decay,
@@ -850,24 +846,22 @@ if __name__ == "__main__":
         data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
     
     if args.abstractive_model == 'LongT5':
-        # Changes are made because of the LongT5 model, it can't work with the default settings..
+        # Changes are made because LongT5 model can't work with the default settings.
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
         training_args.ddp_find_unused_parameters = True 
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
         
-    if args.abstractive_model == 'LLama3':
-
+    if args.abstractive_model == 'Llama3':
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': True}
                 
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
             args = training_args,
-            dataset_text_field = 'text',
             train_dataset = dataset["train"],
-            eval_dataset = dataset["validation"].select(range(1)), #TODO: Change after testing
+            eval_dataset = dataset["validation"],
+            dataset_text_field = 'text',
             max_seq_length = context_length_abstractive_model,
-            #callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
             )
 
@@ -876,7 +870,7 @@ if __name__ == "__main__":
             fsdp_plugin = trainer.accelerator.state.fsdp_plugin
             fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(trainer.model)
 
-        print_trainable_parameters(trainer.model)
+        trainer.model.print_trainable_parameters()
 
     else:
     # Create the trainer
@@ -905,13 +899,10 @@ if __name__ == "__main__":
         if trainer.is_fsdp_enabled:
             trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
 
-        
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
         trainer.push_to_hub()
-
         
-        exit()
         new_result =   {
             "Model_ID": model_id,
             "Date_Created": date.today().strftime("%d/%m/%Y"),
@@ -946,7 +937,11 @@ if __name__ == "__main__":
         f.close()
              
         if args.verbose:
-            print(f"Training finished. Model saved to disk and pushed to Huggingface.")        
+            print(f"Training finished. The model is saved to disk, model information to {evaluation_results_filepath} and pushed to Huggingface.")        
+
+        if args.abstractive_model == 'Llama3' or args.abstractive_model == 'LongT5' or args.abstractive_model == 'PegasusX':
+            print("""Exiting program because Llama3, LongT5 or PegasusX model is used. No evaluation metrics can be calculated in a FSDP or DDP process.\nPlease calculate metrics by running 'python3 training.py' with the same arguments but with the -t flag.""")
+            sys.exit()
 
     #5) Evaluate the abstractive summarization model on the pre-processed dataset
 
@@ -954,8 +949,8 @@ if __name__ == "__main__":
         print("Starting with predictions on the test dataset...")
     
 
-    #LLama3 can't use trainer.predict so we need to use a different method for this model.
-    if args.abstractive_model == 'LLama3':
+    # Llama3 can't use trainer.predict so we need to use a different method for this model.
+    if args.abstractive_model == 'Llama3':
         pred_str = predict_and_save(model = abstractive_model,
                                             tokenizer = abstractive_tokenizer,
                                             dataset = dataset['test'],
@@ -972,10 +967,6 @@ if __name__ == "__main__":
         pred_str = abstractive_tokenizer.batch_decode(pred_ids, skip_special_tokens=True)
         write_predicted_summaries_to_file(path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt"), summary_list = pred_str)
 
-
-    if args.verbose:
-        print("Predictions finished and written to file.")
-
     del abstractive_model, abstractive_tokenizer
 
     if args.verbose:
@@ -985,6 +976,8 @@ if __name__ == "__main__":
     bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
     blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
+
+    print('Calculated all metrics. Saving results and pushing adjusted model card to the hub...')
 
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
         
@@ -1008,4 +1001,4 @@ if __name__ == "__main__":
     model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
         
     if args.verbose:
-        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
+        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.\n Training and evaluation finished.")

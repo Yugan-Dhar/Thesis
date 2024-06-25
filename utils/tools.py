@@ -219,7 +219,6 @@ def calculate_blanc_score(predictions, references, batch_size=2):
     return blanc_score
 
 
-
 def read_created_summaries(model_id):
     """
     Read the created summaries from a text file.
@@ -245,6 +244,8 @@ def read_created_summaries(model_id):
     pred_str = [summary.strip() for summary in summaries]
 
     return pred_str
+
+
 def create_model_card(results):
     """
     Creates a model card based on the provided results. If a template is not found, a default model card is generated, so it is recommended to have a template in the 'docs' directory.
