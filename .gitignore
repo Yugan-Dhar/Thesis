@@ -12,8 +12,8 @@ logs
 # Ignore everything in the results directory
 results/*
 docs/card_template.md
-.log
-
+test_output_02.log
+test_output_01.log
 # But don't ignore evaluation_results.json
 !results/evaluation_results.json
 !results/text_outputs/

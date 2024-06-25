@@ -1,4 +1,0 @@
-usage: training.py [-h] [-t] [-m {fixed,dependent,hybrid}] [-nte] [-b] [-gas] [-gc] [-fp16] [-bf16] [-w] [-gm] [-v] [-wd] [-eas] [-lbm]
-                   [-es] [-mfm] [-ne] [-wr] [-po]
-                   extractive_model {1,2,3,4,5,6,7,8,9} abstractive_model
-training.py: error: the following arguments are required: extractive_model, compression_ratio, abstractive_model
