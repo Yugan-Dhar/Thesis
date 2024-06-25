@@ -669,24 +669,6 @@
     },
     {
         "Model_ID": "LLama3_no_extraction_V1",
-        "Date_Created": "18/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "No extractive model",
-        "Ratio_mode": "No ratio",
-        "Version": 1,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 40,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
-        }
-    },
-    {
-        "Model_ID": "LLama3_no_extraction_V2",
         "Date_Created": "21/06/2024",
         "Abstractive_model": "LLama3",
         "Extractive_model": "No extractive model",
@@ -739,68 +721,12 @@
         }
     },
     {
-        "Model_ID": "LLama3_no_extraction_V3",
-        "Date_Created": "23/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "No extractive model",
-        "Ratio_mode": "No ratio",
-        "Version": 3,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 40,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
-        },
-        "No_extraction": true
-    },
-    {
-        "Model_ID": "LLama3_no_extraction_V4",
-        "Date_Created": "23/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "No extractive model",
-        "Ratio_mode": "No ratio",
-        "Version": 4,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 2,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
-        },
-        "No_extraction": true
-    },
-    {
         "Model_ID": "RoBERTa_LLama3_dependent_V2",
-        "Date_Created": "24/06/2024",
+        "Date_Created": "21/06/2024",
         "Abstractive_model": "LLama3",
         "Extractive_model": "RoBERTa",
         "Ratio_mode": "dependent",
         "Version": 2,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 40,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
-        }
-    },
-    {
-        "Model_ID": "LLama3_no_extraction_V5",
-        "Date_Created": "24/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "No extractive model",
-        "Ratio_mode": "No ratio",
-        "Version": 5,
         "Hyperparameters": {
             "Learning_rate": 5e-05,
             "Epochs": 40,
@@ -811,24 +737,13 @@
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "eval_loss"
         },
-        "No_extraction": true
-    },
-    {
-        "Model_ID": "RoBERTa_LLama3_dependent_V3",
-        "Date_Created": "24/06/2024",
-        "Abstractive_model": "LLama3",
-        "Extractive_model": "RoBERTa",
-        "Ratio_mode": "dependent",
-        "Version": 2,
-        "Hyperparameters": {
-            "Learning_rate": 5e-05,
-            "Epochs": 40,
-            "Batch_size": 16,
-            "Warmup_ratio": 0.1,
-            "Weight_decay": 0.01,
-            "Load_best_model_at_end": true,
-            "Early_stopping_patience": 5,
-            "Metric_for_best_model": "eval_loss"
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.018466770295461177,
+            "ROUGE-2": 0.00803563747419133,
+            "ROUGE-L": 0.014328169760641309,
+            "BERTScore": 0.4054751992225647,
+            "BARTScore": -4.82056874499692,
+            "BLANC": 0.0164346260146678
         }
     }
 ]

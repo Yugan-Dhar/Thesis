@@ -10,6 +10,7 @@ import json
 import numpy as np
 import torch
 import wandb
+from accelerate import Accelerator
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
@@ -188,6 +189,7 @@ def calculate_extractive_steps(example):
     """
     length = context_length_abstractive_model 
 
+    #TODO: CHeck if this is still correct
     if args.abstractive_model == 'LLama3':
         length = context_length_abstractive_model - args.gen_max_length
 
@@ -392,6 +394,8 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
     pred_str = []
     predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
     for i in range(len(dataset)):
+        if i ==4:
+            break
         text = dataset['text'][i]  
 
         split_text = re.split(r'(### Summary:)', text)
@@ -401,15 +405,17 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
 
         input_ids = tokenizer(result_text, return_tensors='pt').input_ids.to(model.device)
         print("Starting on prediction")
-        #TODO: CHeck if this is correct
-        with torch.cuda.amp.autocast():
-            outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
+        #TODO: CHeck if this is correct --> Not needed when using torch.bfloat16 as dtype
+        """with torch.cuda.amp.autocast():
+            outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)"""
+        
+        generation_max_length = 50
+        outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
         print(f"Output without cutting off input:\n{tokenizer.decode(outputs[0], skip_special_tokens=True)}")
         output = outputs[0][len(input_ids[0]):]
 
         output = tokenizer.decode(output, skip_special_tokens=True)
         print(f"Predicted summary:\n{output}")
-        exit()
         if i % 10 == 0:
             print(f"Summarized {i + 1} examples.")
 
@@ -535,24 +541,22 @@ def prepare_dataset_for_causal_lm(dataset):
 
     #Step 1: Tokenize the reference text
     dataset = dataset.map(abstractive_tokenized_text)
-    print("Tokenized the reference text.")
     #Step 2: Calculate the token length of the reference text
     dataset = dataset.map(calculate_abstractive_token_length)
-    print("Calculated the token length of the required text.")
 
     dataset = dataset.map(generate_summarization_datset_causal_model)
 
     averages = []
-    flag = 0
     for data in dataset:
+        flag = 0
         for example in dataset[data]:
             if example['text_context_length'] > context_length_abstractive_model:
                 flag += 1
             averages.append(example['text_context_length'])
         print(f"Amount of examples that will be off for {data}: {flag}")
 
-    mean_token_length = np.mean(averages)
-    print(f"Mean token length of the text: {mean_token_length}\nAmount of examples cut off: {flag}")
+    #mean_token_length = np.mean(averages)
+    #print(f"Mean token length of the text: {mean_token_length}\nAmount of examples cut off: {flag}")
     return dataset
 
 
@@ -615,106 +619,33 @@ if __name__ == "__main__":
     if args.abstractive_model != 'LLama3':
         os.environ["WANDB_PROJECT"] = "thesis_sie"
         os.environ["WANDB_LOG_MODEL"] = "end"
-    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
-    model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-    num_gpu = torch.cuda.device_count()
-    adjusted_size = num_gpu * 2
-    eval_batch_size = args.batch_size // adjusted_size
-    if eval_batch_size < 1:
-        eval_batch_size = 1
-    
 
-    if args.abstractive_model == 'LLama3':
-        training_args = SFTConfig(
-            output_dir = os.path.join('results', model_id, 'output'),
-            num_train_epochs = args.num_train_epochs,
-            max_steps = 1, #TODO: Remove later on but for now we use this to test the model.
-            per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-            gradient_accumulation_steps = args.gradient_accumulation_steps,
-            warmup_ratio = args.warmup_ratio,
-            weight_decay = args.weight_decay,
-            logging_dir = os.path.join('results', model_id, 'logs'),
-            remove_unused_columns = False,        
-            load_best_model_at_end = args.load_best_model_at_end,
-            metric_for_best_model = args.metric_for_best_model,
-            save_strategy= "epoch",
-            save_total_limit= 2,
-            evaluation_strategy = "epoch",
-            run_name = model_id,
-            eval_accumulation_steps = args.eval_accumulation_steps,
-            hub_model_id = f"{model_id}",
-            packing= True,
-            gradient_checkpointing= args.gradient_checkpointing,
-            fp16= args.fp16,
-            bf16= args.bf16,
-        )
-        #print_trainable_parameters(abstractive_model)
-        print("LLama3 model detected. Using LORA for training..")
-        #data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
-        
-        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
-
-        lora_config = LoraConfig(
-            r= 8,
-            lora_alpha=16,
-            lora_dropout=0.1,
-            target_modules = target_modules,
-            task_type= 'CAUSAL_LM',
-            bias= 'none',
-        )
-
-    else:
-        training_args = Seq2SeqTrainingArguments(
-            output_dir = os.path.join('results', model_id, 'output'),
-            num_train_epochs = args.num_train_epochs,
-            per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-            gradient_accumulation_steps = args.gradient_accumulation_steps,
-            warmup_ratio = args.warmup_ratio,
-            weight_decay = args.weight_decay,
-            logging_dir = os.path.join('results', model_id, 'logs'),
-            remove_unused_columns = False,        
-            load_best_model_at_end = args.load_best_model_at_end,
-            metric_for_best_model = args.metric_for_best_model,
-            save_strategy= "epoch",
-            save_total_limit= 2,
-            evaluation_strategy = "epoch",
-            label_names=["labels"],
-            report_to = "wandb",
-            logging_strategy = "epoch",
-            run_name = model_id,
-            predict_with_generate = True, 
-            eval_accumulation_steps = args.eval_accumulation_steps,
-            generation_max_length = gen_max_length,
-            hub_model_id = f"{model_id}",
-            gradient_checkpointing= args.gradient_checkpointing,
-            fp16= args.fp16,
-            bf16= args.bf16,
-        )
-        
-        data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
     if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
         args.gen_max_length = 1024
 
-   
     if args.testing_only:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
         if args.abstractive_model == 'LLama3':
             #TODO: Maybe change the quantization config to a different one.
-            abstractive_model = AutoModelForCausalLM.from_pretrained(
+            quantization_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_compute_dtype=torch.bfloat16,
+                    bnb_4bit_use_double_quant=True,
+                    
+                )
+            abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
                 f"MikaSie/{model_id}",
-                torch_dtype=torch.float16,
-                quantization_config= {"load_in_4bit": True},
+                torch_dtype=torch.bfloat16,
+                quantization_config= quantization_config,
                 device_map="auto",
                 attn_implementation="flash_attention_2")
 
-            
-            
+        
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
@@ -831,6 +762,7 @@ if __name__ == "__main__":
         dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
     label_str = dataset["test"]["summary"]
+    label_str = dataset["test"]["summary"][:4]
     dataset = remove_unused_columns(dataset)
     
     if args.verbose:
@@ -840,7 +772,83 @@ if __name__ == "__main__":
     del extractive_model, extractive_tokenizer
     torch.cuda.empty_cache
     
+    adjusted_size = num_gpu * 2
+    eval_batch_size = args.batch_size // adjusted_size
+    if eval_batch_size < 1:
+        eval_batch_size = 1
+    
 
+    if args.abstractive_model == 'LLama3':
+        training_args = SFTConfig(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            max_steps = 1, #TODO: Remove later on but for now we use this to test the model.
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            #load_best_model_at_end = args.load_best_model_at_end,
+            #metric_for_best_model = args.metric_for_best_model,
+            #save_strategy= "epoch",
+            #save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            run_name = model_id,
+            eval_accumulation_steps = args.eval_accumulation_steps,
+            hub_model_id = f"{model_id}",
+            packing= True,
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
+        print_trainable_parameters(abstractive_model)
+        print("LLama3 model detected. Using LORA for training..")
+        data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
+        
+        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
+
+        lora_config = LoraConfig(
+            r= 8,
+            lora_alpha=16,
+            lora_dropout=0.1,
+            target_modules = target_modules,
+            task_type= 'CAUSAL_LM',
+            bias= 'none',
+        )
+
+    else:
+        training_args = Seq2SeqTrainingArguments(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            load_best_model_at_end = args.load_best_model_at_end,
+            metric_for_best_model = args.metric_for_best_model,
+            save_strategy= "epoch",
+            save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            label_names=["labels"],
+            report_to = "wandb",
+            logging_strategy = "epoch",
+            run_name = model_id,
+            predict_with_generate = True, 
+            eval_accumulation_steps = args.eval_accumulation_steps,
+            generation_max_length = gen_max_length,
+            hub_model_id = f"{model_id}",
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
+        
+        data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
+    
     if args.abstractive_model == 'LongT5':
         # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
@@ -859,7 +867,7 @@ if __name__ == "__main__":
             train_dataset = dataset["train"],
             eval_dataset = dataset["validation"].select(range(1)), #TODO: Change after testing
             max_seq_length = context_length_abstractive_model,
-            callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
+            #callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
             )
 
@@ -890,7 +898,6 @@ if __name__ == "__main__":
         if args.verbose:
             print(f"Starting training on the abstractive model....")
 
-
         trainer.train()
 
         print("Training done, proceeding with saving the model to disk and pushing to Huggingface.....")
@@ -898,9 +905,12 @@ if __name__ == "__main__":
         if trainer.is_fsdp_enabled:
             trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
 
+        
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
         trainer.push_to_hub()
+
+        
         exit()
         new_result =   {
             "Model_ID": model_id,
