@@ -13,7 +13,7 @@ import wandb
 from huggingface_hub import whoami
 from blanc import BlancHelp
 from langchain.text_splitter import TokenTextSplitter
-from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling, AutoModelForCausalLM
+from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, DataCollator, DataCollatorForLanguageModeling, AutoModelForCausalLM, BitsAndBytesConfig
 from trl import SFTTrainer, SFTConfig
 from datasets import load_dataset
 from datetime import date
@@ -372,7 +372,7 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
         print(f"Summaries written to {path}")
 
 
-def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=1500):
+def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_max_length=1500):
     """
     Process predictions for each input and save the results.
 
@@ -387,19 +387,34 @@ def predict_and_save(model, tokenizer, dataset, model_id, generation_max_length=
         list: A list of predicted summaries.
 
     """
+    import re
 
     pred_str = []
     predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
     for i in range(len(dataset)):
-        #TODO: Check if this is correct, also try 
-        input_ids = torch.tensor(dataset['input_ids'][i]).to(model.device)
-        input_ids = input_ids.unsqueeze(0)
-        output = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
-        response = output[0][input_ids.shape[-1]:]
+        text = dataset['text'][i]  
+
+        split_text = re.split(r'(### Summary:)', text)
+
+        result_text = split_text[0] + split_text[1]
+        result_text = result_text.strip()
+
+        input_ids = tokenizer(result_text, return_tensors='pt').input_ids.to(model.device)
+        print("Starting on prediction")
+        #TODO: CHeck if this is correct
+        with torch.cuda.amp.autocast():
+            outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
+        print(f"Output without cutting off input:\n{tokenizer.decode(outputs[0], skip_special_tokens=True)}")
+        output = outputs[0][len(input_ids[0]):]
+
+        output = tokenizer.decode(output, skip_special_tokens=True)
+        print(f"Predicted summary:\n{output}")
+        exit()
         if i % 10 == 0:
             print(f"Summarized {i + 1} examples.")
-        pred_str.append(tokenizer.decode(response, skip_special_tokens=True))
-    
+
+        pred_str.append(output)
+        
     write_predicted_summaries_to_file(predictions_path, pred_str)
     return pred_str
 
@@ -464,6 +479,7 @@ def apply_summarization_template(reference, summary):
     Returns:
         str: The formatted text with the summarization template applied.
     """
+
     return f"""
 Summarize the following text.
 
@@ -479,7 +495,6 @@ def generate_summarization_datset_causal_model(example):
 
 
     # If length is shorter than context_length - gen_max_length, immediately apply summarization template on the correct text.
-    args.gen_max_length = 1500
 
     if example['abstractive_token_length'] <= (context_length_abstractive_model - args.gen_max_length):
 
@@ -494,7 +509,14 @@ def generate_summarization_datset_causal_model(example):
 
 
     else:
-        text = torch.tensor(example['abstractive_tokenized_text']['input_ids'][0]) 
+        #TODO: Wait for albert response. If we need to make the summary always fit perform the following:
+        # First calculate length of summary:
+        #len_summary = abstractive_tokenizer(example['summary'], return_tensors='pt')['input_ids'].shape[1]
+        #text = torch.tensor(example['abstractive_tokenized_text']['input_ids'][0])
+        #text = text[:context_length_abstractive_model - len_summary]
+
+
+        text = torch.tensor(example['abstractive_tokenized_text']['input_ids'][0])
         text = text[:context_length_abstractive_model - args.gen_max_length]
 
         #print(f"Cut off because example token length is {example['abstractive_token_length']}\nNow the length is {len(text)}")
@@ -519,7 +541,6 @@ def prepare_dataset_for_causal_lm(dataset):
     print("Calculated the token length of the required text.")
 
     dataset = dataset.map(generate_summarization_datset_causal_model)
-    #TODO: Check if length is within abstractive_context_length 
 
     averages = []
     flag = 0
@@ -532,7 +553,6 @@ def prepare_dataset_for_causal_lm(dataset):
 
     mean_token_length = np.mean(averages)
     print(f"Mean token length of the text: {mean_token_length}\nAmount of examples cut off: {flag}")
-    exit()
     return dataset
 
 
@@ -592,30 +612,117 @@ if __name__ == "__main__":
     args = parser.parse_args()  
 
     # For some reason, setting wandb will cause a ValueError when saving the trainer using SFTTRainer. This is a workaround for now.
-    if args.abstractive_model != 'LLama3' and args.abstractive_model != 'Mixtral':
+    if args.abstractive_model != 'LLama3':
         os.environ["WANDB_PROJECT"] = "thesis_sie"
         os.environ["WANDB_LOG_MODEL"] = "end"
+    evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
+    model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
+    num_gpu = torch.cuda.device_count()
+    adjusted_size = num_gpu * 2
+    eval_batch_size = args.batch_size // adjusted_size
+    if eval_batch_size < 1:
+        eval_batch_size = 1
+    
 
+    if args.abstractive_model == 'LLama3':
+        training_args = SFTConfig(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            max_steps = 1, #TODO: Remove later on but for now we use this to test the model.
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            load_best_model_at_end = args.load_best_model_at_end,
+            metric_for_best_model = args.metric_for_best_model,
+            save_strategy= "epoch",
+            save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            run_name = model_id,
+            eval_accumulation_steps = args.eval_accumulation_steps,
+            hub_model_id = f"{model_id}",
+            packing= True,
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
+        #print_trainable_parameters(abstractive_model)
+        print("LLama3 model detected. Using LORA for training..")
+        #data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
+        
+        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
+
+        lora_config = LoraConfig(
+            r= 8,
+            lora_alpha=16,
+            lora_dropout=0.1,
+            target_modules = target_modules,
+            task_type= 'CAUSAL_LM',
+            bias= 'none',
+        )
+
+    else:
+        training_args = Seq2SeqTrainingArguments(
+            output_dir = os.path.join('results', model_id, 'output'),
+            num_train_epochs = args.num_train_epochs,
+            per_device_train_batch_size = args.batch_size // num_gpu,
+            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
+            gradient_accumulation_steps = args.gradient_accumulation_steps,
+            warmup_ratio = args.warmup_ratio,
+            weight_decay = args.weight_decay,
+            logging_dir = os.path.join('results', model_id, 'logs'),
+            remove_unused_columns = False,        
+            load_best_model_at_end = args.load_best_model_at_end,
+            metric_for_best_model = args.metric_for_best_model,
+            save_strategy= "epoch",
+            save_total_limit= 2,
+            evaluation_strategy = "epoch",
+            label_names=["labels"],
+            report_to = "wandb",
+            logging_strategy = "epoch",
+            run_name = model_id,
+            predict_with_generate = True, 
+            eval_accumulation_steps = args.eval_accumulation_steps,
+            generation_max_length = gen_max_length,
+            hub_model_id = f"{model_id}",
+            gradient_checkpointing= args.gradient_checkpointing,
+            fp16= args.fp16,
+            bf16= args.bf16,
+        )
+        
+        data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
     evaluation_results_filepath = os.path.join('results', 'evaluation_results.json')
+    if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
+        args.gen_max_length = 1024
 
+   
     if args.testing_only:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
 
-        if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-            abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
+        if args.abstractive_model == 'LLama3':
+            #TODO: Maybe change the quantization config to a different one.
+            abstractive_model = AutoModelForCausalLM.from_pretrained(
                 f"MikaSie/{model_id}",
-                torch_dtype = torch.bfloat16,
+                torch_dtype=torch.float16,
                 quantization_config= {"load_in_4bit": True},
                 device_map="auto",
                 attn_implementation="flash_attention_2")
+
+            
             
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
         abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
-        print(f"Loaded a fine-tuned {args.abstractive_model} model withf model id {model_id} to be used for testing only.")
+        abstractive_tokenizer.pad_token = abstractive_tokenizer.eos_token
+        abstractive_tokenizer.padding_side = 'right'
+        
+        print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
 
     else:
         model_id, model_version, previous_results = get_id_and_version_and_prev_results(evaluation_results_filepath, args)
@@ -724,7 +831,6 @@ if __name__ == "__main__":
         dataset = dataset.map(get_feature, batched= True, batch_size = 32)
     
     label_str = dataset["test"]["summary"]
-
     dataset = remove_unused_columns(dataset)
     
     if args.verbose:
@@ -734,106 +840,27 @@ if __name__ == "__main__":
     del extractive_model, extractive_tokenizer
     torch.cuda.empty_cache
     
-    if args.abstractive_model == 'BART' or args.abstractive_model == 'Pegasus':
-        args.gen_max_length = 1024
-
-
-    adjusted_size = num_gpu * 2
-    eval_batch_size = args.batch_size // adjusted_size
-    if eval_batch_size < 1:
-        eval_batch_size = 1
-    
-
-    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
-        training_args = SFTConfig(
-            output_dir = os.path.join('results', model_id, 'output'),
-            num_train_epochs = args.num_train_epochs,
-            per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-            gradient_accumulation_steps = args.gradient_accumulation_steps,
-            warmup_ratio = args.warmup_ratio,
-            weight_decay = args.weight_decay,
-            logging_dir = os.path.join('results', model_id, 'logs'),
-            remove_unused_columns = False,        
-            load_best_model_at_end = args.load_best_model_at_end,
-            metric_for_best_model = args.metric_for_best_model,
-            save_strategy= "epoch",
-            save_total_limit= 2,
-            evaluation_strategy = "epoch",
-            run_name = model_id,
-            eval_accumulation_steps = args.eval_accumulation_steps,
-            hub_model_id = f"{model_id}",
-            gradient_checkpointing= args.gradient_checkpointing,
-            fp16= args.fp16,
-            bf16= args.bf16,
-        )
-        print_trainable_parameters(abstractive_model)
-        print("LLama3 or Mixtral model detected. Using LORA for training..")
-        data_collator= DataCollatorForLanguageModeling(tokenizer=abstractive_tokenizer, mlm=False)
-        
-        target_modules = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
-
-        lora_config = LoraConfig(
-            r= 8,
-            lora_alpha=16,
-            lora_dropout=0.1,
-            target_modules = target_modules,
-            task_type= 'CAUSAL_LM',
-            bias= 'none',
-        )
-
-    else:
-        training_args = Seq2SeqTrainingArguments(
-            output_dir = os.path.join('results', model_id, 'output'),
-            num_train_epochs = args.num_train_epochs,
-            per_device_train_batch_size = args.batch_size // num_gpu,
-            per_device_eval_batch_size = eval_batch_size, # We use a smaller batch size for evaluation to prevent OOM during prediction
-            gradient_accumulation_steps = args.gradient_accumulation_steps,
-            warmup_ratio = args.warmup_ratio,
-            weight_decay = args.weight_decay,
-            logging_dir = os.path.join('results', model_id, 'logs'),
-            remove_unused_columns = False,        
-            load_best_model_at_end = args.load_best_model_at_end,
-            metric_for_best_model = args.metric_for_best_model,
-            save_strategy= "epoch",
-            save_total_limit= 2,
-            evaluation_strategy = "epoch",
-            label_names=["labels"],
-            report_to = "wandb",
-            logging_strategy = "epoch",
-            run_name = model_id,
-            predict_with_generate = True, 
-            eval_accumulation_steps = args.eval_accumulation_steps,
-            generation_max_length = gen_max_length,
-            hub_model_id = f"{model_id}",
-            gradient_checkpointing= args.gradient_checkpointing,
-            fp16= args.fp16,
-            bf16= args.bf16,
-        )
-        
-        data_collator = DataCollatorForSeq2Seq(tokenizer= abstractive_tokenizer, model= abstractive_model)
 
     if args.abstractive_model == 'LongT5':
         # Changes are made because of the LongT5 model, it can't work with the default settings..
         print("LongT5 model detected. Adjusting training arguments for LongT5 model.")
-        training_args.ddp_find_unused_parameters = True #Used to be True
+        training_args.ddp_find_unused_parameters = True 
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': False}
         
-    if args.abstractive_model == 'LLama3' or args.abstractive_model == 'Mixtral':
+    if args.abstractive_model == 'LLama3':
+
         training_args.gradient_checkpointing_kwargs= {'use_reentrant': True}
                 
         trainer = SFTTrainer(
             model = abstractive_model,
             tokenizer = abstractive_tokenizer,
             args = training_args,
-            #data_collator = data_collator,
             dataset_text_field = 'text',
             train_dataset = dataset["train"],
-            eval_dataset = dataset["validation"],
+            eval_dataset = dataset["validation"].select(range(1)), #TODO: Change after testing
             max_seq_length = context_length_abstractive_model,
             callbacks = [EarlyStoppingCallback(early_stopping_patience = args.early_stopping_patience)],
             peft_config = lora_config,
-            packing= True,
             )
 
         if getattr(trainer.accelerator.state, "fsdp_plugin", None):
@@ -862,7 +889,8 @@ if __name__ == "__main__":
 
         if args.verbose:
             print(f"Starting training on the abstractive model....")
-        
+
+
         trainer.train()
 
         print("Training done, proceeding with saving the model to disk and pushing to Huggingface.....")
@@ -872,9 +900,8 @@ if __name__ == "__main__":
 
         trainer.save_model(output_dir = os.path.join('results', model_id, 'model'))
         
-        print("Model saved to disk.")
         trainer.push_to_hub()
-        print('model pushed to hub')
+        exit()
         new_result =   {
             "Model_ID": model_id,
             "Date_Created": date.today().strftime("%d/%m/%Y"),
@@ -915,8 +942,6 @@ if __name__ == "__main__":
 
     if args.verbose:
         print("Starting with predictions on the test dataset...")
-        
-
     
 
     #LLama3 can't use trainer.predict so we need to use a different method for this model.
@@ -924,20 +949,9 @@ if __name__ == "__main__":
         pred_str = predict_and_save(model = abstractive_model,
                                             tokenizer = abstractive_tokenizer,
                                             dataset = dataset['test'],
-                                            model_id = model_id
+                                            model_id = model_id,
+                                            label_str = label_str
                                             )
-
-        
-        """predictions_path = chunked_predict_and_save(model = abstractive_model, 
-                                                    tokenizer = abstractive_tokenizer, 
-                                                    dataset = dataset, 
-                                                    model_id = model_id,
-                                                    generation_max_length = args.gen_max_length
-                                                    )"""
-
-        
-        #pred_str = read_created_summaries(model_id = model_id)
-
 
     else:
         results = trainer.predict(dataset["test"])

@@ -76,7 +76,7 @@ def initialize_abstractive_model(model_init):
         model = PegasusXForConditionalGeneration.from_pretrained(model_init)
         tokenizer = AutoTokenizer.from_pretrained(model_init)
 
-    elif model_init == 'meta-llama/Meta-Llama-3-8B' or model_init == 'mistralai/Mixtral-8x7B-v0.1':
+    elif model_init == 'meta-llama/Meta-Llama-3-8B':
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
@@ -94,7 +94,7 @@ def initialize_abstractive_model(model_init):
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
             attn_implementation="flash_attention_2",
-            use_cache=False 
+            use_cache=False  
             )
 
         tokenizer = AutoTokenizer.from_pretrained(model_init)
@@ -127,8 +127,7 @@ def select_abstractive_model(model_name):
     'LongT5': 'google/long-t5-tglobal-base', 
     'Pegasus': 'google/pegasus-large',
     'PegasusX': 'google/pegasus-x-base',
-    'LLama3': 'meta-llama/Meta-Llama-3-8B',
-    'Mixtral': 'mistralai/Mixtral-8x7B-v0.1'}
+    'LLama3': 'meta-llama/Meta-Llama-3-8B'}
 
     if model_name in models:
         return initialize_abstractive_model(models[model_name])
