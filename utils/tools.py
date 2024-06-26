@@ -203,7 +203,7 @@ def calculate_blanc_score(predictions, references, batch_size=2):
 
     Args:
         predictions (list): A list of predicted summaries.
-        references (list): A list of reference summaries.
+        references (list): A list of reference texts.
 
     Returns:
         float: The calculated BLANC score.

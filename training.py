@@ -765,7 +765,7 @@ if __name__ == "__main__":
     
     # Extract golden reference summaries from the dataset for later evaluation  
     label_str = dataset["test"]["summary"]
-
+    reference_str = dataset["test"]["reference"]
     # Remove unsed columns to save space
     dataset = remove_unused_columns(dataset)
     
@@ -986,7 +986,7 @@ if __name__ == "__main__":
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = 8)
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = 8)
-    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = 8)
+    blanc_score = calculate_blanc_score(predictions = reference_str, references = label_str, batch_size = 8)
 
     print('Calculated all metrics. Saving results and pushing adjusted model card to the hub...')
 
