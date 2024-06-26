@@ -550,7 +550,7 @@ if __name__ == "__main__":
         start_index_list = [0,30,60,90,120,150]
         
         pred_str = []
-        for start_index in start_index_list
+        for start_index in start_index_list:
             file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
             small_index_pred_list = utils.tools.read_created_summaries(file_path)
             pred_str = pred_str.extend(small_index_pred_list)
