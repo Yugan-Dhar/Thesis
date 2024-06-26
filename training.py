@@ -376,6 +376,7 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
     if args.verbose:
         print(f"Summaries written to {path}")
 
+
 def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index=0, generation_max_length=1500):
     """
     Process predictions for each input and save the results.

@@ -1,0 +1,1692 @@
+Summary 150:
+ procedure for the negotiation and conclusion of agreements on particular matters of civil justice
+SUMMARY
+SUMMARY
+This Regulation establishes a procedure to authorise a Member State to amend an existing agreement or to negotiate and conclude a new agreement with a third country.
+Scope
+This procedure is without prejudice to the respective competencies of the Community and of the Member States.
+This Regulation shall apply to agreements concerning particular matters falling, entirely or partly, within the scope of Regulation (EC) No 593/2008 of the European Parliament and of the European Council of 17 June 2008 on the law applicable to contractual obligations (Rome I) and Regulation (EC) No 864/2007 of the European Parliament and of the European Council of 11 July 2007 on the law applicable to non-contractual obligations (Rome II).
+Definition
+For the purposes of this Regulation, the term ‘agreement’ shall mean:
+a bilateral agreement between a Member State and a third country;
+a regional agreement between a limited number of Member States and of third countries neighbouring Member States which is intended to address local situations and which is not open for accession to other States.
+Notification to the Commission
+Where a Member State intends to enter into negotiations in order to amend an existing agreement or to conclude a new agreement falling within the scope of this Regulation, it shall notify the Commission in writing of its intention at the earliest possible moment before the envisaged opening of formal negotiations.
+The notification shall include, as appropriate, a copy of the existing agreement, the draft agreement or the draft proposal, and any other relevant documentation. The Member State shall describe the subject matter of the negotiations and specify the issues which are to be addressed in the envisaged agreement, or the provisions of the existing agreement which are to be amended. The Member State may provide any other additional information.
+Assessment by the Commission
+Upon receipt of the notification referred to in Article 3, the Commission shall assess whether the Member State may open formal negotiations.
+In making that assessment, the Commission shall first check whether any relevant negotiating mandate with a view to concluding a Community agreement with the third country concerned is specifically envisaged within the next 24 months. If this is not the case, the Commission shall assess whether all of the following conditions are met:
+the Member State concerned has provided information showing that it has a specific interest in concluding the agreement due to economic, geographic, cultural, historical, social or political ties between the Member State and the third country concerned;
+on the basis of the information provided by the Member State, the envisaged agreement appears not to render Community law ineffective and not to undermine the proper functioning of the system established by that law; and
+the envisaged agreement would not undermine the object and purpose of the Community’s external relations policy as decided by the Community.
+If the information provided by the Member State is not sufficient for the purposes of the assessment, the Commission may request additional information.
+Authorisation to open formal negotiations
+If the envisaged agreement meets the conditions set out in Article 4(2), the Commission shall, within 90 days of receipt of the notification referred to in Article 3, give a reasoned decision on the application of the Member State authorising it to open formal negotiations on that agreement.
+The envisaged agreement shall contain a clause providing for either:
+full or partial denunciation of the agreement in the event of the conclusion of a subsequent agreement between the Community or the Community and its Member States, on the one hand, and the same third country, on the other hand, on the same subject matter; or
+direct replacement of the relevant provisions of the agreement by the provisions of a subsequent agreement concluded between the Community or the Community and its Member States, on the one hand, and the same third country, on the other hand, on the same subject matter.
+Refusal to authorise the opening of formal negotiations
+If, on the basis of its assessment under Article 4, the Commission intends not to authorise the opening of formal negotiations on the envisaged agreement, it shall give an opinion to the Member State concerned within 90 days of receipt of the notification referred to in Article 3.
+Within 30 days of receipt of the opinion of the Commission, the Member State concerned may request the Commission to enter into discussions with it with a view to finding a solution.
+If the Member State concerned does not request the Commission to enter into discussions with it within the time limit provided for in paragraph 2, the Commission shall give a reasoned decision on the application of the Member State within 130 days of receipt of the notification referred to in Article 3.
+Participation of the Commission in the negotiations
+The Commission may participate as an observer in the negotiations between the Member State and the third country as far as matters falling within the scope of this Regulation are concerned. If the Commission does not participate as an observer, it shall be kept informed of the progress and results throughout the different stages of the negotiations.
+Authorisation to conclude the agreement
+Before signing a negotiated agreement, the Member State concerned shall notify the Commission and shall transmit to it the text of the agreement.
+Upon receipt of that notification the Commission shall assess whether the negotiated agreement:
+meets the condition set out in Article 4(2)(b);
+meets the condition set out in Article 4(2)(c), in so far as there are new and exceptional circumstances in relation to that condition; and
+fulfils the requirement under Article 5(2).
+If the negotiated agreement fulfils the conditions and requirements referred to in paragraph 2, the Commission shall, within 90 days of receipt of the notification referred to in Article 8(1), give a reasoned decision on the application of the Member State authorising it to conclude that agreement.
+Refusal to authorise the conclusion of the agreement
+If, on the basis of its assessment under Article 8(2), the Commission intends not to authorise the conclusion of the negotiated agreement, it shall give an opinion to the Member State concerned, as well as to the European Parliament and to the Council, within 90 days of receipt of the notification referred to in Article 8(1).
+Within 30 days of receipt of the opinion of the Commission, the Member State concerned may request the Commission to enter into discussions with it with a view to finding a solution.
+If the Member State concerned does not request the Commission to enter into discussions with it within the time limit provided for in paragraph 2, the Commission shall give a reasoned decision on the application of the Member State within 130 days of receipt of the notification referred to in Article 8(1).
+The Commission shall notify its decision to the European Parliament and to the Council within 30 days of the decision.
+Confidentiality
+When providing information to the Commission under Articles 3, 4(3) and 8, the Member State may indicate whether any of the information is to be regarded as confidential and whether the information provided can be shared with other Member States.
+Provision of information to the Member States
+The Commission shall send to the Member States the notifications received under Articles 3 and 8 and, if necessary, the accompanying documents, as well as all its reasoned decisions under Articles 5, 6, 8 and 9, subject to the confidentiality requirements.
+Transitional provisions
+Where, at the time of entry into force of this Regulation, a Member
+
+
+
+Summary 151:
+ Community statistics on migration and international protection
+SUMMARY OF:
+Regulation (EC) No 862/2007
+WHAT IS THE AIM OF THE REGULATION?
+              
+It establishes common rules for the collection and compilation of Community statistics on migration and international protection.
+KEY POINTS
+International migration
+International migration is defined as the action by which a person establishes his/her usual residence in the territory of a Member State for a period that is, or is expected to be, of at least 12 months, having previously been usually resident in another Member State or a third country.
+International migration statistics are collected by Member States on an annual basis and cover:
+immigrants moving to the territory of the Member State, broken down by groups of citizenship, age and sex, groups of country of birth and groups of country of previous usual residence;
+emigrants moving from the territory of the Member State, broken down by groups of citizenship, age, sex and groups of countries of next usual residence;
+persons having their usual residence in the Member State at the end of the reference period, broken down by groups of citizenship, age and sex, and by groups of country of birth.
+The statistics must relate to reference periods of one calendar year and must be supplied to the Commission (Eurostat) within 12 months of the end of the reference year. The first reference year is 2008.
+International protection
+International protection statistics cover:
+the numbers of persons having submitted an application for international protection or having been included in such an application as a family member during the reference period, broken down by age and sex, and by the citizenship of the persons concerned;
+the numbers of persons who are the subject of applications for international protection under consideration by the responsible national authority at the end of the reference period;
+applications for international protection having been withdrawn during the reference period.
+These statistics must relate to reference periods of one calendar month and must be supplied to the Commission (Eurostat) within 2 months of the end of the reference month. The first reference month is January 2008.
+The statistics also cover:
+persons covered by first instance decisions rejecting applications for international protection, such as decisions considering applications as inadmissible or as unfounded and decisions under priority and accelerated procedures, taken by administrative or judicial bodies during the reference period;
+persons covered by first instance decisions granting or withdrawing refugee status, taken by administrative or judicial bodies during the reference period;
+persons covered by first instance decisions granting or withdrawing subsidiary protection status, taken by administrative or judicial bodies during the reference period;
+persons covered by first instance decisions granting or withdrawing temporary protection, taken by administrative or judicial bodies during the reference period;
+persons covered by other first instance decisions granting or withdrawing authorisation to stay for humanitarian reasons under national law concerning international protection, taken by administrative or judicial bodies during the reference period.
+These statistics must be supplied to the Commission (Eurostat) within 2 months of the end of the reference period. The first reference period is January to March 2008.
+The statistics also cover:
+applicants for international protection who are considered by the responsible national authority to be unaccompanied minors during the reference period;
+persons covered by final decisions rejecting applications for international protection, such as decisions considering applications as inadmissible or as unfounded and decisions under priority and accelerated procedures, taken by administrative or judicial bodies in appeal or review during the reference period;
+persons covered by final decisions granting or withdrawing refugee status taken by administrative or judicial bodies in appeal or review during the reference period;
+persons covered by final decisions granting or withdrawing subsidiary protection status taken by administrative or judicial bodies in appeal or review during the reference period;
+persons covered by final decisions granting or withdrawing temporary protection taken by administrative or judicial bodies in appeal or review during the reference period;
+persons covered by other final decisions, taken by administrative or judicial bodies in appeal or review, granting or withdrawing authorisations to stay for humanitarian reasons under national law concerning international protection during the reference period;
+persons who have been granted an authorisation to reside in a Member State within the framework of a national or Community resettlement scheme during the reference period, where such a scheme is implemented in that Member State.
+These statistics must be supplied to the Commission (Eurostat) within 3 months of the end of the reference year. The first reference year is 2008.
+Prevention of illegal entry and stay
+Member States supply the Commission (Eurostat) with statistics on:
+the number of third-country nationals refused entry to the Member State's territory at the external border;
+the number of third-country nationals found to be illegally present in the Member State's territory under national laws relating to immigration.
+The statistics relating to illegal entry and stay must be supplied to the Commission (Eurostat) within 3 months of the end of the reference year. The first reference year is 2008.
+Residence permits and residence of third-country nationals
+Member States supply the Commission (Eurostat) with statistics on:
+the number of residence permits issued to persons who are third-country nationals, broken down by:
+permits issued during the reference period whereby the person is being granted permission to reside for the first time, disaggregated by citizenship, by the reason for the permit being issued and by the length of validity of the permit;
+permits issued during the reference period and granted on the occasion of a person changing immigration status or reason for stay, disaggregated by citizenship, by the reason for the permit being issued and by the length of validity of the permit;
+valid permits at the end of the reference period (number of permits issued, not withdrawn and not expired), disaggregated by citizenship, by the reason for the issue of the permit and by the length of validity of the permit;
+the number of long-term residents at the end of the reference period, disaggregated by citizenship.
+The statistics relating to residence permits and residence of third-country nationals must be supplied to the Commission (Eurostat) within 6 months of the end of the reference year. The first reference year is 2008.
+Returns
+Member States supply the Commission (Eurostat) with statistics relating to:
+the number of third-country nationals found to be illegally present in the territory of the Member State who are subject to an administrative or judicial decision or act stating or declaring that their stay is illegal and imposing an obligation to leave the territory of the Member State, disaggregated by citizenship of the persons concerned;
+the number of third-country nationals who have in fact left the territory of the Member State, following an administrative or judicial decision or act, as referred to in point (a), disaggregated by the citizenship of the persons returned.
+The statistics relating to returns must be supplied to the Commission (Eurostat) within 3 months of the end of the reference year. The first reference year is 2008.
+Reporting
+The Commission is required to submit a report to the European Parliament and the Council on the statistics compiled pursuant to this Regulation and on their quality.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from the 20th day following its publication in the Official Journal of the European Union.
+BACKGROUND
+              
+The European Union is home to a diverse population, which includes people from all over the world. The European Union is also a major destination for migrants from outside the European Union. It is important to collect and analyse data on migration and international protection to support and monitor EU legislation and policies on immigration and asylum, and to support the free movement of persons.
+For more information, please
+
+
+
+Summary 152:
+ 
+EU audit regulation
+EU audit regulation
+The EU’s new audit regulation sets out detailed rules on the carrying out of the statutory audit of public-interest entities, the organisation and selection of statutory auditors and audit firms by public-interest entities, the prevention of conflicts of interest and the supervision of compliance by statutory auditors and audit firms with those requirements.
+ACT
+Regulation (EU) No 537/2014 of the European Parliament and of the Council of 16 April 2014 on specific requirements regarding statutory audit of public-interest entities and repealing Commission Decision 2005/909/EC.
+KEY POINTS
+Scope
+The regulation applies to the following:
+statutory auditors and audit firms carrying out statutory audits of public-interest entities;
+public-interest entities.
+New legal framework
+The regulation establishes a new legal framework for statutory audit of annual and consolidated financial statements. It replaces existing requirements laid down in Directive 2006/43/EC.
+The regulation lays down requirements for the carrying out of the statutory audit of annual and consolidated financial statements of public-interest entities, rules on the organisation and selection of statutory auditors and audit firms by public-interest entities to promote their independence and the avoidance of conflicts of interest and rules on the supervision of compliance by statutory auditors and audit firms with those requirements.
+Public-interest entities
+The regulation defines a public-interest entity as an entity that is subject to one of the following:
+credit institution;
+insurance undertaking;
+investment firm;
+management company;
+regulated market;
+electronic money institution;
+alternative investment fund;
+UCITS.
+The following entities are also considered to be public-interest entities:
+undertakings for collective investment in transferable securities (UCITS);
+investment firms;
+management companies;
+credit institutions;
+insurance undertakings;
+electronic money institutions;
+alternative investment funds;
+regulated markets.
+Conditions for carrying out statutory audit
+Fees for the provision of statutory audits to public-interest entities shall not be contingent fees.
+When the statutory auditor or the audit firm provides to the audited entity, its parent undertaking or its controlled undertakings, for a period of three or more consecutive financial years, non-audit services other than those referred to in Article 5(1) of the regulation, the total fees for such services shall be limited to no more than 70 % of the average of the fees paid in the last three consecutive financial years for the statutory audit(s) of the audited entity and, where applicable, of its parent undertaking, of its controlled undertakings and of the consolidated financial statements of that group of undertakings.
+The following services are considered to be non-audit services:
+tax planning;
+book-keeping or statistical calculations;
+valuation services;
+actuarial services;
+expert services;
+financial, accounting and IT systems;
+management, supervision and control services;
+lending, credit and suretyship;
+administration and management of property, rights and obligations;
+investment and portfolio management;
+advice on acquisitions and disposals;
+services relating to capital structure, corporate restructuring and strategic transactions;
+services relating to the financing, capital structure and allocation, and investment strategy of the audited entity;
+services relating to the general management and management control of the audited entity;
+services relating to the management of human resources;
+services relating to the marketing of the goods and services of the audited entity;
+services relating to the administration of the goods and services of the audited entity;
+services relating to the maintenance of goods and services of the audited entity;
+services relating to the purchasing of goods and services of the audited entity;
+services relating to the logistics of goods and services of the audited entity;
+services relating to the storage of goods and services of the audited entity;
+services relating to the waste management of the audited entity;
+services relating to the transport of goods and services of the audited entity;
+services relating to the packaging of goods and services of the audited entity;
+services relating to the cleaning of goods and services of the audited entity;
+services relating to the repair of goods and services of the audited entity;
+services relating to the production of goods and services of the audited entity;
+services relating to the processing of goods and services of the audited entity;
+services relating to the development of goods and services of the audited entity;
+services relating to the design of goods and services of the audited entity;
+services relating to the assembly of goods and services of the audited entity;
+services relating to the disassembly of goods and services of the audited entity;
+services relating to the analysis of goods and services of the audited entity;
+services relating to the testing of goods and services of the audited entity;
+services relating to the packaging of goods and services of the audited entity;
+services relating to the cleaning of goods and services of the audited entity;
+services relating to the repair of goods and services of the audited entity;
+services relating to the production of goods and services of the audited entity;
+services relating to the processing of goods and services of the audited entity;
+services relating to the development of goods and services of the audited entity;
+services relating to the design of goods and services of the audited entity;
+services relating to the assembly of goods and services of the audited entity;
+services relating to the disassembly of goods and services of the audited entity;
+services relating to the analysis of goods and services of the audited entity;
+services relating to the testing of goods and services of the audited entity;
+services relating to the packaging of goods and services of the audited entity;
+services relating to the cleaning of goods and services of the audited entity;
+services relating to the repair of goods and services of the audited entity;
+services relating to the production of goods and services of the audited entity;
+services relating to the processing of goods and services of the audited entity;
+services relating to the development of goods and services of the audited entity;
+services relating to the design of goods and services of the audited entity;
+services relating to the assembly of goods and services of the audited entity;
+services relating to the disassembly of goods and services of the audited entity;
+services relating to the analysis of goods and services of the audited entity;
+services relating to the testing of goods and services of the audited entity;
+services relating to the packaging of goods and services of the audited entity;
+services relating to the cleaning of goods and services of the audited entity;
+services relating to the repair of goods and services of the audited entity;
+services relating to the production of goods and services of the audited entity;
+services relating to the processing of goods and services of the audited entity;
+services relating to the development of goods and services of the audited entity;
+services relating to the design of goods and services of the audited entity;
+services relating to the assembly of goods and services of the audited entity;
+services relating to the disassembly of goods and services of the audited entity;
+services relating to the analysis of goods and services of the audited entity;
+services relating to the testing of goods and services of the audited entity;
+services relating to the packaging of goods and services of the audited entity;
+services relating to the cleaning of goods and services of the audited entity;
+services relating to the repair of goods and services of the audited entity;
+services relating to the production of goods and services of the audited entity;
+services relating to the processing of
+
+
+
+Summary 153:
+ 2013 reform of the Common Fisheries Policy
+2013 reform of the Common Fisheries Policy
+SUMMARY OF:
+Regulation (EU) No 1380/2013 on the Common Fisheries Policy (CFP)
+WHAT IS THE AIM OF THE REGULATION?
+It establishes a new Common Fisheries Policy (CFP) for the Union’s waters and fishing fleets, setting out the objectives, principles and measures that must be applied to manage and develop fisheries.
+KEY POINTS
+Scope
+The CFP covers:
+the conservation of marine biological resources and the management of fisheries and fleets exploiting such resources;
+in relation to market and financial measures in support of the implementation of the CFP: fresh water biological resources, aquaculture, and the processing and marketing of fisheries and aquaculture products.
+The CFP covers the activities referred to in the above points where they are carried out:
+on the territory of Member States;
+in Union waters, including by fishing vessels flying the flag of, and registered in, third countries;
+by Union fishing vessels outside Union waters; or
+by nationals of Member States, without prejudice to the primary responsibility of the flag State.
+Objectives
+The CFP aims to ensure that:
+fishing and aquaculture activities are environmentally sustainable in the long-term and are managed in a way that is consistent with the objectives of achieving economic, social and employment benefits, and of contributing to the availability of food supplies;
+exploitation of living marine biological resources restores and maintains populations of harvested species above levels which can produce the maximum sustainable yield.
+In order to reach the objective of progressively restoring and maintaining populations of fish stocks above biomass levels capable of producing maximum sustainable yield, the maximum sustainable yield exploitation rate shall be achieved by 2015 where possible and, on a progressive, incremental basis at the latest by 2020 for all stocks.
+Principles of good governance
+The CFP is guided by the following principles of good governance:
+the clear definition of responsibilities at the Union, regional, national and local levels;
+the taking into account of regional specificities, through a regionalised approach;
+the establishment of measures in accordance with the best available scientific advice;
+a long-term perspective;
+administrative cost efficiency;
+appropriate involvement of stakeholders, in particular Advisory Councils, at all stages - from conception to implementation of the measures;
+the primary responsibility of the flag State;
+consistency with other Union policies;
+the use of impact assessments as appropriate;
+coherence between the internal and external dimension of the CFP;
+transparency of data handling in accordance with existing legal requirements, with due respect for private life, the protection of personal data and confidentiality rules; availability of data to the appropriate scientific bodies, other bodies with a scientific or management interest, and other defined end-users.
+Regionalised approach
+The CFP shall be implemented in a way that is consistent with other Union policies and, in particular, that takes into account interactions with Union actions in other maritime policy areas. Coherence shall be ensured in the management of different sectoral policies within the Baltic Sea, North Sea, Celtic seas, Bay of Biscay and the Iberian Coast, Mediterranean and Black Sea sea basins.
+The Commission shall adopt a regionalised approach to fisheries management by 31 December 2015.
+The regionalised approach shall take into account:
+the specificities of the geographical areas concerned;
+the importance of the economic and social role of the fishing and aquaculture sectors in those areas;
+the importance of the economic and social role of the fishing and aquaculture sectors in the outermost regions;
+the importance of the economic and social role of the fishing and aquaculture sectors in the Black Sea.
+It shall be based on the following principles:
+the clear definition of responsibilities at the Union, regional, national and local levels;
+the taking into account of regional specificities;
+the establishment of measures in accordance with the best available scientific advice;
+a long-term perspective;
+administrative cost efficiency;
+appropriate involvement of stakeholders, in particular Advisory Councils, at all stages - from conception to implementation of the measures;
+the primary responsibility of the flag State;
+consistency with other Union policies;
+the use of impact assessments as appropriate;
+coherence between the internal and external dimension of the CFP;
+transparency of data handling in accordance with existing legal requirements, with due respect for private life, the protection of personal data and confidentiality rules; availability of data to the appropriate scientific bodies, other bodies with a scientific or management interest, and other defined end-users.
+Regionalised approach to the Black Sea
+The regionalised approach shall apply to the Black Sea from 1 January 2018. The Commission shall adopt a regionalised approach for the Black Sea by 31 December 2017.
+The regionalised approach shall take into account:
+the specificities of the geographical areas concerned;
+the importance of the economic and social role of the fishing and aquaculture sectors in those areas;
+the importance of the economic and social role of the fishing and aquaculture sectors in the outermost regions;
+the importance of the economic and social role of the fishing and aquaculture sectors in the Black Sea.
+It shall be based on the following principles:
+the clear definition of responsibilities at the Union, regional, national and local levels;
+the taking into account of regional specificities;
+the establishment of measures in accordance with the best available scientific advice;
+a long-term perspective;
+administrative cost efficiency;
+appropriate involvement of stakeholders, in particular Advisory Councils, at all stages - from conception to implementation of the measures;
+the primary responsibility of the flag State;
+consistency with other Union policies;
+the use of impact assessments as appropriate;
+coherence between the internal and external dimension of the CFP;
+transparency of data handling in accordance with existing legal requirements, with due respect for private life, the protection of personal data and confidentiality rules; availability of data to the appropriate scientific bodies, other bodies with a scientific or management interest, and other defined end-users.
+Regionalised approach to aquaculture
+The regionalised approach shall apply to aquaculture from 1 January 2018. The Commission shall adopt a regionalised approach for aquaculture by 31 December 2017.
+The regionalised approach shall take into account:
+the specificities of the geographical areas concerned;
+the importance of the economic and social role of the fishing and aquaculture sectors in those areas;
+the importance of the economic and social role of the fishing and aquaculture sectors in the outermost regions;
+the importance of the economic and social role of the fishing and aquaculture sectors in the Black Sea.
+It shall be based on the following principles:
+the clear definition of responsibilities at the Union, regional, national and local levels;
+the taking into account of regional specificities;
+the establishment of measures in accordance with the best available scientific advice;
+a long-term perspective;
+administrative cost efficiency;
+appropriate involvement of stakeholders, in particular Advisory Councils, at all stages - from conception to implementation of the measures;
+the primary responsibility of the flag State;
+consistency with other Union policies;
+the use of impact assessments as appropriate;
+coherence between the internal and external dimension of the CFP;
+transparency of data handling in accordance with existing legal requirements, with due respect for private life, the protection of personal data and confidentiality rules; availability of data to the appropriate scientific bodies, other bodies with a scientific or management interest, and other defined end-users.
+Regionalised approach to the
+
+
+
+Summary 154:
+ 
+COMMON ORGANISATION OF THE MARKETS IN FISHERY AND AQUACULTURE PRODUCTS
+COMMON ORGANISATION OF THE MARKETS IN FISHERY AND AQUACULTURE PRODUCTS
+SUMMARY OF:
+Regulation (EU) No 1379/2013 of the European Parliament and of the Council on the common organisation of the markets in fishery and aquaculture products, amending Council Regulations (EC) No 1184/2006 and (EC) No 1224/2009 and repealing Council Regulation (EC) No 104/2000
+WHAT IS THE AIM OF THE REGULATION?
+It establishes a common organisation of the markets in fishery and aquaculture products (CMO) in the EU.
+The CMO aims to achieve the objectives of the Common Fisheries Policy (CFP), namely the conservation and management of fish stocks, the rational exploitation of aquatic resources, and the development of the fisheries sector.
+KEY POINTS
+The CMO is made up of:
+professional organisations;
+marketing standards;
+consumer information;
+competition rules;
+market intelligence.
+The CMO applies to the fishery and aquaculture products listed in the annex to the regulation, which are marketed in the EU.
+Professional organisations
+Fishery producer organisations and aquaculture producer organisations (producer organisations) may be established on the initiative of producers of fishery or aquaculture products in one or more EU countries and recognised in accordance with the rules set out in the regulation.
+Producer organisations must pursue the following objectives:
+promote the viable and sustainable fishing activities of their members;
+avoid and reduce unwanted catches;
+contribute to the traceability of fishery products and access to clear and comprehensive information for consumers;
+contribute to the elimination of illegal, unregulated and unreported (IUU) fishing.
+Aquaculture producer organisations must pursue the following objectives:
+promote the sustainable aquaculture activities of their members;
+ascertain that the activities of their members are consistent with the national strategic plans;
+ensure that aquaculture feed products of fishery origin come from fisheries that are sustainably managed.
+Producer organisations may also pursue other complementary objectives, such as:
+improving the conditions for the placing on the market of their members’ fishery and aquaculture products;
+improving economic returns;
+stabilising the markets;
+contributing to food supply and promoting high food quality and safety standards, whilst contributing to employment in coastal and rural areas;
+reducing the environmental impact of fishing, including through measures to improve the selectivity of fishing gears.
+Fishery producer organisations may also make use of the following measures:
+adjusting production to market requirements;
+channelling the supply and marketing of their members’ products;
+promoting the Union fishery and aquaculture products of their members in a non-discriminatory manner by using, for example, certification, and in particular designations of origin, quality seals, geographical designations, traditional specialities guaranteed, and sustainability merits;
+controlling and taking measures to ensure that their members’ activities comply with the rules established by the producer organisation concerned;
+promoting vocational training and cooperation programmes to encourage young people to enter the sector;
+reducing the environmental impact of fishing, including through measures to improve the selectivity of fishing gears;
+facilitating consumer access to information on fishery and aquaculture products.
+Aquaculture producer organisations may also make use of the following measures:
+promoting sustainable aquaculture activities, notably in terms of environmental protection, animal health and animal welfare;
+collecting information on the marketed products, including economic information on first sales, and on production forecasts;
+collecting environmental information;
+planning the management of the aquaculture activities of their members;
+supporting programmes for professionals to promote sustainable aquaculture products.
+Associations of producer organisations
+An association of producer organisations may be established at the initiative of producer organisations recognised in one or more EU countries.
+The provisions of the regulation applicable to producer organisations also apply to associations of producer organisations, unless stated otherwise.
+The objectives of associations of producer organisations are:
+performing in a more efficient and sustainable manner any of the objectives of the member producer organisations laid down in Article 7;
+coordinating and developing activities of common interest for the member producer organisations.
+Inter-branch organisations
+Inter-branch organisations may be established at the initiative of operators of fishery and aquaculture products in one or more EU countries and recognised in accordance with the rules set out in the regulation.
+Inter-branch organisations must improve the coordination of, and the conditions for, making fishery and aquaculture products available on the Union market.
+The following measures may be used to achieve the objectives of inter-branch organisations:
+drawing up standard contracts which are compatible with Union legislation;
+promoting Union fishery and aquaculture products in a non-discriminatory manner by using, for example, certification, and in particular designations of origin, quality seals, geographical designations, traditional specialities guaranteed, and sustainability merits;
+laying down rules on the production and marketing of fishery and aquaculture products which are stricter than those laid down in Union or national legislation;
+improving quality, knowledge of, and the transparency of, production and the market, as well as carrying out professional and vocational training activities, for example, on quality and traceability matters, on food safety and in order to encourage research initiatives;
+performing research and market studies, and developing techniques to optimise the operation of the market, including through the use of information and communication technology, as well as collecting socio-economic data;
+providing the information and carrying out the research needed to deliver sustainable supplies at the quantity, quality and price corresponding to market requirements and consumer expectations;
+promoting, among consumers, species obtained from fish stocks that are in a sustainable state, that have appreciable nutritional value and that are not widely consumed;
+controlling and taking measures for compliance of their members’ activities with the rules established by the inter-branch organisation concerned.
+Recognition of producer organisations and inter-branch organisations
+Member States may recognise as producer organisations all groups set up on the initiative of fishery or aquaculture producers which apply for such recognition, provided that they:
+comply with the principles set out in the regulation and with the rules adopted for their application;
+are sufficiently economically active in the territory of the Member State concerned or a part thereof, in particular as regards the number of members or the volume of marketable production;
+have legal personality under the national law of the Member State concerned, are established there and have their official headquarters in its territory;
+are capable of pursuing the objectives laid down in Article 7;
+comply with the competition rules referred to in Chapter V;
+do not abuse a dominant position on a given market; and
+provide relevant details of their membership, governance and sources of funding.
+Member States may recognise as inter-branch organisations the groups of operators established on their territory which apply for such recognition, provided that they:
+comply with the principles set out in the regulation and with the rules adopted for their application;
+represent a significant share of production activity and of either processing or marketing activities or of both, concerning fishery and aquaculture products or products processed from fishery and aquaculture products;
+are not themselves engaged in the production, processing or marketing of fishery and aquaculture products or products processed from fishery and aqu
+
+
+
+Summary 155:
+ Regulation on securities settlement
+SUMMARY OF:
+Regulation (EU) No 909/2014 on improving securities settlement in the European Union and on central securities depositories
+WHAT IS THE AIM OF THE REGULATION?
+It aims to improve the efficiency and safety of securities settlement in the European Union (EU) by laying down uniform obligations for market participants, as well as a set of common requirements for central securities depositories (CSDs).
+The regulation establishes a single market for securities settlement in the EU, where any investor in the EU may invest in all EU securities with the same ease as in domestic securities and using the same processes.
+KEY POINTS
+Scope
+The regulation applies to the settlement of transactions in all financial instruments and activities of CSDs.
+It also applies to transactions in transferable securities, money-market instruments, units in collective investment undertakings and emission allowances, which are executed on trading venues regulated by Directive 2014/65/EU (see summary) and Regulation (EU) No 600/2014 (see summary).
+It does not apply to transactions in financial instruments that are subject to initial recording in book-entry form.
+CSDs
+CSDs are responsible for the operation of securities settlement systems and for the application of measures to provide timely settlement in the EU. It is therefore essential to ensure that all CSDs are safe and sound and comply at all times with stringent organisational, conduct of business and prudential requirements laid down in the regulation, including by taking all reasonable steps to mitigate fraud and negligence.
+CSDs are defined by reference to certain core services, which consist of settlement, implying the operation of a securities settlement system, notary and central securities accounts maintenance services.
+A CSD should at least operate a securities settlement system and provide one other core service.
+CSDs should have in place recovery plans to ensure continuity of their critical operations.
+CSDs should be authorised by the competent national authorities before starting their activities.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how CSDs operate on a daily basis, to carry out regular reviews and to take appropriate action when necessary.
+CSDs should be able to provide services outside the EU, including through the setting-up of a branch.
+CSDs should be subject to a specific procedure laid down in the regulation where they intend to provide certain core services or set up a branch in a host Member State.
+CSDs should be subject to authorisation and supervision by the competent authority of their home Member State, which is well placed and should be empowered to examine how C
+
+
+
+Summary 156:
+ Cohesion Fund
+COHESION FUND
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It establishes a Cohesion Fund to support projects in the fields of the environment and transport infrastructure in the least developed regions of the European Union (EU).
+It sets out the types of projects that can be supported by the Fund.
+It sets out the indicators that will be used to assess the implementation of the Fund.
+KEY POINTS
+The Cohesion Fund is established for the purpose of strengthening the economic, social and territorial cohesion of the European Union in the interests of promoting sustainable development.
+The Cohesion Fund shall, while ensuring an appropriate balance and according to the investment and infrastructure needs specific to each Member State, support:
+investment in the environment, including areas related to sustainable development and energy which present environmental benefits;
+TEN-T, in compliance with the guidelines adopted by Regulation (EU) No 1315/2013;
+technical assistance.
+The Cohesion Fund shall not support:
+the decommissioning or the construction of nuclear power stations;
+investment to achieve the reduction of greenhouse gas emissions from activities listed in Annex I to Directive 2003/87/EC;
+investment in housing unless related to the promotion of energy efficiency or renewable energy use;
+undertakings in difficulty, as defined under Union State aid rules;
+investment in airport infrastructure unless related to environmental protection or accompanied by investment necessary to mitigate or reduce its negative environmental impact.
+The Cohesion Fund shall support the following investment priorities within the thematic objectives set out in the first paragraph of Article 9 of Regulation (EU) No 1303/2013:
+supporting the shift towards a low-carbon economy in all sectors by:
+promoting the production and distribution of energy derived from renewable sources;
+promoting energy efficiency and renewable energy use in enterprises;
+supporting energy efficiency, smart energy management and renewable energy use in public infrastructure, including in public buildings, and in the housing sector;
+developing and implementing smart distribution systems that operate at low and medium voltage levels;
+promoting low-carbon strategies for all types of territories, in particular for urban areas, including the promotion of sustainable multimodal urban mobility and mitigation-relevant adaptation measures;
+promoting the use of high-efficiency co-generation of heat and power based on useful heat demand;
+promoting climate change adaptation, risk prevention and management by:
+supporting investment for adaptation to climate change, including ecosystem-based approaches;
+promoting investment to address specific risks, ensuring disaster resilience and developing disaster management systems;
+preserving and protecting the environment and promoting resource efficiency by:
+investing in the waste sector to meet the requirements of the Union's environmental acquis and to address needs, identified by the Member States, for investment that goes beyond those requirements;
+investing in the water sector to meet the requirements of the Union's environmental acquis and to address needs, identified by the Member States, for investment that goes beyond those requirements;
+protecting and restoring biodiversity and soil and promoting ecosystem services, including through Natura 2000, and green infrastructure;
+taking action to improve the urban environment, to revitalise cities, regenerate and decontaminate brownfield sites (including conversion areas), reduce air pollution and promote noise-reduction measures;
+promoting sustainable transport and removing bottlenecks in key network infrastructures by:
+supporting a multimodal Single European Transport Area by investing in the TEN-T;
+developing and improving environmentally-friendly (including low-noise) and low-carbon transport systems, including inland waterways and maritime transport, ports, multimodal links and airport infrastructure, in order to promote sustainable regional and local mobility;
+developing and rehabilitating comprehensive, high quality and interoperable railway systems, and promoting noise-reduction measures;
+enhancing institutional capacity of public authorities and stakeholders and efficient public administration through actions to strengthen the institutional capacity and the efficiency of public administrations and public services related to the implementation of the Cohesion Fund.
+Common output indicators for the Cohesion Fund are set out in Annex I to this Regulation.
+For the purposes of the assessment of the implementation of operational programmes, the following indicators shall be used:
+common output indicators;
+programme-specific result indicators;
+programme-specific output indicators.
+REFERENCES
+Act
+Entry into force
+Deadline for implementation in the Member States
+Regulation (EU) No 1300/2013
+21.12.2013
+-
+RELATED ACTS
+Regulation (EU) No 1315/2013 of the European Parliament and of the Council of 11 December 2013 on Union guidelines for the development of the trans-European transport network and repealing Decision No 661/2010/EU (OJ L 348, 20.12.2013).
+Regulation (EU) No 1316/2013 of the European Parliament and of the Council of 11 December 2013 establishing the Connecting Europe Facility, amending Regulation (EU) No 913/2010 and repealing Regulations (EC) No 680/2007 and (EC) No 67/2010 (OJ L 348, 20.12.2013).
+Council Regulation (EC) No 1084/2006 of 11 July 2006 establishing a Cohesion Fund and repealing Regulation (EC) No 1164/94 (OJ L 210, 31.7.2006).
+last update 27.10.2014
+
+
+
+Summary 157:
+ European Regional Development Fund (ERDF)
+European Regional Development Fund (ERDF)
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It sets out the specific provisions of the European Regional Development Fund (ERDF) for the 2014-2020 period.
+It sets out the investment priorities within the thematic objectives of the Investment for Growth and Jobs goal to which the ERDF may contribute.
+KEY POINTS
+The ERDF aims to reinforce economic, social and territorial cohesion by redressing the main regional imbalances in the European Union (EU) through the sustainable development and structural adjustment of regional economies.
+The ERDF may support the following activities:
+productive investment which creates and safeguards sustainable jobs through direct aid for investment in small and medium-sized enterprises (SMEs);
+productive investment which contributes to the investment priorities set out in this regulation and, where that investment involves cooperation between large enterprises and SMEs, in the priority to support SMEs;
+investment in infrastructure providing basic services to citizens in the areas of energy, environment, transport and information and communication technologies;
+investment in social, health, research, innovation, business and educational infrastructure;
+investment in the development of endogenous potential through fixed investment in equipment and small-scale infrastructure, including small-scale cultural and sustainable tourism infrastructure, support to research and innovation bodies and investment in technology and applied research in enterprises;
+networking, cooperation and exchange of experience between competent regional, local, urban and other public authorities, economic and social partners and relevant bodies representing civil society, studies, preparatory actions and capacity-building.
+The ERDF may also support the sharing of facilities and human resources, and all types of infrastructure across borders in all regions.
+The ERDF may not support:
+the decommissioning or the construction of nuclear power stations;
+investment to achieve the reduction of greenhouse gas emissions from activities listed in Annex I to Directive 2003/87/EC;
+the manufacturing, processing and marketing of tobacco and tobacco products;
+undertakings in difficulty, as defined under EU State aid rules;
+investment in airport infrastructure unless related to environmental protection or accompanied by investment necessary to mitigate or reduce its negative environmental impact.
+The thematic objectives set out in the first paragraph of Article 9 of Regulation (EU) No 1303/2013 and the corresponding investment priorities set out in this regulation to which the ERDF may contribute under the Investment for growth and jobs goal shall be concentrated as follows:
+in more developed regions:
+at least 80 % of the total ERDF resources at national level shall be allocated to two or more of the thematic objectives set out in points 1, 2, 3 and 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013;
+at least 20 % of the total ERDF resources at national level shall be allocated to the thematic objective set out in point 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013;
+in transition regions:
+at least 60 % of the total ERDF resources at national level shall be allocated to two or more of the thematic objectives set out in points 1, 2, 3 and 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013;
+at least 15 % of the total ERDF resources at national level shall be allocated to the thematic objective set out in point 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013;
+in less developed regions:
+at least 50 % of the total ERDF resources at national level shall be allocated to two or more of the thematic objectives set in out in points 1, 2, 3 and 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013;
+at least 12 % of the total ERDF resources at national level shall be allocated to the thematic objective set out in point 4 of the first paragraph of Article 9 of Regulation (EU) No 1303/2013.
+The ERDF shall support the following investment priorities within the thematic objectives set out in the first paragraph of Article 9 of Regulation (EU) No 1303/2013:
+strengthening research, technological development and innovation by:
+enhancing research and innovation (R&I) infrastructure and capacities to develop R&I excellence, and promoting centres of competence, in particular those of European interest;
+promoting business investment in R&I, developing links and synergies between enterprises, research and development centres and the higher education sector, in particular promoting investment in product and service development, technology transfer, social innovation, eco-innovation, public service applications, demand stimulation, networking, clusters and open innovation through smart specialisation, and supporting technological and applied research, pilot lines, early product validation actions, advanced manufacturing capabilities and first production, in particular in key enabling technologies and diffusion of general purpose technologies;
+enhancing access to, and use and quality of, ICT by:
+extending broadband deployment and the roll-out of high-speed networks and supporting the adoption of emerging technologies and networks for the digital economy;
+developing ICT products and services, e-commerce, and enhancing demand for ICT;
+strengthening ICT applications for e-government, e-learning, e-inclusion, e-culture and e-health;
+enhancing the competitiveness of SMEs by:
+promoting entrepreneurship, in particular by facilitating the economic exploitation of new ideas and fostering the creation of new firms, including through business incubators;
+developing and implementing new business models for SMEs, in particular with regard to internationalisation;
+supporting the creation and the extension of advanced capacities for product and service development;
+supporting the capacity of SMEs to grow in regional, national and international markets, and to engage in innovation processes;
+supporting the shift towards a low-carbon economy in all sectors by:
+promoting the production and distribution of energy derived from renewable sources;
+promoting energy efficiency and renewable energy use in enterprises;
+supporting energy efficiency, smart energy management and renewable energy use in public infrastructure, including in public buildings, and in the housing sector;
+developing and implementing smart distribution systems that operate at low and medium voltage levels;
+promoting low-carbon strategies for all types of territories, in particular for urban areas, including the promotion of sustainable multimodal urban mobility and mitigation-relevant adaptation measures;
+promoting research and innovation in, and adoption of, low-carbon technologies;
+promoting the use of high-efficiency co-generation of heat and power based on useful heat demand;
+promoting climate change adaptation, risk prevention and management by:
+supporting investment for adaptation to climate change, including ecosystem-based approaches;
+promoting investment to address specific risks, ensuring disaster resilience and developing disaster management systems;
+preserving and protecting the environment and promoting resource efficiency by:
+investing in the waste sector to meet the requirements of the Union's environmental acquis and to address needs, identified by the Member States, for investment that goes beyond those requirements;
+investing in the water sector to meet the requirements of the Union's environmental acquis and to address needs, identified by the Member States, for investment that goes beyond those requirements;
+conserving, protecting, promoting and developing natural and cultural heritage;
+protecting and restoring biodiversity and soil and promoting ecosystem services, including through Natura 2000, and green infrastructure;
+taking action to
+
+
+
+Summary 158:
+ Specific provisions for the support from the European Regional Development Fund to the European territorial cooperation goal
+SUMMARY OF:
+Regulation (EU) No 1299/2013 on specific provisions for the support from the European Regional Development Fund to the European territorial cooperation goal
+WHAT IS THE AIM OF THE REGULATION?
+It establishes the scope of the European Regional Development Fund (ERDF) with regard to the European territorial cooperation goal and lays down specific provisions concerning that goal.
+KEY POINTS
+The ERDF supports 3 types of cooperation:
+cross-border cooperation between adjacent regions to promote integrated regional development between neighbouring land and maritime border regions in 2 or more EU countries or between neighbouring border regions in at least 1 EU country and 1 third country on external borders of the EU;
+transnational cooperation over larger transnational territories, involving national, regional and local partners and also covering maritime cross-border cooperation in cases not covered by cross-border cooperation, with a view to achieving a higher degree of territorial integration of those territories;
+interregional cooperation to reinforce the effectiveness of cohesion policy by promoting:
+exchange of experience focusing on thematic objectives among partners throughout the EU, including in relation to the development of regions referred to in Article 174 of the Treaty on the Functioning of the European Union (TFEU) on the identification and dissemination of good practices with a view to their transfer principally to operational programmes under the Investment for growth and jobs goal but also, where relevant, to cooperation programmes;
+exchange of experience concerning the identification, transfer and dissemination of good practices and innovative approaches in relation to the implementation of cooperation programmes and actions as well as to the use of European groupings of territorial cooperation (EGTCs);
+analysis of development trends in relation to the aims of territorial cohesion, including territorial aspects of economic and social cohesion, and harmonious development of Union territory through studies, data collection and other measures.
+The resources for the European territorial cooperation goal amount to 2.75% of the global resources available for budgetary commitment from the ERDF, European Social Fund (ESF) and the Cohesion Fund for the 2014-2020 programming period and set out in Article 91(1) of Regulation (EU) No 1303/2013 (i.e., a total of EUR 19.5 billion).
+The ERDF supports the following types of cooperation:
+cross-border cooperation between adjacent regions to promote integrated regional development between neighbouring land and maritime border regions in 2 or more EU countries or between neighbouring border regions in at least 1 EU country and 1 third country on external borders of the EU;
+transnational cooperation over larger transnational territories, involving national, regional and local partners and also covering maritime cross-border cooperation in cases not covered by cross-border cooperation, with a view to achieving a higher degree of territorial integration of those territories;
+interregional cooperation to reinforce the effectiveness of cohesion policy by promoting:
+exchange of experience focusing on thematic objectives among partners throughout the EU, including in relation to the development of regions referred to in Article 174 of the TFEU on the identification and dissemination of good practices with a view to their transfer principally to operational programmes under the Investment for growth and jobs goal but also, where relevant, to cooperation programmes;
+exchange of experience concerning the identification, transfer and dissemination of good practices and innovative approaches in relation to the implementation of cooperation programmes and actions as well as to the use of European groupings of territorial cooperation (EGTCs);
+analysis of development trends in relation to the aims of territorial cohesion, including territorial aspects of economic and social cohesion, and harmonious development of Union territory through studies, data collection and other measures.
+The resources for the European territorial cooperation goal amount to 2.75% of the global resources available for budgetary commitment from the ERDF, European Social Fund (ESF) and the Cohesion Fund for the 2014-2020 programming period and set out in Article 91(1) of Regulation (EU) No 1303/2013 (i.e., a total of EUR 19.5 billion).
+The ERDF supports the following types of cooperation:
+cross-border cooperation between adjacent regions to promote integrated regional development between neighbouring land and maritime border regions in 2 or more EU countries or between neighbouring border regions in at least 1 EU country and 1 third country on external borders of the EU;
+transnational cooperation over larger transnational territories, involving national, regional and local partners and also covering maritime cross-border cooperation in cases not covered by cross-border cooperation, with a view to achieving a higher degree of territorial integration of those territories;
+interregional cooperation to reinforce the effectiveness of cohesion policy by promoting:
+exchange of experience focusing on thematic objectives among partners throughout the EU, including in relation to the development of regions referred to in Article 174 of the TFEU on the identification and dissemination of good practices with a view to their transfer principally to operational programmes under the Investment for growth and jobs goal but also, where relevant, to cooperation programmes;
+exchange of experience concerning the identification, transfer and dissemination of good practices and innovative approaches in relation to the implementation of cooperation programmes and actions as well as to the use of European groupings of territorial cooperation (EGTCs);
+analysis of development trends in relation to the aims of territorial cohesion, including territorial aspects of economic and social cohesion, and harmonious development of Union territory through studies, data collection and other measures.
+The resources for the European territorial cooperation goal amount to 2.75% of the global resources available for budgetary commitment from the ERDF, European Social Fund (ESF) and the Cohesion Fund for the 2014-2020 programming period and set out in Article 91(1) of Regulation (EU) No 1303/2013 (i.e., a total of EUR 19.5 billion).
+The ERDF supports the following types of cooperation:
+cross-border cooperation between adjacent regions to promote integrated regional development between neighbouring land and maritime border regions in 2 or more EU countries or between neighbouring border regions in at least 1 EU country and 1 third country on external borders of the EU;
+transnational cooperation over larger transnational territories, involving national, regional and local partners and also covering maritime cross-border cooperation in cases not covered by cross-border cooperation, with a view to achieving a higher degree of territorial integration of those territories;
+interregional cooperation to reinforce the effectiveness of cohesion policy by promoting:
+exchange of experience focusing on thematic objectives among partners throughout the EU, including in relation to the development of regions referred to in Article 174 of the TFEU on the identification and dissemination of good practices with a view to their transfer principally to operational programmes under the Investment for growth and jobs goal but also, where relevant, to cooperation programmes;
+exchange of experience concerning the identification, transfer and dissemination of good practices and innovative approaches in relation to the implementation of cooperation programmes and actions as well as to the use of European groupings of territorial cooperation (EGTCs);
+analysis of development trends in relation to the aims of territorial cohesion, including territorial aspects of economic and social cohesion, and harmonious development of Union territory through studies, data collection and other measures.
+The resources for the European territorial cooperation goal amount to 2.75% of the global resources available for budgetary commitment from the ERDF, European Social Fund (ESF) and the Cohesion Fund for the 2014-2020 programming period and
+
+
+
+Summary 159:
+ Guidelines for trans-European energy infrastructure
+SUMMARY OF:
+Regulation (EU) No 347/2013 on guidelines for trans-European energy infrastructure and repealing Decision No 1364/2006/EC and amending Regulations (EC) No 713/2009, (EC) No 714/2009 and (EC) No 715/2009
+WHAT IS THE AIM OF THE REGULATION?
+It lays down guidelines for the timely development and interoperability of priority corridors and areas of trans-European energy infrastructure.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+KEY POINTS
+Projects of common interest (POCI)
+Projects of common interest (POCI) are defined as those necessary to implement the energy infrastructure priority corridors and areas set out in Annex I to the regulation. They are identified by the 12 regional groups of countries established by the regulation, and each group adopts a regional list of proposed POCI. These are then assessed by the Commission and, if they fulfil the criteria set out in Article 4 of the regulation, they are included in the Union list of POCI.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects. The second Union list of POCI, adopted in 2016, includes 283 projects.
+The regulation establishes 12 regional groups of countries that are responsible for identifying projects of common interest (POCI) necessary to implement priority corridors and areas falling under the energy infrastructure categories in electricity, gas, oil, and carbon dioxide.
+The first Union list of POCI was adopted in 2014 and includes 246 projects.
+
+
+
+Summary 160:
+ 
+Online dispute resolution
+Online dispute resolution
+SUMMARY OF:
+Regulation (EU) No 524/2013 on online dispute resolution for consumer disputes and amending Regulation (EC) No 2006/2004 and Directive 2009/22/EC
+WHAT IS THE AIM OF THE REGULATION?
+              
+It aims to set up a European online dispute resolution (ODR) platform for online disputes governed by common rules.
+KEY POINTS
+              
+The ODR platform is a single point of entry for consumers and traders seeking the out-of-court resolution of disputes covered by the regulation.
+The ODR platform offers an electronic complaint form, which can be filled in by the complainant party in accordance with Article 8 of the regulation. The complaint form is user-friendly and easily accessible on the ODR platform.
+The information to be submitted by the complainant party is listed in the annex to the regulation. That information is sufficient to determine the competent ADR entity. The complainant party may attach documents in support of the complaint.
+The Commission may adopt delegated acts in accordance with Article 17 of the regulation to adapt the information listed in the annex to the regulation.
+The Commission shall lay down the rules concerning the modalities for the electronic complaint form by means of implementing acts.
+The ODR platform shall transmit the complaint to the ADR entity, which the parties have agreed to use, in accordance with Article 9 of the regulation.
+The ODR platform shall offer an electronic case management tool free of charge, which enables the parties and the ADR entity to conduct the dispute resolution procedure online through the ODR platform.
+The ODR platform shall provide an electronic form by means of which ADR entities shall transmit the information referred to in point (c) of Article 10 of the regulation.
+The ODR platform shall make publicly available the following:
+general information on ADR as a means of out-of-court dispute resolution;
+information on ADR entities listed in accordance with Article 20(2) of Directive 2013/11/EU which are competent to deal with disputes covered by the regulation;
+an online guide about how to submit complaints through the ODR platform;
+information, including contact details, on ODR contact points designated by the Member States in accordance with Article 7(1) of the regulation.
+The ODR platform shall provide a feedback system which allows the parties to express their views on the functioning of the ODR platform and on the ADR entity which has handled their dispute.
+The ODR platform shall make publicly available statistical data on the outcome of the disputes which were transmitted to ADR entities through the ODR platform.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 9 January 2016.
+REFERENCES
+Act
+Entry into force
+Deadline for transposition in the Member States
+Official Gazette publication
+Regulation (EU) No 524/2013
+9.1.2016
+-
+OJ L 149, 9.6.2013, pp. 1-12
+RELATED DOCUMENTS
+              
+Commission Recommendation of 27 June 2012 on common principles for online dispute resolution for consumer disputes (OJ C 260, 3.10.2012, pp. 9-13).
+Commission Recommendation of 27 June 2012 on common principles for online dispute resolution for consumer disputes (OJ C 260, 3.10.2012, pp. 9-13).
+Last updated: 10.02.2016
+
+
+
+Summary 161:
+ Direct payments to farmers
+Direct payments to farmers
+SUMMARY OF:
+Regulation (EU) No 1307/2013 establishing rules for direct payments to farmers under support schemes within the framework of the common agricultural policy (CAP)
+Regulation (EU) No 1306/2013 from the European Parliament and the Council establishing uniform supported for farmers within the framework of the CAP
+WHAT IS THE AIMS OF THE REGULATIONS?
+Regulation (EU) No 1307/2013 repeals Regulation (EC) No 73/2009 and replaces it with a new text.
+Regulation (EU) No 1306/2013 repeals Regulation (EC) No 1782/2003 and Regulation (EC) No 637/2008 and replaces them with a new text.
+The purpose of both regulations is to reform the common agricultural policy (CAP) in order to ensure that it is better targeted and more effective.
+Regulation (EU) No 1307/2013 lays down the rules for direct payments to farmers under support schemes within the framework of the CAP. It applies from 1 January 2014.
+KEY POINTS
+Eligible farmers
+Farmers are eligible for direct payments if they:
+have a permanent operating basis and have been active in agriculture during the reference period (the year preceding the year in which the payment is due);
+fulfil the conditions for good agricultural and environmental condition and good results in the cross-compliance control system;
+are not subject to any exclusion or administrative penalty under Regulation (EU) No 1306/2013.
+Direct payments
+Farmers may receive 2 types of direct payments:
+basic payment: this is a payment made per hectare of land that is eligible for support and that a farmer has in his/her holding;
+premium: this is a payment made to farmers who comply with the specific rules of the sector-specific support schemes (see Regulation (EU) No 1308/2013).
+Basic payment
+Farmers may receive a basic payment if they:
+are eligible for direct payments;
+have a permanent operating basis;
+have a land area of 2 hectares or more.
+The basic payment is calculated on the basis of the number of payment entitlements that a farmer holds and the value of those entitlements.
+Payment entitlements
+A payment entitlement is an instrument that allows a farmer to receive the basic payment for a certain number of hectares. A farmer can hold payment entitlements by virtue of:
+owning land;
+leasing land;
+having a share in a partnership.
+A farmer may hold several payment entitlements, but the total number of payment entitlements held may not exceed the number of hectares of land he/she has.
+The value of the payment entitlements determines the amount of the basic payment received by the farmer.
+The basic payment may be granted to farmers who:
+have inherited or acquired a holding;
+have leased a holding;
+are the beneficiary of an inheritance contract.
+Single area payment scheme
+Farmers in the following EU countries may apply the single area payment scheme until 31 December 2020:
+Cyprus;
+Greece;
+Italy;
+Latvia;
+Lithuania;
+Portugal;
+Romania;
+Slovenia.
+For these countries, the basic payment may be granted to farmers who:
+have a permanent operating basis;
+have a land area of 2 hectares or more;
+have been active in agriculture during the reference period.
+Premium
+Farmers may receive a premium if they:
+have a permanent operating basis;
+have been active in agriculture during the reference period;
+fulfil the conditions for good agricultural and environmental condition and good results in the cross-compliance control system;
+are not subject to any exclusion or administrative penalty under Regulation (EU) No 1306/2013.
+The premium may be granted to farmers who:
+have inherited or acquired a holding;
+have leased a holding;
+are the beneficiary of an inheritance contract.
+FROM WHEN DOES THE REGULATION APPLY?
+Regulation (EU) No 1307/2013 applies from 1 January 2014.
+REFERENCES
+Act
+Year
+of entry into force
+EU Law Notice
+Regulation (EU) No 1307/2013
+2013-12-17
+KEY TERMS
+Agricultural area: the total area of land and water used by a farmer for agricultural production. It includes the area of land and water used for the production of crops and livestock, the production of livestock products, the production of livestock by-products, the rearing of livestock and the rearing of game animals.
+Permanent operating basis: a permanent operating basis is a land area, including buildings, necessary for the agricultural activity of the holding.
+FROM WHEN DOES THE REGULATION APPLY?
+Regulation (EU) No 1306/2013 applies from 1 January 2014.
+REFERENCES
+Act
+Year
+of entry into force
+EU Law Notice
+Regulation (EU) No 1306/2013
+2013-12-17
+KEY TERMS
+Agricultural area: the total area of land and water used by a farmer for agricultural production. It includes the area of land and water used for the production of crops and livestock, the production of livestock products, the production of livestock by-products, the rearing of livestock and the rearing of game animals.
+FROM WHEN DOES THE REGULATION APPLY?
+Regulation (EU) No 1305/2013 applies from 1 January 2014.
+REFERENCES
+Act
+Year
+of entry into force
+EU Law Notice
+Regulation (EU) No 1305/2013
+2013-12-17
+KEY TERMS
+Agricultural area: the total area of land and water used by a farmer for agricultural production. It includes the area of land and water used for the production of crops and livestock, the production of livestock products, the production of livestock by-products, the rearing of livestock and the rearing of game animals.
+RELATED DOCUMENTS
+              
+For more information, please see:
+Common Agricultural Policy (CAP) – overview (European Commission).
+ACT
+Hierarchy
+EU
+Regulation (EU) No 1307/2013 of the European Parliament and of the Council
+Regulation (EU) No 1306/2013 of the European Parliament and of the Council
+Regulation (EU) No 1305/2013 of the European Parliament and of the Council
+Regulation (EU) No 1308/2013 of the European Parliament and of the Council
+Council Regulation (EC) No 73/2003
+Council Regulation (EC) No 1782/2003
+Council Regulation (EC) No 637/2008
+Council Regulation (EC) No 1698/2005
+Council Regulation (EC) No 834/2007
+Council Regulation (EC) No 178/2002
+Council Directive 92/43/EEC
+Council Directive 2009/147/EEC
+Council Directive 2000/60/EC
+last update 26.04.2016
+
+
+
+Summary 162:
+ EU support for small islands in the Aegean Sea
+EU support for small islands in the Aegean Sea
+SUMMARY OF:
+Regulation (EU) No 229/2013 laying down specific measures for agriculture in favour of the smaller Aegean islands and repealing Council Regulation (EC) No 1405/2006
+WHAT IS THE AIM OF THE REGULATION?
+It establishes specific measures for agriculture in favour of the smaller Aegean islands to mitigate the difficulties caused by the particular geographical situation of the smaller Aegean islands.
+KEY POINTS
+The specific measures provided for in the regulation are defined by a support programme comprising:
+specific supply arrangements;
+specific measures to assist local agricultural production.
+The support programme is established at the geographical level deemed most appropriate by Greece.
+The specific supply arrangements are established for the Union’s agricultural products which are essential in the smaller islands for human consumption, for the manufacture of other products or as agricultural inputs.
+The aid granted to supply the smaller islands with agricultural products is determined for each product concerned, taking account of the additional costs of marketing products in the smaller islands, calculated from the usual ports of shipment in mainland Greece, and from the ports of islands of transit or of loading for the islands of final destination. In the case of agricultural inputs and products intended for processing, such aid should take account of the additional costs associated with insularity, small size and distance from markets.
+The specific supply arrangements only apply to products of sound, fair and marketable quality.
+In implementing the specific supply arrangements, account is taken, in particular, of the following:
+the specific needs of the smaller islands and the precise quality requirements;
+traditional trade flows with ports in mainland Greece and between the islands in the Aegean Sea;
+the economic aspect of the proposed aid;
+where applicable, the need not to obstruct the development of local products.
+In implementing the specific supply arrangements, the aid granted is subject to the condition that the impact of the economic advantage is passed on up to the end-user who, as appropriate, may be the consumer in the case of products meant for direct consumption, the end processor or packager in the case of products meant for the processing or packaging industries, or farmers in the case of products used for animal feed or as agricultural inputs.
+The aid provided for in Article 9(1) is granted on presentation of a certificate.
+The aid provided for in the regulation is financed under the financial allocation referred to in Article 18(2) and (3). The support programme comprises a forecast supply balance indicating the products, the quantities thereof and the amount of aid for supply from the Union together with a draft programme of support for local production.
+The Commission may authorise, in accordance with Article 108 of the Treaty, operating aid in the sectors producing, processing, marketing and transporting the agricultural products covered by Annex I to the Treaty, with a view to alleviating the specific constraints on farming in the smaller islands as a result of their insularity, small size, mountainous terrain and climate, their economic dependency on a small number of products and their distance from markets.
+The Union shall finance the measures provided for in Chapters III and IV up to a maximum annual amount of EUR 23,93 million.
+The Commission shall adopt implementing acts establishing the requirements in accordance with which Greece may amend the allocation of resources allocated each year to the various products benefiting from the specific supply arrangements.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 21 March 2013.
+REFERENCES
+Act
+EU
+Year
+of assentment
+Format
+Block  EU
+229/2013
+2013
+PDF.
+RELATED DOCUMENTS
+              
+Regulation (EC) No 1405/2006 of the European Parliament and of the Council of 28 June 2006 establishing a specific program for the smaller Aegean islands (OJ L 184, 22.7.2006, pp. 23-30).
+See consolidated act.
+last update 10.08.2015
+
+
+
+Summary 163:
+ Road transport statistics
+Road transport statistics
+SUMMARY OF:
+Regulation (EU) No 70/2012 on statistical returns in respect of the carriage of goods by road (recast)
+WHAT IS THE AIM OF THE REGULATION?
+It lays down the rules for the compilation of statistics on the carriage of goods by road by means of vehicles registered in the EU.
+The Commission has delegated and implementing powers to adopt acts to update Annex I of the Regulation, except for any modifications to the optional nature of the required information, and to adapt Annexes II to VII to take account of economic and technical developments.
+KEY POINTS
+Road transport vehicles
+A road transport vehicle is a road vehicle fitted with an engine whence it derives its sole means of propulsion, which is normally used for carrying persons or goods by road, or for drawing, on the road, vehicles used for the carriage of persons or goods.
+A goods road transport vehicle is any single road transport vehicle, or combination of road vehicles, namely road train or articulated vehicle designed to carry goods.
+A lorry is a rigid road vehicle designed exclusively or primarily to carry goods.
+A road tractor is a road transport vehicle designed exclusively or primarily to haul other road vehicles which are not power-driven (mainly semi-trailers).
+A trailer is a road vehicle for the transport of goods with no front axle so designed that part of the vehicle and a substantial part of its loaded weight rest on the road tractor.
+A semi-trailer is a road vehicle for the transport of goods with no front axle so designed that part of the vehicle and a substantial part of its loaded weight rest on the road tractor.
+An articulated vehicle is a road tractor coupled to a semi-trailer.
+A road train is a goods road transport vehicle coupled to a trailer or an articulated vehicle with a further trailer attached.
+A vehicle is registered when it is entered in a register of road transport vehicles, kept by an official body in a Member State, whether or not the registration is accompanied by the issue of a registration plate.
+Data collection
+Each Member State shall compile statistics for the Union on the carriage of goods by road by means of goods road transport vehicles which are registered in that Member State, and on the journeys made by such vehicles.
+The statistical variables in each area, their definition and the levels within the classification used for their breakdown are set out in Annexes II to VII.
+Member States shall transmit to the European Statistical System Committee (ESSC) every quarter duly verified individual data corresponding to the variables referred to in Article 3 and listed in Annex I, without indicating the name, address or registration number.
+The Commission shall be empowered to adopt, where necessary, delegated acts in accordance with Article 8 concerning the updating of Part 1 of Annex I, solely in order to take account of economic and technical developments, except for any modifications to the optional nature of the required information.
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the adaptation of Annexes II to VII to take account of economic and technical developments.
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the precision of the statistical data required.
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the transmission of the data referred to in Article 5, including, where appropriate, the statistical tables based on those data.
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the dissemination of statistical results in respect of the carriage of goods by road, including the structure and content of the results to be disseminated.
+Dissemination of statistical results
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the dissemination of statistical results in respect of the carriage of goods by road, including the structure and content of the results to be disseminated.
+The Commission shall be empowered to adopt, where necessary, implementing acts in accordance with Article 9 concerning the dissemination of statistical results in respect of the carriage of goods by road, including the structure and content of the results to be disseminated.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 23 February 2012.
+REFERENCES
+Act
+Entry into force
+Deadline for transposition in the Member States
+Official Gazette notification in the Member States
+Regulation (EU) No 70/2012
+23.2.2012
+-
+-
+See Annex
+REFERENCES TO OTHER RELEVANT DOCUMENTS
+1.  Council Regulation (EC) No 1172/98 of 25 May 1998 on statistical returns in respect of the carriage of goods by road (OJ L 163, 6.6.1998, pp. 1-8)
+RELATED DOCUMENTS
+              
+Commission Implementing Decision 2015/1069 of 27 July 2015 on the adaptation of Annex II of Regulation (EU) No 70/2012 of the European Parliament and of the Council on statistical returns in respect of the carriage of goods by road (OJ L 209, 4.8.2015, pp. 6-7)
+last update 18.01.2017
+
+
+
+Summary 164:
+ Service of documents in civil or commercial matters (Service of documents)
+Service of documents in civil or commercial matters (Service of documents)
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It sets out the rules for the service of judicial and extra-judicial documents in civil and commercial matters between EU countries.
+It repeals Regulation (EC) No 1348/2000.
+KEY POINTS
+Service of documents
+The regulation applies where a judicial or extra-judicial document has to be transmitted from one EU country to another for service there.
+The document must be accompanied by a standard form.
+The form must be completed in the official language of the EU country addressed or in another language that country accepts.
+The document and any accompanying papers must be exempt from legalisation or any equivalent formalities.
+When the transmitting agency wishes a copy of the document to be returned together with the certificate, it must send the document in duplicate.
+The applicant must be advised by the transmitting agency to which he forwards the document for transmission that the addressee may refuse to accept it if it is not in one of the languages provided for in the regulation.
+The applicant must bear any costs of translation prior to the transmission of the document, without prejudice to any possible subsequent decision by the court or competent authority on liability for such costs.
+The receiving agency must, as soon as possible and in any event within 7 days of receipt, send a receipt to the transmitting agency by the swiftest possible means of transmission using the standard form.
+Where the request for service cannot be fulfilled on the basis of the information or documents transmitted, the receiving agency must contact the transmitting agency by the swiftest possible means in order to secure the missing information or documents.
+If the request for service is manifestly outside the scope of the regulation or if non-compliance with the formal conditions required makes service impossible, the request and the documents transmitted must be returned, on receipt, to the transmitting agency, together with the notice of return using the standard form.
+A receiving agency receiving a document for service but not having territorial jurisdiction to serve it must forward it, as well as the request, to the receiving agency having territorial jurisdiction in the same EU country if the request complies with the conditions laid down in the regulation and must inform the transmitting agency accordingly using the standard form. That receiving agency must inform the transmitting agency when it receives the document, in the manner provided for in the regulation.
+The receiving agency must itself serve the document or have it served, either in accordance with the law of the EU country addressed or by a particular method requested by the transmitting agency, unless that method is incompatible with the law of that EU country.
+The receiving agency must take all necessary steps to effect the service of the document as soon as possible, and in any event within 1 month of receipt. If it has not been possible to effect service within 1 month of receipt, the receiving agency must:
+immediately inform the transmitting agency by means of the certificate in the standard form;
+continue to take all necessary steps to effect the service of the document, unless indicated otherwise by the transmitting agency, where service seems to be possible within a reasonable period of time.
+The receiving agency must inform the addressee, using the standard form, that he may refuse to accept the document to be served at the time of service or by returning the document to the receiving agency within 1 week if it is not written in, or accompanied by a translation into, either of the following languages:
+a language which the addressee understands; or
+the official language of the EU country addressed or, if there are several official languages in that EU country, the official language or one of the official languages of the place where service is to be effected.
+If the receiving agency is informed that the addressee refuses to accept the document in accordance with the regulation, it must immediately inform the transmitting agency by means of the certificate provided for in the regulation and return the request and the documents of which a translation is requested.
+If the addressee has refused to accept the document pursuant to the regulation, the service of the document can be remedied through the service on the addressee in accordance with the provisions of the regulation of the document accompanied by a translation into a language provided for in the regulation.
+The date of service of the document must be the date on which the document accompanied by the translation is served in accordance with the law of the EU country addressed. However, where according to the law of an EU country, a document has to be served within a particular period, the date to be taken into account with respect to the applicant must be the date of the service of the initial document determined pursuant to the regulation.
+The date of service of a document must be the date on which it is served in accordance with the law of the EU country addressed.
+However, where according to the law of an EU country a document has to be served within a particular period, the date to be taken into account with respect to the applicant must be the date determined by the law of that EU country.
+The certificate of service and a copy of the document served must be drawn up using the standard form.
+The service of judicial documents coming from an EU country must not give rise to any payment or reimbursement of taxes or costs for services rendered by the EU country addressed.
+However, the applicant must pay or reimburse the costs occasioned by:
+recourse to a judicial officer or to a person competent under the law of the EU country addressed;
+the use of a particular method of service.
+Costs occasioned by recourse to a judicial officer or to a person competent under the law of the EU country addressed must correspond to a single fixed fee laid down by that EU country in advance which respects the principles of proportionality and non-discrimination.
+Extrajudicial documents may be transmitted for service in another EU country in accordance with the provisions of the regulation.
+Transmitting and receiving agencies
+Each EU country must designate the public officers, authorities or other persons competent for the transmission of judicial or extrajudicial documents to be served in another EU country.
+Each EU country must designate the public officers, authorities or other persons competent for the receipt of judicial or extrajudicial documents from another EU country.
+A country may designate one transmitting agency and one receiving agency, or one agency to perform both functions. A federal State, a State in which several legal systems apply or a State with autonomous territorial units must be free to designate more than one such agency. The designation must have effect for a period of 5 years and may be renewed at 5-year intervals.
+Each EU country must provide the Commission with the following information:
+the names and addresses of the receiving agencies referred to in the regulation;
+the geographical areas in which they have jurisdiction;
+the means of receipt of documents available to them; and
+the languages that may be used for the completion of the standard form.
+The EU country must notify the Commission of any subsequent modification of such information.
+Each EU country must designate a central body responsible for:
+supplying information to the transmitting agencies;
+seeking solutions to any difficulties which may arise during transmission of documents for service;
+forwarding, in exceptional cases, at the request of a transmitting agency, a request for service to the competent receiving agency.
+A federal State, a State in which several legal systems apply or a State with autonomous territorial units must be free to designate more than one central body
+
+
+
+Summary 165:
+  
+Advanced therapy medicinal products
+SUMMARY OF:
+Regulation (EC) No 1394/2007 on advanced therapy medicinal products
+WHAT IS THE AIM OF THE REGULATION?
+It lays down specific rules for the authorisation, supervision and pharmacovigilance of advanced therapy medicinal products (ATMPs).
+It amends Directive 2001/83/EC and Regulation (EC) No 726/2007.
+KEY POINTS
+Advanced therapy medicinal products (ATMPs)
+ATMPs are defined as:
+a gene therapy medicinal product;
+a somatic cell therapy medicinal product;
+a tissue engineered product.
+An ATMP contains or consists of engineered cells or tissues and is presented as having properties for, or is used in or administered to human beings with a view to regenerating, repairing or replacing a human tissue.
+A tissue engineered product may contain cells or tissues of human or animal origin, or both. The cells or tissues may be viable or non-viable. It may also contain additional substances, such as cellular products, biomolecules, biomaterials, chemical substances, scaffolds or matrices.
+Products containing or consisting exclusively of non-viable human or animal cells and/or tissues, which do not contain any viable cells or tissues and which do not act principally by pharmacological, immunological or metabolic action, shall be excluded from this definition.
+Manufacturing
+The Commission shall draw up guidelines on good manufacturing practice (GMP) specific to ATMPs.
+Clinical trials
+The rules laid down in Directive 2001/83/EC in respect of gene therapy and somatic cell therapy medicinal products shall apply to tissue engineered products.
+Traceability
+The holder of a marketing authorisation for an ATMP shall establish and maintain a system ensuring that the individual product and its starting and raw materials, including all substances coming into contact with the cells or tissues it may contain, can be traced through the sourcing, manufacturing, packaging, storage, transport and delivery to the hospital, institution or private practice where the product is used.
+The hospital, institution or private practice where the ATMP is used shall establish and maintain a system for patient and product traceability. That system shall contain sufficient detail to allow linking of each product to the patient who received it and vice versa.
+Where an ATMP contains human cells or tissues, the marketing authorisation holder, as well as the hospital, institution or private practice where the product is used, shall ensure that the traceability systems established in accordance with the regulation are complementary to, and compatible with, the requirements laid down in Directive 2004/23/EC as regards human cells and tissues other than blood cells, and in Directive 2002/98/EC as regards human blood cells.
+The marketing authorisation holder shall keep the data referred to in the regulation for a minimum of 30 years after the expiry date of the product, or longer if required by the Commission as a term of the marketing authorisation.
+Certification of data
+The Commission shall draw up guidelines on the certification of data on the quality and safety of ATMPs.
+Evaluation procedure
+The Committee for Medicinal Products for Human Use (CHMP) shall consult the Committee for Advanced Therapies (CAT) on any scientific assessment of ATMPs necessary to draw up the scientific opinions referred to in Article 5(2) and (3) of Regulation (EC) No 726/2004. The CAT shall also be consulted in the event of re-examination of the opinion pursuant to Article 9(2) of Regulation (EC) No 726/2004.
+When preparing a draft opinion for final approval by the CHMP, the CAT shall endeavour to reach a scientific consensus. If such consensus cannot be reached, the CAT shall adopt the position of the majority of its members. The draft opinion shall mention the divergent positions and the grounds on which they are based.
+The draft opinion given by the CAT under paragraph 1 shall be sent to the Chairman of the CHMP in a timely manner so as to ensure that the deadline laid down in Article 6(3) or Article 9(2) of Regulation (EC) No 726/2004 can be met.
+Post-authorisation follow-up
+In addition to the requirements for pharmacovigilance laid down in Articles 21 to 29 of Regulation (EC) No 726/2004, the applicant shall detail, in the marketing authorisation application, the measures envisaged to ensure the follow-up of efficacy of ATMPs and of adverse reactions thereto.
+The Commission shall, on the advice of the European Medicines Agency (EMA), require as part of the marketing authorisation that a risk management system designed to identify, characterise, prevent or minimise risks related to ATMPs, including an evaluation of the effectiveness of that system, be set up, or that specific post-marketing studies be carried out by the holder of the marketing authorisation and submitted for review to the EMA.
+Evaluation of the effectiveness of any risk management system and the results of any studies performed shall be included in the periodic safety update reports referred to in Article 24(3) of Regulation (EC) No 726/2004.
+The EMA shall forthwith inform the Commission if it finds that the marketing authorisation holder has failed to comply with the requirements referred to in paragraph 2.
+Scientific advice
+The applicant or holder of a marketing authorisation may request advice from the EMA on the design and conduct of pharmacovigilance and of the risk management system referred to in Article 14.
+A 90 % reduction for small and medium-sized enterprises (SMEs) and 65 % for other applicants shall apply to the fee for scientific advice payable to the EMA for any advice given in respect of ATMPs pursuant to paragraph 1 of this Article and Article 57(1)(n) of Regulation (EC) No 726/2004.
+Scientific recommendation on advanced therapy classification
+Any applicant developing a product based on genes, cells or tissues may request a scientific recommendation of the EMA with a view to determining whether the referred product falls, on scientific grounds, within the definition of an ATMP. The EMA shall deliver this recommendation after consultation with the Commission and within 60 days after receipt of the request.
+The EMA shall publish summaries of the recommendations delivered in accordance with paragraph 1, after deletion of all information of commercial confidential nature.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 12 July 2008. It had to apply from 12 July 2008 at the latest.
+BACKGROUND
+              
+For further information, please see ‘Advanced therapy medicinal products: what are they?’ on the European Commission’s website.
+KEY TERMS
+              
+Advanced therapy medicinal product (ATMP): a product that:
+contains or consists of engineered cells or tissues,
+is presented as having properties for, or is used in or administered to human beings with a view to regenerating, repairing or replacing a human tissue.
+REFERENCES
+              
+Regulation (EC) No 1394/2007 of the European Parliament and of the Council of 13 November 2007 on advanced therapy medicinal products and amending Directive 2001/83/EC and Regulation (EC) No 726/2004 (OJ L 324, 10.12.2007, pp. 121-132
+
+
+
+Summary 166:
+ type-approval regulation (Euro 5 and Euro 6) and access to vehicle repair and maintenance information
+SUMMARY OF:
+Regulation (EC) No 715/2007 on type-approval of motor vehicles with respect to emissions from light passenger and commercial vehicles (Euro 5 and Euro 6) and on access to vehicle repair and maintenance information
+WHAT IS THE AIM OF THE REGULATION?
+It establishes common technical requirements for the type approval of motor vehicles and replacement parts, such as replacement pollution control devices, with regard to their emissions.
+It lays down rules for in-service conformity, durability of pollution control devices, on-board diagnostic (OBD) systems, measurement of fuel consumption and accessibility of vehicle repair and maintenance information.
+It sets out the requirements and tests for the implementation of these rules.
+KEY POINTS
+Scope
+The regulation applies to vehicles of categories M1, M2, N1 and N2 as defined in Annex II to Directive 70/156/EEC with a reference mass not exceeding 2 610 kg.
+At the manufacturer's request, type approval granted under this Regulation may be extended from vehicles covered by this Article to M1, M2, N1 and N2 vehicles as defined in Annex II to Directive 70/156/EEC with a reference mass not exceeding 2 840 kg and which meet the conditions laid down in this Regulation and its implementing measures.
+Manufacturers’ obligations
+Manufacturers must ensure that all new vehicles sold, registered or put into service in the European Union are type approved in accordance with this Regulation and its implementing measures. They must also demonstrate that all new replacement pollution control devices requiring type approval which are sold or put into service in the EU are type approved in accordance with this Regulation and its implementing measures.
+Manufacturers must also ensure that type approval procedures for verifying conformity of production, durability of pollution control devices and in-service conformity are met.
+Manufacturers must set out carbon dioxide emissions and fuel consumption figures in a document given to the purchaser of the vehicle at the time of purchase.
+The specific procedures and requirements for the implementation of these obligations shall be established in accordance with the procedure referred to in Article 15(2).
+Access to vehicle repair and maintenance information
+Manufacturers must provide unrestricted and standardised access to vehicle repair and maintenance information to independent operators through websites using a standardised format in a readily accessible and prompt manner, and in a manner which is non-discriminatory compared to the provision given or access granted to authorised dealers and repairers.
+Access to vehicle repair and maintenance information must include:
+an unequivocal vehicle identification;
+service handbooks;
+technical manuals;
+component and diagnosis information;
+wiring diagrams;
+diagnostic trouble codes;
+the software calibration identification number applicable to a vehicle type;
+information provided concerning, and delivered by means of, proprietary tools and equipment;
+data record information and two-directional monitoring and test data.
+Authorised dealers or repairers within the distribution system of a given vehicle manufacturer shall be regarded as independent operators for the purposes of this Regulation to the extent that they provide repair or maintenance services for vehicles in respect of which they are not members of the vehicle manufacturer's distribution system.
+The vehicle repair and maintenance information shall always be available, except as required for maintenance purposes of the information system.
+Manufacturers may charge reasonable and proportionate fees for access to vehicle repair and maintenance information covered by this Regulation; a fee is not reasonable or proportionate if it discourages access by failing to take into account the extent to which the independent operator uses it.
+The measures necessary for implementation of Articles 6 and 7, which are designed to amend non-essential elements of this Regulation, by supplementing it, shall be adopted in accordance with the regulatory procedure with scrutiny referred to in Article 15(3). This shall include the definition and updating of technical specifications relating to the way in which OBD and vehicle repair and maintenance information shall be provided, with special attention being paid to the specific needs of small and medium-sized enterprises (SMEs).
+The vehicle repair and maintenance information shall always be available, except as required for maintenance purposes of the information system.
+With effect from 2 July 2007, if a manufacturer so requests, the national authorities may not, on grounds relating to emissions or fuel consumption of vehicles, refuse to grant EC type approval or national type approval for a new type of vehicle, where the vehicle concerned complies with this Regulation and its implementing measures, and in particular with the Euro 5 limit values set out in Table 1 of Annex I or with the Euro 6 limit values set out in Table 2 of Annex I.
+With effect from 1 September 2009, and from 1 September 2010 in the case of category N1 class II and III and category N2 vehicles, the national authorities shall refuse, on grounds relating to emissions or fuel consumption, to grant EC type approval or national type approval for new types of vehicle which do not comply with this Regulation and its implementing measures, and in particular with the Annexes, with the exception of the Euro 6 limit values set out in Table 2 of Annex I. For the test on tailpipe emissions, the limit values applied to vehicles designed to fulfil specific social needs shall be the same as for category N1 class III vehicles.
+With effect from 1 January 2011, and from 1 January 2012 in the case of category N1 class II and III and category N2 vehicles and vehicles designed to fulfil specific social needs, national authorities shall, in the case of new vehicles which do not comply with this Regulation and its implementing measures, and in particular with the Annexes with the exception of the Euro 6 limit values set out in Table 2 of Annex I, consider certificates of conformity to be no longer valid for the purposes of Article 7(1) of Directive 70/156/EEC and shall, on grounds relating to emissions or fuel consumption, prohibit the registration, sale or entry into service of such vehicles. For the test on tailpipe emissions, the limit values applied to vehicles designed to fulfil specific social needs shall be the same as for category N1 class III vehicles.
+With effect from 1 September 2014, and from 1 September 2015 in the case of category N1 class II and III and category N2 vehicles, the national authorities shall refuse, on grounds relating to emissions or fuel consumption, to grant EC type approval or national type approval for new types of vehicle which do not comply with this Regulation and its implementing measures, and in particular with the Euro 6 limit values set out in Table 2 of Annex I.
+With effect from 1 September 2015, and from 1 September 2016 in the case of category N1 class II and III and category N2 vehicles, national authorities shall, in the case of new vehicles which do not comply with this Regulation and its implementing measures, and in particular with the Euro 6 limit values set out in Table 2 of Annex I, consider certificates of conformity to be no longer valid for the purposes of Article 7(1) of Directive 70/156/EEC and shall, on grounds relating to emissions or fuel consumption, prohibit the registration, sale or entry into service of such vehicles.
+FROM WHEN DOES THE REGULATION APPLY?
+The regulation applies from 2 July 2007.
+REFERENCES
+Act
+Year
+
+
+
+Summary 167:
+ common procedure for food additives, enzymes and flavourings
+SUMMARY
+SUMMARY
+The European Parliament and the Council have established a common authorisation procedure for food additives, enzymes and flavourings. This procedure is laid down in Regulation (EC) No 1331/2008.
+WHAT IS THE AIM OF THE REGULATION?
+It establishes a common authorisation procedure for food additives, enzymes and flavourings in order to ensure the free movement of food within the European Union (EU) and a high level of protection of human health.
+KEY POINTS
+The common authorisation procedure comprises four main stages:
+1.
+the applicant sends the application to the European Commission;
+2.
+the Commission sends the application to the European Food Safety Authority (EFSA);
+3.
+the Commission adopts a regulation implementing the update of the Community list of authorised substances;
+4.
+the Commission may decide not to proceed with a planned update.
+The procedure may be started either on the initiative of the Commission or following an application. Applications may be made by a Member State or by an interested party, who may represent several interested parties. Applications shall be sent to the Commission.
+The Commission shall seek the opinion of the European Food Safety Authority (EFSA), to be given in accordance with the procedure set out in the regulation. However, for the updates referred to in Article 2(2)(b) and (c) of the regulation, the Commission shall not be required to seek the opinion of the Authority if the updates in question are not liable to have an effect on human health.
+The Commission shall submit to the Committee referred to in Article 14(1) of the regulation a draft regulation updating the Community list of authorised substances. The measures, designed to amend non-essential elements of the legislation on food additives, food enzymes and flavourings, relating to the removal of a substance from the Community list, shall be adopted in accordance with the regulatory procedure with scrutiny referred to in Article 14(3) of the regulation.
+On grounds of efficiency, the normal time-limits for the regulatory procedure with scrutiny may be curtailed for the addition of substances to the Community lists and for adding, removing or changing conditions, specifications or restrictions associated with the presence of a substance on the Community lists.
+The Commission shall submit to the Committee referred to in Article 14(1) of the regulation a draft regulation updating the Community list of authorised substances, taking account of the opinion of the Authority, any relevant provisions of EU law and any other legitimate factors relevant to the matter under consideration.
+The regulation may be amended by the Commission by means of implementing measures in accordance with the regulatory procedure referred to in Article 14(2) of the regulation.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It entered into force on 20 January 2009.
+REFERENCES
+Act
+Entry into force
+Deadline for implementation into national law
+Official Journal
+Regulation (EC) No 1331/2008
+20.1.2009
+- —
+OJ L 354, 31.12.2008, pp. 1-4
+RELATED DOCUMENTS
+              
+Regulation (EC) No 1332/2008 of the European Parliament and of the Council of 16 December 2008 on food enzymes (OJ L 354, 31.12.2008, pp. 5-11)
+Regulation (EC) No 1333/2008 of the European Parliament and of the Council of 16 December 2008 on food additives (OJ L 354, 31.12.2008, pp. 22-27)
+Regulation (EC) No 1334/2008 of the European Parliament and of the Council of 16 December 2008 on flavourings and certain food ingredients with flavouring properties for use in and on foods (OJ L 354, 31.12.2008, pp. 13-21)
+last update 15.12.2015
+
+
+
+Summary 168:
+ Regulation on accreditation and market surveillance
+REGULATION (EC) No 765/2008 sets out the rules for accreditation and market surveillance in relation to the marketing of products.
+Accreditation
+Accreditation is a system of attestation by a national accreditation body that a conformity assessment body meets the requirements set by harmonised standards and, where applicable, any additional requirements including those set out in relevant sectoral schemes, to carry out a specific conformity assessment activity.
+Accreditation is used on a compulsory or voluntary basis, whether that assessment is compulsory or not, and irrespective of the legal status of the body performing the accreditation.
+Each Member State shall appoint a single national accreditation body.
+Where a Member State considers that it is not economically meaningful or sustainable to have a national accreditation body or to provide certain accreditation services, it shall, as far as possible, have recourse to the national accreditation body of another Member State.
+A Member State shall inform the Commission and the other Member States where, in accordance with the above, recourse is had to the national accreditation body of another Member State.
+Where accreditation is not operated directly by the public authorities themselves, a Member State shall entrust its national accreditation body with the operation of accreditation as a public authority activity and grant it formal recognition.
+The responsibilities and tasks of the national accreditation body shall be clearly distinguished from those of other national authorities.
+The national accreditation body shall operate on a not-for-profit basis.
+The national accreditation body shall not offer or provide any activities or services that conformity assessment bodies provide, nor shall it provide consultancy services, own shares in or otherwise have a financial or managerial interest in a conformity assessment body.
+Each Member State shall ensure that its national accreditation body has the appropriate financial and personnel resources for the proper performance of its tasks, including the fulfilment of special tasks, such as activities for European and international accreditation cooperation and activities that are required to support public policy and which are not self-financing.
+The national accreditation body shall be a member of the body recognised under Article 14.
+National accreditation bodies shall establish and maintain appropriate structures to ensure the effective and balanced involvement of all interested parties within both their organisations and the body recognised under Article 14.
+A national accreditation body shall, when requested by a conformity assessment body, evaluate whether that conformity assessment body is competent to carry out a specific conformity assessment activity. Where it is found to be competent, the national accreditation body shall issue an accreditation certificate to that effect.
+Where a national accreditation body ascertains that a conformity assessment body which has received an accreditation certificate is no longer competent to carry out a specific conformity assessment activity or has committed a serious breach of its obligations, that accreditation body shall take all appropriate measures within a reasonable timeframe to restrict, suspend or withdraw the accreditation certificate.
+Member States shall establish procedures for the resolution of appeals, including, where appropriate, legal remedies against accreditation decisions or the absence thereof.
+National accreditation bodies shall not compete with conformity assessment bodies.
+National accreditation bodies shall not compete with other national accreditation bodies.
+National accreditation bodies shall be permitted to operate across national borders, within the territory of another Member State, either at the request of a conformity assessment body in the circumstances set out in Article 7(1), or, if they are asked to do so by a national accreditation body in accordance with Article 7(3), in cooperation with the national accreditation body of that Member State.
+Where a conformity assessment body requests accreditation it shall do so with the national accreditation body of the Member State in which it is established or with the national accreditation body to which that Member State has had recourse in accordance with Article 4(2).
+A national accreditation body may request another national accreditation body to carry out part of the assessment activity. In such a case, the accreditation certificate shall be issued by the requesting body.
+A national accreditation body shall fulfil the following requirements:
+it shall be organised in such a manner as to make it independent of the conformity assessment bodies it assesses and of commercial pressures, and to ensure that no conflicts of interest with conformity assessment bodies occur;
+it shall be organised and operated so as to safeguard the objectivity and impartiality of its activities;
+it shall ensure that each decision relating to the attestation of competence is taken by competent persons different from those who carried out the assessment;
+it shall have adequate arrangements to safeguard the confidentiality of the information obtained;
+it shall identify the conformity assessment activities for which it is competent to perform accreditation, referring, where appropriate, to relevant Community or national legislation and standards;
+it shall set up the procedures necessary to ensure efficient management and appropriate internal controls;
+it shall have a number of competent personnel at its disposal sufficient for the proper performance of its tasks;
+it shall document the duties, responsibilities and authorities of personnel who could affect the quality of the assessment and of the attestation of competence;
+it shall establish, implement and maintain procedures for monitoring the performance and competence of the personnel involved;
+it shall verify that conformity assessments are carried out in an appropriate manner, meaning that unnecessary burdens are not imposed on undertakings and that due account is taken of the size of an undertaking, the sector in which it operates, its structure, the degree of complexity of the product technology in question and the mass or serial nature of the production process;
+it shall publish audited annual accounts prepared in accordance with generally accepted accounting principles.
+The European cooperation for Accreditation (the EA)
+The European cooperation for Accreditation (the EA) is the first body recognised under this Regulation and Member States shall ensure that their national accreditation bodies seek and maintain membership of the EA for as long as it is so recognised.
+The EA manages a peer evaluation system among national accreditation bodies from the Member States and other European countries. That system has proved to be efficient and to provide mutual confidence.
+The EA shall:
+develop and maintain a peer evaluation system for the purpose of assessing and monitoring the competence of national accreditation bodies;
+organise, develop and maintain sectoral accreditation schemes;
+develop and maintain a register of accredited conformity assessment bodies;
+develop and maintain a register of national accreditation bodies;
+develop and maintain a register of conformity assessment bodies;
+develop and maintain a register of sectoral accreditation schemes;
+develop and maintain a register of bodies recognised under Article 14;
+develop and maintain a register of bodies recognised under Article 15;
+develop and maintain a register of bodies recognised under Article 16;
+develop and maintain a register of bodies recognised under Article 17;
+develop and maintain a register of bodies recognised under Article 18;
+develop and maintain a register of bodies recognised under Article 19;
+develop and maintain a register of bodies recognised under Article 20;
+develop and maintain a register of bodies recognised under Article 21;
+develop and maintain a register of bodies recognised under Article 22;
+develop and maintain a register of bodies recognised under Article 23;
+develop and maintain a register of bodies recognised under Article 24;
+develop and maintain a register of bodies recognised under Article 25;
+develop and maintain a register of bodies recognised under Article 26;
+develop and maintain a register of bodies recognised under Article 27;
+develop and maintain a register of bodies recognised under Article 28;
+develop and maintain a register of bodies recognised under Article 29;
+develop and maintain a register of bodies recognised under Article 30;
+develop and maintain a register of bodies recognised under Article 31;
+develop and maintain a register of bodies recognised under Article 32;
+develop and maintain a register of bodies recognised under Article 33;
+develop and maintain a register
+
+
+
+Summary 169:
+
+
+
+
+Summary 170:
+  
+Rail passengers’ rights and obligations
+SUMMARY OF:
+Regulation (EC) No 1371/2007 on rail passengers’ rights and obligations
+WHAT IS THE AIM OF THE REGULATION?
+It aims to strengthen passengers’ rights in the EU rail transport sector. It sets out a common set of rules for the rights and obligations of passengers and railway undertakings.
+KEY POINTS
+Scope
+The regulation applies to all rail journeys and services throughout the EU provided by one or more railway undertakings licensed in accordance with Directive 95/18/EC (see summary).
+It does not apply to railway undertakings and transport services which are not licensed under that Directive.
+It applies to all rail passenger services throughout the EU, except for urban, suburban and regional rail passenger services, unless an exemption has been granted by a Member State.
+A Member State may grant an exemption for a maximum period of 5 years for domestic rail passenger services or particular services or journeys because a significant part of the rail passenger service, including at least one scheduled station stop, is operated outside the EU.
+The regulation does not apply to railway undertakings and transport services which are not licensed under Directive 95/18/EC.
+Information and tickets
+Railway undertakings and ticket vendors offering transport contracts on behalf of one or more railway undertakings must provide the passenger, upon request, with at least the information set out in Annex II, Part I in relation to the journeys for which a transport contract is offered by the railway undertaking concerned.
+Ticket vendors offering transport contracts on their own account, and tour operators, must provide this information where available.
+During the journey, railway undertakings must provide the passenger with at least the information set out in Annex II, Part II.
+Railway undertakings and ticket vendors must offer, where available, tickets, through tickets and reservations.
+Liability for passengers and luggage
+The liability of railway undertakings in respect of passengers and their luggage is governed by Chapters I, III and IV of Title IV, Title VI and Title VII of Annex I.
+The obligation set out in Article 9 of Directive 95/18/EC as far as it relates to liability for passengers shall be understood as requiring a railway undertaking to be adequately insured or to make equivalent arrangements for cover of its liabilities under this Regulation.
+Delays, missed connections and cancellations
+The liability of railway undertakings in respect of delays, missed connections and cancellations is governed by Chapter II of Title IV of Annex I.
+Where it is reasonably to be expected that the delay in the arrival at the final destination under the transport contract will be more than 60 minutes, the passenger shall immediately have the choice between:
+reimbursement of the full cost of the ticket, under the conditions by which it was paid, for the part or parts of his or her journey not made and for the part or parts already made if the journey is no longer serving any purpose in relation to the passenger’s original travel plan, together with, when relevant, a return service to the first point of departure at the earliest opportunity;
+continuation or re-routing, under comparable transport conditions, to the final destination at the earliest opportunity; or
+continuation or re-routing, under comparable transport conditions, to the final destination at a later date at the passenger’s convenience.
+Compensation for delays
+Without losing the right of transport, a passenger may request compensation for delays from the railway undertaking if he or she is facing a delay between the places of departure and destination stated on the ticket for which the ticket has not been reimbursed in accordance with Article 16. The minimum compensations for delays shall be as follows:
+25 % of the ticket price for a delay of 60 to 119 minutes;
+50 % of the ticket price for a delay of 120 minutes or more.
+Passengers who hold a travel pass or season ticket and who encounter recurrent delays or cancellations during its period of validity may request adequate compensation in accordance with the railway undertaking’s compensation arrangements. These arrangements shall state the criteria for determining delay and for the calculation of the compensation.
+Disabled persons and persons with reduced mobility
+Railway undertakings and station managers shall, with the active involvement of representative organisations of disabled persons and persons with reduced mobility, establish, or shall have in place, non-discriminatory access rules for the transport of disabled persons and persons with reduced mobility.
+Reservations and tickets shall be offered to disabled persons and persons with reduced mobility at no additional cost. A railway undertaking, ticket vendor or tour operator may not refuse to accept a reservation from, or issue a ticket to, a disabled person or a person with reduced mobility, or require that such person be accompanied by another person, unless this is strictly necessary in order to comply with the access rules referred to in the first paragraph.
+Upon request, a railway undertaking, a ticket vendor or a tour operator shall provide disabled persons and persons with reduced mobility with information on the accessibility of rail services and on the access conditions of rolling stock in accordance with the access rules referred to in the first paragraph and shall inform disabled persons and persons with reduced mobility about facilities on board.
+Railway undertakings, station managers, ticket vendors and tour operators shall cooperate in order to provide assistance to disabled persons and persons with reduced mobility in line with Articles 22 and 23 in accordance with the following points:
+assistance shall be provided on condition that the railway undertaking, the station manager, the ticket vendor or the tour operator with which the ticket was purchased is notified of the person’s disability or reduced mobility;
+the railway undertaking, the station manager, the ticket vendor or the tour operator shall accept a written declaration from the passenger that he or she is disabled or has reduced mobility;
+the railway undertaking, the station manager, the ticket vendor or the tour operator shall accept a certificate issued by a doctor or other appropriate health professional, which is no more than 12 months old, that the passenger is disabled or has reduced mobility;
+the railway undertaking, the station manager, the ticket vendor or the tour operator shall accept a certificate issued by a doctor or other appropriate health professional, which is no more than 12 months old, that the passenger is disabled or has reduced mobility and that the facilities or services requested are necessary for the person’s disability or reduced mobility.
+Assistance for disabled persons and persons with reduced mobility
+On departure from, transit through or arrival at, a staffed railway station of a disabled person or a person with reduced mobility, the station manager shall provide assistance free of charge in such a way that that person is able to board the departing service, or to disembark from the arriving service for which he or she purchased a ticket.
+In unstaffed stations, railway undertakings and station managers shall ensure that easily accessible information is displayed in accordance with the access rules regarding the nearest staffed stations and directly available assistance for disabled persons and persons with reduced mobility.
+Railway undertakings shall provide disabled persons and persons with reduced mobility assistance free of charge on board a train and during boarding and disembarking from a train.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+The regulation applies from 12 December 2009.
+REFERENCES
+              
+Regulation (EC) No 1371/2007 of the European Parliament and of the Council of 23 October 2007 on rail passengers’ rights and obligations (OJ L 318, 24.12
+
+
+
+Summary 171:
+ EU statistics on education and lifelong learning
+EU statistics on education and lifelong learning
+WHAT IS THE AIM OF THE REGULATION?
+It sets out the rules for the production and development of statistics on education and lifelong learning in the European Union (EU).
+KEY POINTS
+Scope
+The regulation applies to the production of statistics in three domains:
+Domain 1: education and training systems;
+Domain 2: participation of adults in lifelong learning;
+Domain 3: other statistics on education and lifelong learning.
+The annex to the regulation specifies the scope of each of these domains.
+Production of statistics
+The production of Community statistics in the field of education and lifelong learning is implemented by individual statistical actions. These include:
+the regular delivery of statistics on education and lifelong learning by the EU Member States;
+the use of other statistical information systems and surveys, to provide additional statistical variables and indicators on education and lifelong learning;
+the development, improvement and updating of standards and manuals on statistical frameworks, concepts and methods;
+the improvement of data quality, in the context of the quality framework.
+Transmission of micro-data on individuals
+When necessary for the production of Community statistics, EU Member States may transmit confidential micro-data resulting from sample surveys to the European Commission (Eurostat). The transmitted data must not permit the direct identification of the statistical units (individuals).
+Implementing measures
+The Commission (Eurostat) adopts implementing measures to:
+select and specify the subjects covered by the domains and their characteristics in response to policy or technical needs;
+breakdown the characteristics;
+set the observation period and deadlines for transmission of results;
+set the quality requirements, including the required precision;
+set the quality reporting framework.
+The Commission (Eurostat) may also adopt implementing measures to:
+take account of the potential burden on educational institutions and individuals;
+take account of the results of pilot studies;
+take account of the latest agreements between the UNESCO Institute for Statistics, the Organisation for Economic Cooperation and Development and the Commission (Eurostat) on concepts, definitions, data collection format, data processing, periodicity and deadlines for transmission of results;
+take account of the results from the Adult Education Pilot Survey performed between 2005 and 2007 and further development needs;
+take account of the availability, suitability and the legal context of existing Community data sources.
+Committee
+The Commission (Eurostat) is assisted by the Statistical Programme Committee.
+Implementing measures are adopted in accordance with the regulatory procedure with scrutiny.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 7 June 2008.
+REFERENCES
+Act
+Entry into force
+Deadline for implementation in the Member States
+Regulation (EC) No 452/2008
+7.6.2008
+—
+Official Publications
+Regulation (EC) No 452/2008
+Council Statement
+Council Statement
+last update 10.04.2015
+
+
+
+Summary 172:
+ EU statistics on energy supply and consumption
+EU statistics on energy supply and consumption
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It establishes a common framework for the production, transmission, evaluation and dissemination of comparable energy statistics in the EU.
+KEY POINTS
+The regulation covers statistical data on all types of energy products and their aggregates in the EU.
+The EU countries must collect data from specific statistical surveys addressed to the primary and transformed energy producers and traders, importers and exporters, as well as other statistical surveys addressed to final energy users.
+The EU countries must lay down the detailed rules concerning the reporting of the data needed for the national statistics as specified in Annexes B, C and D by undertakings and other sources.
+The regulation applies to all EU countries except Denmark which has opted out of this regulation.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It has applied since 1 January 2009.
+REFERENCES
+Act
+Entry into force
+Deadline for transposition in the Member States
+Official Journal
+Regulation (EC) No 1099/2008
+1.1.2009
+—
+OJ L 304, 14.11.2008, pp. 1-11
+RELATED DOCUMENTS
+Decision No 280/2004/EC
+Decision 2005/166/EC
+Green Paper on energy efficiency
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Progress Report
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Report
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Executive Summary
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Background Note
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Frequently Asked Questions
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Annexes
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (French)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (German)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Spanish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Finnish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Danish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Dutch)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Greek)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Italian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Portuguese)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Swedish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Latvian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Lithuanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Hungarian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Romanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Czech)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovak)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Polish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Bulgarian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovenian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Estonian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Maltese)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Croatian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Serbian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Albanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Montenegrin)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Macedonian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Kosovar)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Turkish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Cypriot)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Bosnian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovakian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Latvian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Lithuanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Hungarian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Romanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Czech)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovak)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Polish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Bulgarian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovenian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Estonian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Maltese)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Croatian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Serbian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Albanian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Montenegrin)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Macedonian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Kosovar)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Turkish)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Cypriot)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Bosnian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Slovakian)
+Green Paper on a European Strategy for Sustainable, Competitive and Secure Energy - Press Release (Latv
+
+
+
+Summary 173:
+ 
+Passenger rights in bus and coach transport
+Passenger rights in bus and coach transport
+SUMMARY OF REGULATION (EU) No 181/2011
+WHAT DOES THIS REGULATION DO?
+              
+It lays down rules for passengers in bus and coach transport.
+KEY POINTS
+              
+The regulation applies to passengers travelling with regular services for non-specified categories of passengers where the boarding or the alighting point of the passengers is situated in the territory of a Member State and where the scheduled distance of the service is 250 km or more.
+It establishes rights for passengers in the event of accidents arising out of the use of the bus or coach resulting in death or personal injury or loss of or damage to luggage.
+It establishes non-discrimination and mandatory assistance for disabled persons and persons with reduced mobility.
+It establishes rights for passengers in cases of cancellation or delay.
+It establishes minimum information to be provided to passengers.
+It establishes procedures for handling complaints.
+It establishes general rules on enforcement.
+The regulation does not apply to passengers travelling with occasional services where the initial boarding point or the final alighting point of the passenger is situated in the territory of a Member State.
+The regulation does not apply to passengers travelling with domestic regular services which have been exempted by a Member State for a maximum period of 4 years from the date of application of the regulation.
+The regulation does not apply to passengers travelling with particular regular services because a significant part of such regular services, including at least one scheduled stop, is operated outside the Union. Such exemptions may be granted for a maximum period of 4 years from the date of application of the regulation.
+The regulation does not affect the rights of passengers under Directive 90/314/EEC and does not apply in case where a package tour referred to in that Directive is cancelled for reasons other than cancellation of a regular service.
+KEY TERMS
+              
+Regular services: services which provide for the carriage of passengers by bus or coach at specified intervals along specified routes, passengers being picked up and set down at predetermined stopping points.
+Occasional services: services which do not fall within the definition of regular services and the main characteristic of which is the carriage by bus or coach of groups of passengers constituted on the initiative of the customer or the carrier himself.
+Carrier: a natural or legal person, other than a tour operator, travel agent or ticket vendor, offering transport by regular or occasional services to the general public.
+Performing carrier: a natural or legal person other than the carrier, who actually performs the carriage wholly or partially.
+Ticket vendor: any intermediary concluding transport contracts on behalf of a carrier.
+Travel agent: any intermediary acting on behalf of a passenger for the conclusion of transport contracts.
+Tour operator: an organiser or retailer, other than the carrier, within the meaning of Article 2(2) and (3) of Directive 90/314/EEC.
+Disabled person or person with reduced mobility: any person whose mobility when using transport is reduced as a result of any physical disability (sensory or locomotory, permanent or temporary), intellectual disability or impairment, or any other cause of disability, or as a result of age, and whose situation needs appropriate attention and adaptation to his particular needs of the services made available to all passengers.
+Access conditions: relevant standards, guidelines and information on the accessibility of buses and/or of designated terminals including their facilities for disabled persons or persons with reduced mobility.
+Terminal: a staffed terminal where according to the specified route a regular service is scheduled to stop for passengers to board or alight, equipped with facilities such as a check-in counter, waiting room or ticket office.
+Bus stop: any point other than a terminal where according to the specified route a regular service is scheduled to stop for passengers to board or alight.
+Terminal managing body: an organisational entity in a Member State responsible for the management of a designated terminal.
+Cancellation: the non-operation of a regular service which was previously scheduled.
+Delay: a difference between the time the regular service was scheduled to depart in accordance with the published timetable and the time of its actual departure.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+The regulation applies from 1 March 2013.
+REFERENCES
+ACTS
+Regulation (EU) No 181/2011 of the European Parliament and of the Council of 16 February 2011 concerning the rights of passengers in bus and coach transport and amending Regulation (EC) No 2006/2004 (OJ L 55, 17.2.2011, pp. 1-12)
+RELATED DOCUMENTS
+Directive 95/46/EC of the European Parliament and of the Council of 24 October 1995 on the protection of individuals with regard to the processing of personal data and on the free movement of such data (OJ L 281, 23.11.1995, pp. 31-50)
+Regulation (EC) No 2006/2004 of the European Parliament and of the Council of 27 October 2004 on cooperation between competent authorities of the Member States and the Commission in the suppression of Turnish (OJ L 349, 23.12.2004, pp. 15-29)
+Council Directive 2000/43/EC of 29 June 2000 implementing the principle of equal treatment between persons irrespective of racial or ethnic origin (OJ L 180, 9.7.2000, pp. 22-33)
+Council Directive 2004/113/EC of 13 December 2004 implementing the principle of equal treatment between men and women in the access to and supply of goods and services (OJ L 9, 12.1.2005, pp. 3-71)
+Council Directive 95/53/EC of 29 June 1995 on the coordination of regulations, laws, regulations and administrative provisions relating to the application of Directive 95/46/EC of the European Parliament and of the Council on the protection of individuals with regard to the processing of personal data and on the free movement of such data (OJ L 214, 17.8.1995, pp. 13-15)
+Council Directive 95/59/EC of 6 November 1995 on the coordination of standards, specifications and ratings in the field of road transport intended for the carriage of passengers (OJ L 305, 19.12.1995, pp. 1-4)
+Council Directive 95/18/EC of 19 June 1995 on the harmonisation of certain aspects of the taxation of savings income (OJ L 148, 27.6.1995, pp. 1-7)
+Council Directive 2003/59/EC of 15 July 2003 on the initial qualification and periodic training of drivers of certain road vehicles for the carriage of goods or passengers (OJ L 236, 23.9.2003, pp. 73-79)
+last update 18.09.2015
+
+
+
+Summary 174:
+ EU statistics on aquaculture
+EU statistics on aquaculture
+SUMMARY OF:
+Regulation (EC) No 762/2008 on the submission by Member States of statistics on aquaculture
+WHAT IS THE AIM OF THE REGULATION?
+It sets out the rules for the collection of statistics on the production and structure of the European Union’s (EU) aquaculture sector.
+KEY POINTS
+The EU’s aquaculture sector is a major contributor to the EU’s fisheries production. It is expected to continue to grow in the coming years, providing the EU with a large share of its fish consumption. It is therefore essential that the sector is properly monitored and managed.
+The regulation sets out the rules for the collection of statistics on the production and structure of the EU’s aquaculture sector. The data are collected from national authorities responsible for the sector and submitted to the European Commission (Eurostat) on an annual basis.
+Production
+The regulation covers the following:
+the annual production (volume and unit value) of aquaculture;
+the annual input (volume and unit value) to capture-based aquaculture;
+the annual production of hatcheries and nurseries;
+the structure of the aquaculture sector.
+The regulation covers the whole of the EU’s territory, including territorial waters, and inland waters such as lakes and rivers.
+The data are collected from national authorities responsible for the sector and submitted to the Commission (Eurostat) on an annual basis. The first reference calendar year is 2008. The data are submitted within 12 months of the end of the reference calendar year.
+The Commission (Eurostat) publishes the statistics in its online database.
+Structure
+The regulation also covers the structure of the sector. The data are collected from national authorities responsible for the sector and submitted to the Commission (Eurostat) on an annual basis. The first reference calendar year is 2008. The data are submitted within 12 months of the end of the reference calendar year.
+The Commission (Eurostat) publishes the statistics in its online database.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 1 January 2009.
+BACKGROUND
+              
+The regulation repeals Council Regulation (EC) No 788/96 on the submission by Member States of statistics on aquaculture production. That regulation required the Member States to submit annual data on the volume of production.
+The increasing contribution of aquaculture to the EU’s total fisheries production requires a wider range of data for a rational development and management of this sector within the Common Fisheries Policy.
+The regulation also covers the production of hatcheries and nurseries for aquaculture activity.
+The regulation was adopted in 2008, following the adoption of the new Common Fisheries Policy in 2009.
+For more information, see:
+EU aquaculture production (Eurostat).
+KEY TERMS
+              
+Aquaculture: the breeding, rearing and reproduction of aquatic animals and plants under controlled conditions.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 1 January 2009.
+REFERENCES
+Act
+Date
+Maturity date
+Object
+Official Journal
+Regulation (EC) No 762/2008
+9.7.2008
+-
+on the submission by Member States of statistics on aquaculture and repealing Council Regulation (EC) No 788/96
+OJ L 218, 13.8.2008, pp. 1-9
+last update 22.07.2016
+
+
+
+Summary 175:
+ 
+Scheme of control and enforcement applicable in the area covered by the Convention on future multilateral cooperation in the North-East Atlantic fisheries — repealing Council Regulation (EC) No 2791/1999
+Scheme of control and enforcement applicable in the area covered by the Convention on future multilateral cooperation in the North-East Atlantic fisheries — repealing Council Regulation (EC) No 2791/1999
+This Regulation lays down a scheme of control and enforcement applicable in the area covered by the Convention on future multilateral cooperation in the North-East Atlantic fisheries. It also repeals Council Regulation (EC) No 2791/1999.
+WHAT IS THE AIM OF THE REGULATION?
+It aims to ensure that the Union applies the scheme of control and enforcement applicable in the area covered by the Convention on future multilateral cooperation in the North-East Atlantic fisheries (NEAFC).
+KEY POINTS
+Scope
+The regulation applies to all EU vessels used or intended for use for fishing activities carried out in respect of fishery resources in the Regulatory Area (the waters of the Convention Area which lie beyond the waters under the fisheries jurisdiction of the Contracting Parties).
+Monitoring measures
+Member States shall send to the Commission, in a computer-readable form, a list of all vessels flying their flag and registered in the Union which are authorised to fish in the Regulatory Area, in particular the vessels authorised to fish directly for one or more regulated resources.
+Member States shall ensure that gear used by their fishing vessels in the Regulatory Area is marked in accordance with Commission Regulation (EC) No 356/2005.
+Member States shall undertake to retrieve on a regular basis lost gears belonging to vessels flying their flag.
+In addition to the information specified in Article 6 of Council Regulation (EEC) No 2847/93, the masters of EU fishing vessels shall record, either in a bound paginated fishing logbook or by electronic means, the following:
+each entry into and exit from the Regulatory Area;
+on a daily basis and/or for each haul the estimated cumulative catches retained on board since the last entry into the Regulatory Area;
+on a daily basis and/or for each haul the amount of fish discarded;
+immediately after each communication pursuant to Article 9, the date and time, according to Universal Coordinated Time (UTC), of transmission of a report and, in the case of radio transmission, the name of the radio station through which the report was transmitted;
+the fishing depth, where appropriate.
+In addition to the information specified in Article 6 of Regulation (EC) No 1224/2009, the masters of EU fishing vessels shall record, either in a bound paginated fishing logbook or by electronic means, the following:
+each entry into and exit from the Regulatory Area;
+on a daily basis and/or for each haul the estimated cumulative catches retained on board since the last entry into the Regulatory Area;
+on a daily basis and/or for each haul the amount of fish discarded;
+immediately after each communication pursuant to Article 9, the date and time, according to Universal Coordinated Time (UTC), of transmission of a report and, in the case of radio transmission, the name of the radio station through which the report was transmitted;
+the fishing depth, where appropriate.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NEAFC inspectors are carried out in a non-discriminatory manner and in accordance with the scheme.
+Member States shall ensure that the inspections by their NE
+
+
+
+Summary 176:
+ 
+EU Ecolabel — a new label for the environment
+EU Ecolabel — a new label for the environment
+The EU Ecolabel is a voluntary eco-label for products that meet high environmental standards. It was created in 2000 by Regulation (EC) No 1980/2000. This Regulation repeals the previous one and introduces changes to the EU Ecolabel scheme.
+ACT
+Regulation (EC) No 66/2010 of the European Parliament and of the Council of 25 November 2009 on the EU Ecolabel.
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It establishes a revised EU Ecolabel scheme which is intended to promote products with a reduced environmental impact during their entire life cycle and to provide consumers with accurate, non-deceptive, science-based information on the environmental impact of products.
+KEY POINTS
+The EU Ecolabel may be used by operators (manufacturers, importers, wholesalers, retailers) who have been awarded the EU Ecolabel and comply with the EU Ecolabel criteria and the assessment requirements published by the European Commission.
+EU Ecolabel criteria
+EU Ecolabel criteria shall be based on the environmental performance of products, taking into account the latest strategic objectives of the Community in the field of the environment.
+EU Ecolabel criteria shall set out the environmental requirements that a product must fulfil in order to bear the EU Ecolabel.
+EU Ecolabel criteria shall be determined on a scientific basis considering the whole life cycle of products.
+For specific categories of goods containing substances referred to in Article 6(6) of this Regulation, the Commission may adopt measures to grant derogations from Article 6(6). No derogation shall be given concerning substances that meet the criteria of Article 57 of Regulation (EC) No 1907/2006 and that are identified according to the procedure described in Article 59(1) of that Regulation, present in mixtures, in an article or in any homogeneous part of a complex article in concentrations higher than 0,1 % (weight by weight).
+Development and revision of EU Ecolabel criteria
+The Commission may initiate and lead the development or revision of EU Ecolabel criteria.
+The Commission shall, no later than nine months after consulting the EUEB, adopt measures to establish specific EU Ecolabel criteria for each product group.
+Award of the EU Ecolabel and terms and conditions of its use
+The EU Ecolabel shall have the form depicted in Annex II of this Regulation.
+The EU Ecolabel may only be used in connection with products complying with the EU Ecolabel criteria applicable to the products concerned and for which the EU Ecolabel has been awarded.
+Applications shall specify the full contact details of the operator, as well as the product group in question and shall contain a full description of the product as well as all other information requested by the competent body.
+The competent body to which an application is made shall charge fees according to Annex III of this Regulation. The use of the EU Ecolabel shall be conditional upon the fees having been paid in due time.
+Market surveillance and control of the use of the EU Ecolabel
+The competent body shall, in respect of products to which it has awarded the EU Ecolabel, verify that the product complies with the EU Ecolabel criteria and assessment requirements published under Article 8, on a regular basis.
+The user of the EU Ecolabel shall, upon request by the competent body which has awarded the EU Ecolabel to the product, grant access to the premises on which the product concerned is produced.
+The competent body which finds that a product bearing the EU Ecolabel does not comply with the relevant product group criteria or that the EU Ecolabel is not used in accordance with Article 9, shall either prohibit the use of the EU Ecolabel on that product, or, in the event that the EU Ecolabel has been awarded by another competent body, it shall inform that competent body. The user of the EU Ecolabel shall not be entitled to repayment of the fees referred to in Article 9(4), either in whole or in part.
+Promotion of the EU Ecolabel
+Member States and the Commission shall, in cooperation with the EUEB, agree on a specific action plan to promote the use of the EU Ecolabel by:
+awareness-raising actions and information and public education campaigns for consumers, producers, manufacturers, wholesalers, service providers, public purchasers, traders, retailers and the general public,
+encouraging the uptake of the scheme, especially for SMEs,
+thus supporting the development of the scheme.
+Promotion of the EU Ecolabel may be undertaken via the EU Ecolabel website providing basic information and promotional materials on the EU Ecolabel, and information on where to purchase EU Ecolabel products, in all Community languages.
+Member States shall encourage the use of the ‘Manual for authorities awarding public contracts’, as specified in Annex I, Part A, point 5. For this purpose, Member States shall consider, for example, the setting of targets for the purchasing of products meeting the criteria specified in that Manual.
+Exchange of information and experiences
+Competent bodies shall regularly exchange information and experiences, in particular on the application of Articles 9 and 10.
+The Commission shall set up a working group of competent bodies for this purpose. The working group shall meet at least twice a year. Travel expenses shall be borne by the Commission.
+KEY TERMS
+EU Ecolabel: voluntary eco-label for products that meet high environmental standards.
+FROM WHEN DOES THIS REGULATION APPLY?
+              
+It applies from 20 January 2010.
+REFERENCES
+Act
+Entry into force
+Deadline for transposition in the Member States
+Official Journal
+Regulation (EC) No 66/2010
+20.1.2010
+—
+OJ L 27, 30.1.2010, pp. 1-11
+RELATED ACTS
+Regulation (EC) No 1980/2000 of the European Parliament and of the Council of 17 July 2000 on a revised Community eco-label award scheme (OJ L 237, 21.9.2000, pp. 1-7). See consolidated version.
+Regulation (EC) No 1907/2006 of the European Parliament and of the Council of 18 December 2006 concerning the Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH), establishing a European Agency for the Safety of Operated Chemicals (OJ L 396, 30.12.2006, pp. 1-849). See consolidated version.
+last update 21.01.2015
+
+
+
+Summary 177:
+ EU supplementary protection certificates for medicinal products
+EU supplementary protection certificates for medicinal products
+SUMMARY
+WHAT DOES THIS REGULATION DO?
+It codifies Regulation (EC) No 1768/92 which provides for supplementary protection certificates for medicinal products.
+The regulation extends the duration of the patent for the product concerned by the period between the date on which the application for the patent was lodged and the date on which the first authorisation to place the medicinal product on the market was granted in the EU.
+The regulation aims to encourage the development of new medicinal products.
+KEY POINTS
+The regulation applies to medicinal products which are protected by a patent and subject to an administrative authorisation procedure before being placed on the market.
+The application for the certificate must be lodged within 6 months of the date on which the authorisation to place the medicinal product on the market was granted.
+The certificate is granted for a period of 5 years from the date on which it takes effect.
+The duration of the certificate may not exceed 5 years from the date on which it takes effect.
+The certificate may be granted in the 10 new EU countries which joined the EU in 2004, 2007 and 2013.
+FROM WHEN DOES THE REGULATION APPLY?
+              
+It applies from 16 June 2009.
+REFERENCES
+Act
+Entry into force
+Deadline for transposition in the Member States
+Official Gazette reference
+Regulation (EC) No 469/2009
+16.6.2009
+-
+O.J. L 152 of 16.6.2009 p. 1.
+RELATED DOCUMENTS
+              
+Regulation (EC) No 1901/2006 establishing a European Medicines Agency (EMEA) (O.J. L 378 of 27.12.2006 p. 1).
+Council Regulation (EEC) No 1768/92 (O.J. L 182 of 2.7.1992 p. 1).
+Last updated: 20.11.2014
+
+
+
+Summary 178:
+
+
+
+
