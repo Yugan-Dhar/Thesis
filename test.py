@@ -557,7 +557,6 @@ if __name__ == "__main__":
     if args.verbose:
         print("Calculating evaluation metrics...")
 
-    print(len(pred_str))
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")
     bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
@@ -568,7 +567,7 @@ if __name__ == "__main__":
     print("Calculated BLANC scores")
     print(f"ROUGE-1: {rouge_scores['rouge1']}, ROUGE-2: {rouge_scores['rouge2']}, ROUGE-L: {rouge_scores['rougeL']}, BERTScore: {bert_score}, BARTScore: {bart_score}, BLANC: {blanc_score}")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
-    """
+    
     new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],

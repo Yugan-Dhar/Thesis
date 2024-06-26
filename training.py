@@ -11,6 +11,7 @@ import numpy as np
 import torch
 import wandb
 import sys
+import re
 from accelerate import Accelerator
 from huggingface_hub import whoami
 from blanc import BlancHelp
@@ -365,6 +366,7 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
     Returns:
         None
     """
+
     with open(path, 'a') as file:
         i = start_index
         for summary in summary_list:
@@ -375,7 +377,7 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
         print(f"Summaries written to {path}")
 
 
-def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_max_length=1500):
+def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index = 0, generation_max_length=1500):
     """
     Process predictions for each input and save the results.
 
@@ -390,20 +392,32 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
         list: A list of predicted summaries.
 
     """
-    import re
+    if args.Llama_super_batch:
+        end_index = start_index + 1
+        if start_index == 150:
+            end_index = 179
+
+        dataset = dataset.select(range[start_index:end_index])
+        print(type(dataset))
+        print(len(dataset))
+        predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
+
+    else:
+        predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
 
     pred_str = []
-    predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+
+
     for i in range(len(dataset)):
+
+        print(f"Summarizing example {i + 1} of {len(dataset)}")
         text = dataset['text'][i]  
 
         split_text = re.split(r'(### Summary:)', text)
 
         result_text = split_text[0] + split_text[1]
         result_text = result_text.strip()
-
         input_ids = tokenizer(result_text, return_tensors='pt').input_ids.to(model.device)
-        
         #TODO: CHeck if this is correct --> Not needed when using torch.bfloat16 as dtype
         """with torch.cuda.amp.autocast():
             outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)"""
@@ -411,13 +425,12 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, generation_
         outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
         output = outputs[0][len(input_ids[0]):]
 
+
         output = tokenizer.decode(output, skip_special_tokens=True)
-        if i % 10 == 0:
-            print(f"Summarized {i + 1} examples.")
 
         pred_str.append(output)
         
-    write_predicted_summaries_to_file(predictions_path, pred_str)
+    write_predicted_summaries_to_file(predictions_path, pred_str, start_index = start_index)
     return pred_str
 
 
@@ -601,7 +614,10 @@ if __name__ == "__main__":
                         help= "Write the actual summaries to a txt file for reference.")
     parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
                         help= "Only preprocess the dataset and exit the program.")
-    
+    parser.add_argument('-lsb', '--Llama_super_batch', action= "store_true", default= False,
+                        help= "Use super batch testing for Llama3 model.") 
+    parser.add_argument('-si', '--start_index', type= int, default= 0, metavar= "",
+                        help= "The starting index for the summaries to be written to file and for prediction.")
     args = parser.parse_args()  
 
     # For some reason, setting wandb will cause a ValueError when saving the trainer using SFTTRainer. This is a workaround for now.
@@ -955,8 +971,12 @@ if __name__ == "__main__":
                                             tokenizer = abstractive_tokenizer,
                                             dataset = dataset['test'],
                                             model_id = model_id,
-                                            label_str = label_str
+                                            label_str = label_str,
+                                            index = args.start_index
                                             )
+        if arsg.Llama_super_batch:
+            print(f"Using Llama super fast prediction batch because I screwed up!\nExiting")
+            sys.exit()
 
     else:
         results = trainer.predict(dataset["test"])
