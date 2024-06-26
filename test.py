@@ -9,6 +9,7 @@ import json
 import numpy as np
 import torch.nn as nn
 import wandb
+from training import write_predicted_summaries_to_file
 from huggingface_hub import whoami
 from langchain.text_splitter import TokenTextSplitter
 from transformers import DataCollatorForSeq2Seq, Seq2SeqTrainer, Seq2SeqTrainingArguments, EarlyStoppingCallback, AutoTokenizer, AutoModelForSeq2SeqLM
@@ -73,6 +74,7 @@ def set_device(abstractive_model, args):
             print(f"Using abstractive model on {num_gpu} devices")
 
     return num_gpu  
+
 
 def calculate_word_length_summary(example): 
     """
@@ -436,6 +438,8 @@ if __name__ == "__main__":
                         help= "Write the actual summaries to a txt file for reference.")
     parser.add_argument('-po', '--preprocessing_only', action= "store_true", default= False,
                         help= "Only preprocess the dataset and exit the program.")
+    parser.add_argument('-lsb', '--Llama_super_batch', action= "store_true", default= False,
+                        help= "Use super batch testing for Llama3 model.") 
 
     args = parser.parse_args()  
 
@@ -452,7 +456,7 @@ if __name__ == "__main__":
                 torch_dtype = torch.bfloat16,
                 quantization_config= {"load_in_4bit": True},
                 device_map="auto",
-                #attn_implementation="flash_attention_2"
+                attn_implementation="flash_attention_2"
                 )
         else:
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
@@ -541,21 +545,23 @@ if __name__ == "__main__":
         
     import re
 
-# Load the text file content
-    file_path = f'results/text_outputs/{model_id}_predictions.txt'
-    with open(file_path, 'r', encoding='utf-8') as file:
-        text_content = file.read()
-
-    # Regular expression to find all summaries
-    pattern = r'Summary \d+:\s(.*?)(?=Summary \d+:|\Z)'
-
-    # Find all matches
-    summaries = re.findall(pattern, text_content, re.DOTALL)
-    print("Found all summaries")
-    pred_str = [summary.strip() for summary in summaries]
     
-    if args.verbose:
-        print("Calculating evaluation metrics...")
+    if args.Llama_super_batch:
+        start_index_list = [0,30,60,90,120,150]
+        
+        pred_str = []
+        for start_index in start_index_list
+            file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
+            small_index_pred_list = utils.tools.read_created_summaries(file_path)
+            pred_str = pred_str.extend(small_index_pred_list)
+
+        file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+        write_predicted_summaries_to_file(file_path, pred_str, start_index=0)
+
+    # Load the text file content
+    else:
+        file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
+        pred_str = utils.tools.read_created_summaries(file_path)
 
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")
@@ -565,7 +571,6 @@ if __name__ == "__main__":
     print("Calculated BART scores")
     blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
-    print(f"ROUGE-1: {rouge_scores['rouge1']}, ROUGE-2: {rouge_scores['rouge2']}, ROUGE-L: {rouge_scores['rougeL']}, BERTScore: {bert_score}, BARTScore: {bart_score}, BLANC: {blanc_score}")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     
     new_result["Evaluation_metrics"] = {

@@ -219,7 +219,7 @@ def calculate_blanc_score(predictions, references, batch_size=2):
     return blanc_score
 
 
-def read_created_summaries(model_id):
+def read_created_summaries(file_path):
     """
     Read the created summaries from a text file.
 
@@ -231,7 +231,6 @@ def read_created_summaries(model_id):
 
     """
     # Load the text file content
-    file_path = f'results/text_outputs/{model_id}_predictions.txt'
     with open(file_path, 'r', encoding='utf-8') as file:
         text_content = file.read()
 
