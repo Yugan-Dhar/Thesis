@@ -534,7 +534,9 @@ if __name__ == "__main__":
             pred_str.extend(small_index_pred_list)
 
         file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
-        write_predicted_summaries_to_file(file_path, pred_str, start_index=0)
+        # Only write to file if it doesn't exist, otherwise,we just use the predictions from the files found.
+        if not os.path.exists(file_path):
+            write_predicted_summaries_to_file(file_path, pred_str, start_index=0)
 
     # Load the text file content
     else:
