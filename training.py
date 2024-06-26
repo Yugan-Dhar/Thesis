@@ -393,20 +393,17 @@ def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index
 
     """
     if args.Llama_super_batch:
-        end_index = start_index + 1
+        end_index = start_index + 30
         if start_index == 150:
             end_index = 179
 
-        dataset = dataset.select(range[start_index:end_index])
-        print(type(dataset))
-        print(len(dataset))
+        dataset = dataset[start_index:end_index]
         predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
 
     else:
         predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
 
     pred_str = []
-
 
     for i in range(len(dataset)):
 
@@ -972,9 +969,9 @@ if __name__ == "__main__":
                                             dataset = dataset['test'],
                                             model_id = model_id,
                                             label_str = label_str,
-                                            index = args.start_index
+                                            start_index = args.start_index
                                             )
-        if arsg.Llama_super_batch:
+        if args.Llama_super_batch:
             print(f"Using Llama super fast prediction batch because I screwed up!\nExiting")
             sys.exit()
 
