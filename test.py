@@ -544,17 +544,20 @@ if __name__ == "__main__":
         pred_str = utils.tools.read_created_summaries(file_path)
 
 
-    rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    #rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")
-    bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
+    #bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BERT scores")
-    bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
+    #bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BART scores")
     blanc_score = calculate_blanc_score(predictions = reference_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
-    new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
+    #new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
     
     
+    
+    print(blanc_score)
+    """
     new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
@@ -563,8 +566,6 @@ if __name__ == "__main__":
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
     }
-    print(new_result)
-    """
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)

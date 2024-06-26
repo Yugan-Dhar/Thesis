@@ -158,9 +158,7 @@ def calculate_bert_score(predictions, references, batch_size=2):
     """
     bert_score_evaluation_metric = evaluate.load('bertscore')
     bert_scores = bert_score_evaluation_metric.compute(references=references, predictions=predictions, model_type="allenai/longformer-base-4096", batch_size=batch_size)
-    print(f"Precisions: {bert_scores['precision']}")
-    print(f"Recalls: {bert_scores['recall']}")
-    print(f"F1s: {bert_scores['f1']}")
+
     final_bert_score = sum(bert_scores['f1']) / len(bert_scores['f1'])
 
     del bert_score_evaluation_metric
