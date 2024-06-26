@@ -373,8 +373,7 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
             file.write(f"Summary {i}:\n")
             file.write(summary + "\n\n\n\n")
             i += 1
-    if args.verbose:
-        print(f"Summaries written to {path}")
+    print(f"Summaries written to {path}")
 
 
 def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index=0, generation_max_length=1500):

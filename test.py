@@ -330,29 +330,6 @@ def get_feature(batch):
     return encodings
 
 
-def write_predicted_summaries_to_file(path, summary_list):
-    """
-    Write a list of summaries to a file.
-
-    Args:
-        path (str): The path to the file where the summaries will be written.
-        summary_list (list): A list of summaries to be written to the file.
-
-    Returns:
-        None
-    """
-
-    file = open(path,'w+')
-    i = 0
-    for summary in summary_list:
-        file.write(f"Summary {i}:\n")
-        file.write(summary+"\n\n\n\n")
-        i+=1
-    file.close()
-    if args.verbose:
-        print(f"Summaries written to {path}")
-
-
 def compute_rouge_during_training(pred):
 
     labels_ids = pred.label_ids
@@ -374,6 +351,7 @@ def preprocess_logits_for_metrics(logits, labels):
     pred_ids = torch.argmax(logits[0], dim=-1)
 
     return pred_ids, labels
+
 
 def print_trainable_parameters(model):
     """
@@ -548,12 +526,11 @@ if __name__ == "__main__":
     
     if args.Llama_super_batch:
         start_index_list = [0,30,60,90,120,150]
-        
         pred_str = []
         for start_index in start_index_list:
             file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
             small_index_pred_list = utils.tools.read_created_summaries(file_path)
-            pred_str = pred_str.extend(small_index_pred_list)
+            pred_str.extend(small_index_pred_list)
 
         file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
         write_predicted_summaries_to_file(file_path, pred_str, start_index=0)
@@ -562,6 +539,7 @@ if __name__ == "__main__":
     else:
         file_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
         pred_str = utils.tools.read_created_summaries(file_path)
+
 
     rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")

@@ -241,7 +241,6 @@ def read_created_summaries(file_path):
     summaries = re.findall(pattern, text_content, re.DOTALL)
     print("Found all summaries")
     pred_str = [summary.strip() for summary in summaries]
-
     return pred_str
 
 

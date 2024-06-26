@@ -737,7 +737,15 @@
             "Early_stopping_patience": "none",
             "Metric_for_best_model": "none"
         },
-        "No_extraction": true
+        "No_extraction": true,
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.40882862839240736,
+            "ROUGE-2": 0.18159371743379238,
+            "ROUGE-L": 0.21068371325472,
+            "BERTScore": 0.7854171728288661,
+            "BARTScore": -3.342440718304916,
+            "BLANC": 0.1544905384727284
+        }
     },
     {
         "Model_ID": "RoBERTa_Llama3_dependent_V2",
@@ -755,6 +763,14 @@
             "Load_best_model_at_end": false,
             "Early_stopping_patience": 5,
             "Metric_for_best_model": "none"
+        },
+        "Evaluation_metrics": {
+            "ROUGE-1": 0.44735144728276666,
+            "ROUGE-2": 0.18847569776210704,
+            "ROUGE-L": 0.2283974604972479,
+            "BERTScore": 0.8686823648447431,
+            "BARTScore": -3.126791387499633,
+            "BLANC": 0.15631719891215298
         }
     }
 ]
