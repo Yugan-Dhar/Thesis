@@ -7,7 +7,7 @@ venv3
 __pycache__/
 datasets
 logs
-.log
+*.log
 .ipynb_checkpoints
 .ipynb_checkpoints/*
 # Ignore everything in the results directory

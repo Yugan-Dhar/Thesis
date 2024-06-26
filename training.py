@@ -376,58 +376,52 @@ def write_predicted_summaries_to_file(path, summary_list, start_index=0):
     if args.verbose:
         print(f"Summaries written to {path}")
 
-
-def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index = 0, generation_max_length=1500):
+def predict_and_save(model, tokenizer, dataset, model_id, label_str, start_index=0, generation_max_length=1500):
     """
     Process predictions for each input and save the results.
 
     Args:
         model (object): The model used for generating predictions.
         tokenizer (object): The tokenizer used for decoding predictions.
-        dataset (object): The dataset containing input_ids.
+        dataset (dict): The dataset containing input_ids.
         model_id (str): The ID of the model.
         generation_max_length (int, optional): Maximum length of the generated text. Defaults to 1500.
 
     Returns:
         list: A list of predicted summaries.
-
     """
     if args.Llama_super_batch:
         end_index = start_index + 30
         if start_index == 150:
             end_index = 179
 
-        dataset = dataset[start_index:end_index]
+        # Slice the list inside the dictionary
+        subset_texts = dataset['text'][start_index:end_index]
         predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions_start_index{start_index}.txt")
-
     else:
+        subset_texts = dataset['text']
         predictions_path = os.path.join('results', 'text_outputs', f"{model_id}_predictions.txt")
 
     pred_str = []
-
-    for i in range(len(dataset)):
-
-        print(f"Summarizing example {i + 1} of {len(dataset)}")
-        text = dataset['text'][i]  
+    print(f"Dataset: {dataset}\nLength of dataset: {len(subset_texts)}")
+    for i in range(len(subset_texts)):
+        print(f"Summarizing example {i + 1} of {len(subset_texts)}")
+        text = subset_texts[i]  
 
         split_text = re.split(r'(### Summary:)', text)
 
         result_text = split_text[0] + split_text[1]
         result_text = result_text.strip()
         input_ids = tokenizer(result_text, return_tensors='pt').input_ids.to(model.device)
-        #TODO: CHeck if this is correct --> Not needed when using torch.bfloat16 as dtype
-        """with torch.cuda.amp.autocast():
-            outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)"""
         
         outputs = model.generate(input_ids=input_ids, max_new_tokens=generation_max_length, eos_token_id=tokenizer.eos_token_id)
         output = outputs[0][len(input_ids[0]):]
-
 
         output = tokenizer.decode(output, skip_special_tokens=True)
 
         pred_str.append(output)
         
-    write_predicted_summaries_to_file(predictions_path, pred_str, start_index = start_index)
+    write_predicted_summaries_to_file(predictions_path, pred_str, start_index=start_index)
     return pred_str
 
 
