@@ -7,7 +7,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTex
 from transformers import AutoTokenizer, AutoModel, RobertaTokenizer, TFRobertaModel, AutoConfig
 from summarizer import Summarizer
 
-def get_pdf_text(pdf_docs, rect):
+def get_pdf_text(file_path):
   """
   Takes pdf documents and returns raw texts.
 
@@ -18,6 +18,8 @@ def get_pdf_text(pdf_docs, rect):
     text(string): Raw text formatted in one long string.
 
   """
+  rect = fitz.Rect(10, 40, 585, 770) 
+  pdf_docs = fitz.open(file_path)
 
   text = ""
   
@@ -124,13 +126,9 @@ def main():
 
 
   tokenizer = RobertaTokenizer.from_pretrained('roberta-large')
+  
 
-  pdf_object = fitz.open("docs/test_pdf.pdf")
-
-  #TODO: USEFUL TO LET THE USER OF THE STREAMLITT APP CHANGE THE RECT SIZE 
-  rect = fitz.Rect(10, 40, 585, 770) 
-
-  raw_text = get_pdf_text(pdf_object, rect) 
+  raw_text = get_pdf_text(os.path.join("docs", "test_pdf.pdf")) 
 
   #GET CHUNKS
   text_chunks = get_text_chunks(raw_text, tokenizer)
