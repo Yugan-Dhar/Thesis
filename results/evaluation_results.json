@@ -738,5 +738,23 @@
             "Metric_for_best_model": "none"
         },
         "No_extraction": true
+    },
+    {
+        "Model_ID": "RoBERTa_Llama3_dependent_V2",
+        "Date_Created": "26/06/2024",
+        "Abstractive_model": "Llama3",
+        "Extractive_model": "RoBERTa",
+        "Ratio_mode": "dependent",
+        "Version": 2,
+        "Hyperparameters": {
+            "Learning_rate": 5e-05,
+            "Epochs": 10,
+            "Batch_size": 16,
+            "Warmup_ratio": 0.1,
+            "Weight_decay": 0.01,
+            "Load_best_model_at_end": false,
+            "Early_stopping_patience": 5,
+            "Metric_for_best_model": "none"
+        }
     }
 ]
