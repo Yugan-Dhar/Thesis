@@ -595,4 +595,4 @@ if __name__ == "__main__":
         
 
     if args.verbose:
-        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")"""
+        print(f"Results saved to {evaluation_results_filepath} and model card pushed to the hub.")
