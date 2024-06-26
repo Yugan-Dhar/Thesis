@@ -504,6 +504,7 @@ if __name__ == "__main__":
 
     # Additional pre-processing is done here because the dataset is loaded from disk and the columns are not loaded with it. This way it is easier to remove the columns we don't need.    
     label_str = dataset["test"]["summary"]
+    reference_str = dataset["test"]["reference"]
 
     # Remove the columns from all datasets
     columns_to_keep = ["input_ids", "attention_mask", "labels"]
@@ -547,9 +548,10 @@ if __name__ == "__main__":
     print("Calculated BERT scores")
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BART scores")
-    blanc_score = calculate_blanc_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
+    blanc_score = calculate_blanc_score(predictions = reference_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
+    
     
     new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
@@ -559,7 +561,8 @@ if __name__ == "__main__":
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
     }
-
+    print(new_result)
+    """
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)
@@ -569,7 +572,7 @@ if __name__ == "__main__":
 
     # Only MikaSie can push to the hub
     user = whoami()['name']
-    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")
+    model_card.push_to_hub(repo_id = f"{user}/{model_id}", repo_type= "model")"""
         
 
     if args.verbose:
