@@ -133,7 +133,7 @@ Summarize the following text.
         input_ids = abstractive_tokenizer(text, return_tensors='pt', truncation =True, max_length = length).input_ids.to('cuda')
     print(f"Length of input_ids: {len(input_ids[0])}")
 
-    outputs = abstractive_model.generate(input_ids=input_ids, max_new_tokens=gen_max_length, eos_token_id=abstractive_tokenizer.eos_token_id)
+    outputs = abstractive_model.generate(input_ids=input_ids, max_new_tokens=gen_max_length, eos_token_id=abstractive_tokenizer.eos_token_id, repetition_penalty = 1.2)
     
     if args.abstractive_model == 'Llama3':
         output = outputs[0][len(input_ids[0]):]
@@ -141,9 +141,6 @@ Summarize the following text.
         output = outputs[0]
 
     output = abstractive_tokenizer.decode(output, skip_special_tokens=True)
-    print(output)
-    print(f"Lenght output: {len(output)}\n")
-    print(f"Length of input_ids: {len(input_ids[0])}\n")
-    with open(os.path.join('docs', f'human_eval_{model_id}.txt'), 'w') as f:
+    with open(os.path.join('docs', f'human_eval_{model_id}', 't5_repetition_penalty.txt'), 'w') as f:
         f.write(output)
 
