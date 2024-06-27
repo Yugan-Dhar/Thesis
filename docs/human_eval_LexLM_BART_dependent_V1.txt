@@ -1,0 +1,47 @@
+Carbon border adjustment mechanism (CBAM) for greenhouse gas emissions embedded in imported goods
+Carbon base adjustment mechanism for greenhouse gases embedded in imported goods
+SUMMARY OF:
+Regulation (EU) 2018/2067 — carbon border adjustment scheme
+WHAT IS THE AIM OF THE REGULATION?
+It establishes a system for calculating greenhouse gas (GHG) emissions embedded into imported goods.
+It aims to prevent GHG emissions from leakage into the EU’s internal market.
+KEY POINTS
+Scope
+The regulation applies to goods listed in Annex I on their importation into the customs territory of the EU.
+Annex II only direct emissions are calculated and taken into account.
+Importers must submit a certificate to the competent authority of the Member State where the authorised CBAM declarant is established.
+The certificate must be verified by a person accredited by a national accreditation body appointed in accordance with Regulation (EC) No 765/2008 of the European Parliament and of the Council (12) or (13) or pursuant to Directive 2003/87/EC (see summary).
+The declaration of emissions must be accompanied by a carbon price that is equivalent to that applied to EU products, and the declaration of the actual emissions.
+Authorised CBAM Declarant
+The authorised declarant must submit the repurchase request by 30 June of each year during which the CBAM certificates were surrendered.
+If the Commission finds that the number of CBAM certificate in the account of an authorised declarant does not comply with the obligations pursuant to paragraph 2, it must inform the authority of that Member State.
+Penalties
+The penalty amount for the failure to surrender CBAM Certificates is identical to the amount for failing to surrender certificates pursuant to Article 16(3) and (4) of Directives 2003/86/EC and 2003/93/EC.
+Exemptions
+The Regulation does not apply to:
+goods covered by the EU Emissions Trading System (ETS) or to goods covered by Regulation (EU, Euratom) No 652/2013 (see overview);
+good-goods that are not covered by Directive 2009/43/EC or Regulation (Euratom) no 552/2012 (see description);
+products covered by Article 7(2) of Directive 2003(87) of the EC and which are not subject to the EU ETS.
+In addition, the Commission may present a report to the European parliament and to the Council that identifies products further down the value chain of the goods it considers to be considered for inclusion within the scope of this regulation.
+DATE OF ENTRY INTO FORCE
+It has applied since 30 June 2018.
+BACKGROUND
+   
+ 
+For more information, see:
+‘Embedded emissions’ on the European Commission's website.
+REFERENCES
+Act
+Entry into force - Date of expiry
+Deadline for transposition in the Member States
+Official Journal
+Commission Implementing Regulation (U.S.A. 2019
+30.6.2018
+-
+OJ L 130 of 16.5.2019
+RELATED ACTS
+Regulations (E.U. 2015/856 and (E) 2015/966 of the Commission and Council Directives 2009/44/EC, 2009/45/EC of the Parliament and the Council and Directives 2004/34/EC on the harmonisation of the laws, regulations, administrative provisions and administrative provisions of Member States relating to the emission trading system, the European System of Central Banks and the European Customs Union (ECCBAM), the European Convention on the Law of the Sea and the Protocol on the Harmonization of the Laws, Regulations on the Approximation of the Emissions Trade System, the Rules of the Customs Union, the Regulations of the Court of Justice and the High Representative of the Union for Foreign Affairs and Security Policy, the Treaty on the Functioning of the United Kingdom and the Treaty of Lisbon (OJ C 202, 17.6.).
+Directive 2009/42/EC establishes a carbon border adjust mechanism (the ‘CBAM’) to address greenhouse gas emission embedded in the goods imported into the Union in order to prevent the risk of carbon leakage, thereby reducing global carbon emissions and supporting the goals of the Paris Agreement, also creating incentives for the reduction of emissions by operators in non-EU countries.
+See also:
+EU Emissions trading system (European Commission).
+last update 04.02.2021

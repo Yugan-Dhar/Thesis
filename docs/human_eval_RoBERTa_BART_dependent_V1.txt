@@ -1,0 +1,42 @@
+Carbon capture and accounting system (CBAM) for imports of greenhouse gases
+Carbon capturing and accounting systems for imports into the EU
+SUMMARY OF:
+Regulation (EU) 2019/331 — the Carbon Capture and Accounting System
+WHAT IS THE AIM OF THE REGULATION?
+It sets out the rules for the establishment of a Carbon Capture & Accounting System (CBRAM) to prevent the risk of greenhouse gas (GHG) emissions being exported from the EU to non-EU countries.
+KEY POINTS
+Scope
+The regulation applies to imports of GHG emission-intensive goods from the European Union (EU). It does not apply to:
+goods produced in the EU for export to third countries which do not apply the EU’s Emissions Trading System (ETS) or a similar carbon pricing mechanism;
+other goods which are imported from outside the EU and which are subject to a carbon price that is equivalent to that applied to EU products.
+Implementing acts
+Each implementing act must be adopted in accordance with the examination procedure referred to in Article 29(2) of Directive 2003/87/EC (see summary).
+The implementing acts must make the information in the CBAM registry available automatically and in real time to customs authorities and competent authorities.
+The Commission must communicate the information to the competent authority of the EU country where the authorised CBAM declarant is established and cross-check that information with the data in the registry pursuant to Article 14 of the regulation.
+Review of CBAM declarations
+The competent authority must ensure that the declared number of certificates is correct and that the declarations are accurate.
+If a CBAM declaration is incorrect, the Commission must assess the obligations under this regulation of that authorised declarant on the basis of the information it has at its disposal.
+Where an authorised declrant fails to submit a declaration, or where the Commission considers that the number of declared certificates is incorrect or that the declaration of the number declared number is incorrect in relation to the quantity of emissions embedded in the goods, it must review the declaration and take any appropriate action.
+FROM WHEN DOES THE RECOMMENDATION APPLY?
+   
+It has applied since 19 December 2019.
+BACKGROUND
+The EU has adopted a strategy to tackle climate change. The strategy aims to transform the EU into a fair and prosperous society, with a modern, resource-efficient and competitive economy, where there are no net emissions (emissions after deduction of removals) of greenhouse greenhouse gases (‘greenhouse gas emissions’) at the latest by 2050 and where economic growth is decoupled from the use of resources.
+For more information, see:
+‘Climate action and climate action’ on the European Commission's website.
+MAIN DOCUMENT
+ 
+  Еграканска барка   глаксанта  бълка
+Commission Delegated Regulation (EU, 2019/332 of 19 December 2018 determining transitional Union-wide rules for harmonised carbon capture & accounting systems and implementing implementing acts relating to the carbon capture and storage system for imports from the Member States of the Union for the period 2019-2023 (OJ L 130, 20.5.2019, pp. 1-2)
+Successive amendments to Regulation (EEC, 2018/2067 have been incorporated in the original text. This consolidated version is of documentary value only.
+RELATED DOCUMENTS
+Communication from the Commission to the European Parliament, the Council, the European Economic and Social Committee and the Committee of the Regions on the implementation of Implementing Regulation (EC) No 596/2013 of the European Central Bank on the inclusion of the greenhouse gas capture and analysis system in the framework of the Green Deal (COM(2018) 2018/841) (COM) 2018-2067)
+Communications from the Council and the European Committee of European Parliament and the Council of 30 May 2018 on the addition of greenhouse Gases to the EU Green Deal and on the harmonisation of the rules on greenhouse gas emission capture & analysis systems for the European Regional Development Fund (REFERENCES
+Act
+Entry into force - Date of expiry
+Deadline for transposition into force
+Official Journal L 130 of 21.6.2019
+-
+OJ C 130 of 20.6-20.2023
+Amending act(s) No 2109/2014 of the Commission and of the Representatives of the Governments, meeting within the meaning of Article 29 of the Treaty on European Union, amending Implementing Regulations (EC, Euratom) No 652/2013, (EC), (ECB) No 1082/2013 and (EC)(EU) No 472/2013
+Regulations (Euratom) 2020/852 and (EUR) No 852/2014 and (O

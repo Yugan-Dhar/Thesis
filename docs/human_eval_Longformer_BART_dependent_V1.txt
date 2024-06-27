@@ -1,0 +1,49 @@
+EU carbon capture and storage system (CBAM) for imports and exports of goods from non-EU countries (until 2023)
+EU carbon capturing and storage systems (BCAM)
+SUMMARY OF:
+Regulation (EU) 2018/2067 on the establishment of the European Carbon Capture and Storage System
+WHAT IS THE AIM OF THE REGULATION?
+It establishes a system for importing and exporting carbon-capturing and storing products from third countries (LDCs) to the EU.
+It aims to prevent carbon leakage and reduce greenhouse gas emissions in LDCs.
+KEY POINTS
+The regulation sets out the rules for the establishment and operation of the EU’s carbon capture, storage and management system, known as the CBAM.
+The system is designed to:
+ensure that imported products are subject to a regulatory system that applies carbon costs equivalent to those borne under the EU ETS, resulting in a carbon price that is equivalent for imports* and domestic products;
+encourage LDC countries to reduce their emissions of greenhouse gases (GHG) by reducing their GHG emissions by up to 40% by 2050;
+ensures that imports of energy-intensive products from non EU countries are subject, at the latest, to a carbon tax that is equal to those applicable to imports of domestic products.
+To achieve these objectives, the regulation sets up a system to register the number of CBAM certificates issued by authorised CBAM declarants (certificates issued by the EU countries to the European Commission.
+Each CBAM certificate holder is authorised by the competent authorities in each EU country.
+each CBAM holder must keep an account in the registry.
+the CBAM registry contains information on:
+the number of certificates issued,
+the certificates issued and
+the total number of installations in the EU that have been certified
+the estimated number of installed installations in each installation
+the actual emissions of complex goods produced in a given installation.
+In addition, the registry contains a list of the countries and territories which have been removed from the list in point 2 of Annex III of the regulation.
+Annex IV sets out methods for calculating embedded emissions for the purpose of calculating the embedded emissions.
+FROM WHEN DOES THE RECOMMENDATION APPLYEAR OF ENTRY INTO FORCE?
+   
+It entered into force on 1 January 2019.
+BACKGROUND
+The EU has adopted a strategy to transform the EU into a fair and prosperous society, with a modern, resource-efficient and competitive economy, where there are no net emissions (emissions after deduction of removals) of GHG greenhouse gases by 2050 and where economic growth is decoupled from the use of resources.
+For more information, see:
+‘Greenhouse Gas Emissions from Non-EU Countries’ (European Commission).
+KEY TERMS
+* Carbon capture & storage system: a system designed to capture, store and store carbon emissions from imported and exported goods.
+* Embedded emissions: the emissions of the input materials (precursors) consumed in the production process, which are then used in the final product.
+REFERENCES
+Act
+Entry into force - Date of expiry
+Deadline for transposition in the Member States
+Official Journal
+Commission Implementing Regulation(EU) 2019/2065
+1.1.2023
+-
+OJ L 130 of 21.5.2019
+RELATED ACTS
+ 
+Regulations (EU, Euratom) 2019-2023 of the Parliament and of the Council of 27 April 2019 on the harmonisation of the laws, regulations and administrative provisions of Member States relating to the import and export of carbon-absorbing and storing systems (Official Journal L 130, 31.4.2019, pp. 1-8)
+Regulating (EU), Euratom, Euratomic, Euronews and Euratom of 27 March 2019 on a harmonised system for the import of carbon dioxide emissions from certain industrial sectors and repealing Directive 95/46/EC (General Data Protection Regulation) and repealing Regulation (EC) No 552/2004 (Protection Regulation) ( Official Journal L 119, 4.3.2019).
+See consolidated version.
+last update 14.02.2021
