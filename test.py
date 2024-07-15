@@ -557,11 +557,11 @@ if __name__ == "__main__":
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BART scores")"""
 
-    print(f"Length predictions: {len(pred_str)}\n Length references: {len(reference_str)}\n Length label string: {len(label_str)}")
     blanc_score = calculate_blanc_score(predictions = pred_str, references = reference_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
 
+    print(f"BLANC SCORES: {blanc_score}")
     """new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
