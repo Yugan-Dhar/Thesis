@@ -149,8 +149,8 @@ def calculate_bert_score(predictions, references, batch_size=2):
     Calculates the BERT score for a given set of predictions and references.
 
     Args:
-        predictions (list): A list of predicted sentences.
-        references (list): A list of reference sentences.
+        predictions (list): A list of predicted texts.
+        references (list): A list of reference texts.
 
     Returns:
         float: The final BERT score.
@@ -171,8 +171,8 @@ def calculate_bart_score(predictions, references, batch_size=2):
     Calculate the F1 score using the precision and recall scores.
 
     Args:
-        predictions (list): A list of predicted sentences.
-        references (list): A list of reference sentences.
+        predictions (list): A list of predicted texts.
+        references (list): A list of reference texts.
 
     Returns:
         float: The F1 score.

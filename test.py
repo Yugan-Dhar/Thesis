@@ -428,7 +428,7 @@ if __name__ == "__main__":
     if args.testing_only:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
      
-        if args.abstractive_model == 'Llama3' or args.abstractive_model == 'Mixtral':
+        """if args.abstractive_model == 'Llama3' or args.abstractive_model == 'Mixtral':
             abstractive_model = AutoPeftModelForCausalLM.from_pretrained(
                 f"MikaSie/{model_id}",
                 torch_dtype = torch.bfloat16,
@@ -440,35 +440,36 @@ if __name__ == "__main__":
             abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(f"MikaSie/{model_id}")
 
         abstractive_tokenizer = AutoTokenizer.from_pretrained(f"MikaSie/{model_id}")
-        print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")
+        print(f"Loaded a fine-tuned {args.abstractive_model} model with model id {model_id} to be used for testing only.")"""
 
     else:
         model_id, model_version, previous_results = utils.tools.get_id_and_version_and_prev_results(evaluation_results_filepath, args)
-        abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
-        print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
+        #abstractive_model, abstractive_tokenizer = utils.models.select_abstractive_model(args.abstractive_model)
+        #print(f"Loaded a {args.abstractive_model} model with new model id {model_id} to be used for training and testing.")
 
+    print(f"Model_id to be evaluated: {model_id}")
     #Needs to be set manually because not all models have same config setup
-    if args.abstractive_model == 'T5':
+    """if args.abstractive_model == 'T5':
         context_length_abstractive_model = 512
     elif args.abstractive_model == 'LongT5':
         context_length_abstractive_model = 16384
     else:
-        context_length_abstractive_model = abstractive_model.config.max_position_embeddings
+        context_length_abstractive_model = abstractive_model.config.max_position_embeddings"""
 
     if args.write_actual_summaries_and_references_to_file:
         write_actual_summaries_and_references_to_file()
 
-    if args.verbose:
+    """if args.verbose:
         print(f"Extractive model and tokenizer loaded: {args.extractive_model}\nAbstractive model and tokenizer loaded: {args.abstractive_model}")
         print(f"Context length for abstractive model: {context_length_abstractive_model}")
         if args.no_extraction:
-            print("No extractive steps are enabled.")
+            print("No extractive steps are enabled.")"""
 
     #num_gpu = set_device(abstractive_model, args)
-    num_gpu = torch.cuda.device_count()
+    #num_gpu = torch.cuda.device_count()
 
     # args.compression_ratio is an integer, so we need to divide it by 10 to get the actual compression ratio. Beware of this in later code!
-    if args.mode == 'fixed' or args.mode == 'hybrid':
+    """if args.mode == 'fixed' or args.mode == 'hybrid':
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ratio_{args.compression_ratio}_ablength_{context_length_abstractive_model}")
     else:
         dataset_path = os.path.join("datasets", f"eur_lex_sum_processed_{args.extractive_model}_{args.mode}_ablength_{context_length_abstractive_model}")
@@ -491,7 +492,11 @@ if __name__ == "__main__":
         
         
         if args.verbose:
-            print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")
+            print(f"Dataset already exists. Loaded the dataset from {dataset_path}.")"""
+    dataset = load_dataset("dennlinger/eur-lex-sum", 'english', trust_remote_code = True)  
+    dataset = dataset.map(calculate_word_length_summary)
+    dataset = remove_outliers_from_dataset(dataset)
+
 
     if args.verbose:
         print(f"Length of the dataset: Train: {len(dataset['train'])} Validation: {len(dataset['validation'])} Test: {len(dataset['test'])}")
@@ -514,16 +519,15 @@ if __name__ == "__main__":
         columns_to_remove = [col for col in all_columns if col not in columns_to_keep]
         dataset[dataset_name] = dataset[dataset_name].remove_columns(columns_to_remove)
     
+
     if args.verbose:
         print("Dataset preprocessed and ready for the next step.")
 
     # Models are deleted to save space for training. For RoBERTa, around 13GB is freed up!
     del extractive_model, extractive_tokenizer
 
-    del abstractive_model, abstractive_tokenizer
+    #del abstractive_model, abstractive_tokenizer
         
-    import re
-
     
     if args.Llama_super_batch:
         start_index_list = [0,30,60,90,120,150]
@@ -544,24 +548,31 @@ if __name__ == "__main__":
         pred_str = utils.tools.read_created_summaries(file_path)
 
 
-    rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
+    """rouge_scores = calculate_rouge_score(predictions = pred_str, references = label_str)
     print("Calculated ROUGE scores")
+
     bert_score = calculate_bert_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
     print("Calculated BERT scores")
+
     bart_score =  calculate_bart_score(predictions = pred_str, references = label_str, batch_size = args.batch_size)
-    print("Calculated BART scores")
+    print("Calculated BART scores")"""
+
+    print(f"Length predictions: {len(pred_str)}\n Length references: {len(reference_str)}\n Length label string: {len(label_str)}")
     blanc_score = calculate_blanc_score(predictions = pred_str, references = reference_str, batch_size = args.batch_size)
     print("Calculated BLANC scores")
     new_result = next((item for item in previous_results if item["Model_ID"] == model_id), None)
-        
-    new_result["Evaluation_metrics"] = {
+
+    """new_result["Evaluation_metrics"] = {
                 "ROUGE-1": rouge_scores['rouge1'],
                 "ROUGE-2": rouge_scores['rouge2'],
                 "ROUGE-L": rouge_scores['rougeL'],
                 "BERTScore": bert_score,
                 "BARTScore": bart_score,
                 "BLANC": blanc_score
-    }
+    }"""
+
+    new_result["Evaluation_metrics"]["BLANC"] = blanc_score
+        
          # Convert to JSON and write to a file
     with open(evaluation_results_filepath, 'w') as f:
         json.dump(previous_results, f, indent=4)
