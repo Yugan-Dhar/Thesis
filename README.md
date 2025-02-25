@@ -54,6 +54,11 @@ All models have been uploaded to my HuggingFace account, which can be found [her
 
 ## Usage
 
+1.  **Training new model combinations**
+The ```training.py```
+
+2. **Testing existings model combinations**
+
 
 
 ## Project Structure

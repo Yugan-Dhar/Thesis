@@ -616,7 +616,7 @@ if __name__ == "__main__":
     if args.abstractive_model != 'Llama3':
         os.environ["WANDB_LOG_MODEL"] = "end"
     os.environ["WANDB_MODE"] = 'online'
-    os.environ["WANDB_PROJECT"] = 
+    os.environ["WANDB_PROJECT"] = 'your_project'
 
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
@@ -843,7 +843,7 @@ if __name__ == "__main__":
             run_name = model_id,
             predict_with_generate = True, 
             eval_accumulation_steps = args.eval_accumulation_steps,
-            generation_max_length = gen_max_length,
+            generation_max_length = args.gen_max_length,
             hub_model_id = f"{model_id}",
             gradient_checkpointing= args.gradient_checkpointing,
             fp16= args.fp16,
