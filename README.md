@@ -10,7 +10,6 @@ All models have been uploaded to my HuggingFace account, which can be found [her
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
@@ -19,10 +18,6 @@ All models have been uploaded to my HuggingFace account, which can be found [her
 
 ---
 
-## Overview
-
-
----
 ## Installation
 
 1. **Clone the repository:**
@@ -55,11 +50,34 @@ All models have been uploaded to my HuggingFace account, which can be found [her
 ## Usage
 
 1.  **Training new model combinations**
-The ```training.py```
+
+The ```training.py``` file is used to train new models in different combinations. There are 3 required arguments, which are ```extractive_model```, ```compression_ratio``` and ```abstractive_model```. So, for example the file can be called as follows:
+
+```bash
+training.py LegalBERT 4 BART
+```
+Please check  ```models.py``` for all available smodels. 
+
+After the command, first it will be checked if there is already a text available, which has been extractively summarized by the corresponding extractive model with the corresponding compression ratio. If so, this text will be used for the training of the abstractive model. If there is no text available, then the text will be summarized and saved _so it can be used to train another abstractive model. Automatically, the extractive ratio will be set to 0.4 (hence 4) and the mode is set to the dependent strategy automatically.
+
+All models will be saved to your HuggingFace account under the name of the extractive model, extractive compression ratio, the abstractive model, the mode, and the version number. So, in the previous example, it will become: ```LegalBERT_4_BART_dependent_V1```.
+
+After training, all required evaluation tests will be run. Then, the results will be saved to ```evaluation_results.json```, a model card is created, the predictions are saved in a text file with the same name in ```results``` and the final fine-tuned abstractive model is pushed to HuggingFace under the same name, with the corresponding model card for easy insights. 
+
+Furthermore, there are quite a lot of different optional arguments which can be used to augment your training. Please find these in  ```training.py```.
 
 2. **Testing existings model combinations**
 
+Often, I trained a model and needed to recalculate evaluation tests again afterwards. This was done via ```test.py```. It can be called the same way as ```training.py``` is called, for example:
 
+```bash
+training.py LegalBERT 4 BART
+```
+
+The script will first check if a model combination like this exists on HuggingFace. If not, then nothing can be done. If there is a model combination like this, then it will take the **latest** version available. So if there are 4 different model combinations, ```test.py``` takes V4. 
+After completing all evaluation methods, test.py will update the modelcard on HuggingFace by changing the results for that specific model. Also, ```evaluation_results.json``` will be updated with the new values. 
+
+Again, there are quite a lot of different optional arguments which can be used to augment your testing. Please find these in  ```test.py```.
 
 ## Project Structure
 ```
