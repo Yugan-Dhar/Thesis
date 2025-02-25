@@ -612,11 +612,11 @@ if __name__ == "__main__":
     args = parser.parse_args()  
 
     # For some reason, setting wandb will cause a ValueError when saving the trainer using SFTTRainer. This is a workaround for now.
+    # Change this information to your specific wandb information.
     if args.abstractive_model != 'Llama3':
         os.environ["WANDB_LOG_MODEL"] = "end"
     os.environ["WANDB_MODE"] = 'online'
-    os.environ["WANDB_PROJECT"] = "thesis_sie"
-
+    os.environ["WANDB_PROJECT"] = 
 
     extractive_model, extractive_tokenizer = select_extractive_model(args.extractive_model)
     
