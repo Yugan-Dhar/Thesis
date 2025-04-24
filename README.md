@@ -23,8 +23,8 @@ All models have been uploaded to my HuggingFace account, which can be found [her
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/MikaSie/FishBackground
-   cd FishBackground
+   git clone https://github.com/MikaSie/Thesis
+   cd Thesis
    ```
 
 2. **Create a virtual environment:**
